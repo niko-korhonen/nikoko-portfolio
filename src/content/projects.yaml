@@ -1,0 +1,132 @@
+- slug: karma_pr
+  title: Start & End
+  description: A brief showcase of the Karma app when I joined and when I left.
+  image: karma_pr.webp
+  logo: karma
+  bg: "#FEC1E0"
+
+- slug: karma_rw
+  title: App & Rewards
+  description: Redesigned at the height of the pandemic for increased engagement and loyalty.
+  image: karma_rw.webp
+  logo: karma
+  bg: "#D3E0FB"
+
+- slug: karma_fp
+  title: Karma Full Price
+  description: Introducing full price items to increase revenue.
+  image: karma_fp.webp
+  logo: karma
+  bg: "#B9DABD"
+
+- slug: epidemic_ngs
+  title: AI Concept
+  description: High-velocity soundtracking workflows in a mobile era.
+  image: epidemic_ngs.webp
+  logo: epidemic
+  bg: "#C6F7F8"
+
+- slug: epidemic_np
+  title: Mobile Music Player
+  description: Redesigned with improved functionality.
+  image: epidemic_np.webp
+  logo: epidemic
+  bg: "#FFB2BF"
+
+- slug: klarna_tdp
+  title: Transaction Icons
+  description: Lead designer.
+  image: klarna_tdp.webp
+  logo: klarna
+  bg: "#F1F1F0"
+
+- slug: klarna_nav
+  title: Navbar Icons
+  description: Lead designer.
+  image: klarna_nav.webp
+  logo: klarna
+  bg: "#F1F1F0"
+
+- slug: klarna_mi
+  title: Magic Import
+  description: Idea, concept, and final design by Niko. Scaled 60K users to 800K in 30 days.
+  image: klarna_mi.webp
+  logo: klarna
+  bg: "#FFEC8C"
+
+- slug: klarna_fh
+  title: Financial Hardship
+  description: End-to-end design by Niko including application and payments. Est. saved 1.2M SEK in monthly costs.
+  image: klarna_fh.webp
+  logo: klarna
+  bg: "#C7C7C7"
+
+- slug: klarna_xr
+  title: Express Refund
+  description: End-to-end design by Niko. Est. saved 300K SEK in monthly costs.
+  image: klarna_xr.webp
+  logo: klarna
+  bg: "#B0D6EF"
+
+- slug: klarna_hc
+  title: Help Center
+  description: Concept and testing.
+  image: klarna_hc.webp
+  logo: klarna
+  bg: "#FAA590"
+
+- slug: klarna_rr
+  title: Returns & Refunds Hub
+  description: Lead designer.
+  image: klarna_rr.webp
+  logo: klarna
+  bg: "#FFEAEB"
+
+- slug: klarna_rd
+  title: Returns
+  description: Complete redesign with improved features such as evidence gathering. Est. saved 2.3M SEK in monthly costs.
+  image: klarna_rd.webp
+  logo: klarna
+  bg: "#FFC1E0"
+
+- slug: klarna_kb
+  title: Klarna Balance Refunds
+  description: Lead designer in collaboration with other designers across multiple departments.
+  image: klarna_kb.webp
+  logo: klarna
+  bg: "#E4E0F7"
+
+- slug: klarna_omt
+  title: "Buyer's Protection & More"
+  description: Concepts of general improvements to returns.
+  image: klarna_omt.webp
+  logo: klarna
+  bg: "#C5FFE2"
+
+- slug: klarna_dc
+  title: Debt Collection
+  description: New and improved experience for debt collection.
+  image: klarna_dc.webp
+  logo: klarna
+  bg: "#FDE2E2"
+
+- slug: klarna_ac
+  title: Activity Center
+  description: Concepts that eventually become Inbox.
+  image: klarna_ac.webp
+  logo: klarna
+  bg: "#B0D6EF"
+
+- slug: klarna_ada
+  title: Agent Dispute App
+  description: Lead designer overhauling the internal agent dispute app and integrating agentic co-piloting features. Est. saved 120M SEK in yearly costs.
+  image: klarna_ada.webp
+  logo: klarna
+  bg: "#EFC6FF"
+
+- slug: klarna_mp
+  title: Merchant Portal Stats
+  description: Stats, guides, and helpful actions driving down errand rates.
+  image: klarna_mp.webp
+  logo: klarna
+  bg: "#FFEC8C"
