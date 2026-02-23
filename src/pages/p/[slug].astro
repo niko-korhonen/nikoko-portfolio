@@ -19,7 +19,7 @@ if (!project) {
 <BaseLayout>
   <div class="project-page">
     <a href="/" class="company-logo">
-      <img src={`/companies/${project.logo}.png`} alt={project.logo} />
+      <img src={`/companies/${project.logo}.svg`} alt={project.logo} />
     </a>
 
     <a href="/" class="close-btn" aria-label="Close">
@@ -36,16 +36,18 @@ if (!project) {
       />
     </section>
 
-    <section class="content">
+    <div class="project-info">
       <h1>{project.title}</h1>
       <p>{project.description}</p>
-    </section>
+    </div>
   </div>
 </BaseLayout>
 
 <style>
   .project-page {
     position: relative;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .company-logo {
@@ -84,7 +86,7 @@ if (!project) {
   }
 
   .stage {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,41 +101,27 @@ if (!project) {
     display: block;
   }
 
-  .content {
-    background: #ffffff;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 64px 24px 80px;
+  .project-info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
   }
 
-  .content h1 {
-    font-size: 54px;
+  .project-info h1 {
+    font-size: 16px;
     font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin: 0 0 16px;
+    line-height: 1.4;
+    margin: 0 0 4px;
+    color: #000;
   }
 
-  .content p {
-    font-size: 54px;
+  .project-info p {
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.4;
     margin: 0;
-    color: #555;
-  }
-
-  @media (max-width: 480px) {
-    .content {
-      padding: 40px 16px 60px;
-    }
-
-    .content h1 {
-      font-size: 28px;
-    }
-
-    .content p {
-      font-size: 28px;
-    }
+    color: #000;
+    opacity: 0.5;
   }
 </style>
