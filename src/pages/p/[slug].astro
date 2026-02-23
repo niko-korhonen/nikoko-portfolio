@@ -16,7 +16,7 @@ if (!project) {
 }
 ---
 
-<BaseLayout>
+<BaseLayout themeColor={project.bg} bodyStyle={`background-color: ${project.bg}`}>
   <div class="project-page">
     <a href="/" class="company-logo">
       <img src={`/companies/${project.logo}.svg`} alt={project.logo} />
@@ -52,7 +52,7 @@ if (!project) {
 
   .company-logo {
     position: fixed;
-    top: 16px;
+    top: calc(16px + env(safe-area-inset-top));
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -67,8 +67,8 @@ if (!project) {
 
   .close-btn {
     position: fixed;
-    top: 16px;
-    right: 16px;
+    top: calc(16px + env(safe-area-inset-top));
+    right: calc(16px + env(safe-area-inset-right));
     z-index: 10;
     display: flex;
     align-items: center;
@@ -103,8 +103,8 @@ if (!project) {
 
   .project-info {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    left: calc(20px + env(safe-area-inset-left));
     z-index: 10;
   }
 

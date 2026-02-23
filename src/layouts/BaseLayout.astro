@@ -1,19 +1,22 @@
 ---
 import '../styles/global.css';
+
+const { themeColor, bodyStyle } = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, viewport-fit=cover" />
     <link rel="icon" href="/favicon.svg" />
     <title>nikoko</title>
 
     <!-- Open Graph preview -->
     <meta property="og:image" content="/og.png" />
+    {themeColor && <meta name="theme-color" content={themeColor} />}
   </head>
-  <body>
+  <body style={bodyStyle}>
     <slot />
   </body>
 </html>
