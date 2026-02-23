@@ -35,3 +35,8 @@
     color: var(--text-color);
     background: var(--bg-color);
   }
+
+  html[data-theme-hint="dark"] {
+    --bg-color: #000;
+    --text-color: #fff;
+  }

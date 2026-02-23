@@ -10,11 +10,18 @@ const { themeColor, bodyStyle } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, viewport-fit=cover" />
     <link rel="icon" href="/favicon.svg" />
-    <title>nikoko</title>
+    <title>Niko Korhonen</title>
 
     <!-- Open Graph preview -->
     <meta property="og:image" content="/og.png" />
     {themeColor && <meta name="theme-color" content={themeColor} />}
+    <script is:inline>
+      (function() {
+        if (sessionStorage.getItem('theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme-hint', 'dark');
+        }
+      })();
+    </script>
   </head>
   <body style={bodyStyle}>
     <slot />
