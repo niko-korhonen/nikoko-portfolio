@@ -1,0 +1,293 @@
+.world-game {
+  position: fixed;
+  inset: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #ffffff;
+  color: #171717;
+}
+
+.world-game__map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.world-game__map svg {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.world-game__hud {
+  position: absolute;
+  top: 16px;
+  z-index: 2;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #111;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: none;
+}
+
+.world-game__hud--timer {
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  color: inherit;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: none;
+}
+
+.world-game__hud--timer:hover {
+  background: #fafafa;
+}
+
+.world-game__hud--left {
+  left: 16px;
+}
+
+.world-game__hud--right {
+  right: 16px;
+}
+
+.world-game__hud--score {
+  cursor: default;
+  outline: none;
+}
+
+.world-game__hud--score:focus-visible {
+  outline: 2px solid #009f38;
+  outline-offset: 2px;
+}
+
+.world-game__score-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #404040;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.12s ease,
+    visibility 0.12s ease;
+  transition-delay: 0s;
+  z-index: 10;
+}
+
+.world-game__hud--score:hover .world-game__score-tooltip,
+.world-game__hud--score:focus .world-game__score-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.07s;
+}
+
+.world-game__input-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: min(420px, calc(100vw - 32px));
+  margin: 0;
+}
+
+.world-game__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: none;
+  font: inherit;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #111;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+.world-game__input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.world-game__input:focus {
+  outline: 2px solid #009f38;
+  outline-offset: 2px;
+}
+
+.world-game__modal-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.world-game__modal-backdrop--pause {
+  z-index: 4;
+}
+
+.world-game__modal-backdrop--game-over .world-game__modal {
+  position: relative;
+  z-index: 1;
+}
+
+.world-game__confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.world-game__confetti-piece {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 1px;
+  transform-origin: center;
+  animation: world-game-confetti-fall 1.1s cubic-bezier(0.28, 0.55, 0.38, 1) both;
+}
+
+@keyframes world-game-confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--x0), var(--y0), 0) rotate(0deg) scale(0.65);
+  }
+  10% {
+    opacity: 1;
+    transform: translate3d(var(--x0), var(--y0), 0) rotate(0deg) scale(0.65);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--x1), var(--y1), 0) rotate(var(--rot)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-game__confetti {
+    display: none;
+  }
+}
+
+.world-game__modal {
+  max-width: 380px;
+  width: 100%;
+  padding: 28px 24px;
+  text-align: center;
+  background: #f5f5f5;
+  color: #171717;
+  border-radius: 18px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.world-game__globe {
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.world-game__modal-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.world-game__modal-text {
+  margin: 0 0 20px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #404040;
+}
+
+.world-game__modal-text--emphasis {
+  font-weight: 600;
+  color: #171717;
+}
+
+.world-game__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: #171717;
+  color: #fafafa;
+  box-shadow: none;
+}
+
+.world-game__btn:hover {
+  opacity: 0.9;
+}
+
+.world-game__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.world-game__modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.world-game__btn--danger {
+  background: #ea580c;
+  color: #fff;
+  border: 1px solid #c2410c;
+  box-shadow: none;
+}
+
+.world-game__btn--danger:hover {
+  background: #c2410c;
+  border-color: #9a3412;
+  opacity: 1;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.world-game-fallback {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #171717;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9375rem;
+}

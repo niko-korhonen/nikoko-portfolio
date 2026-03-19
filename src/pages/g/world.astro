@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorldGame from '../../components/games/WorldGame.tsx';
+import '../../components/games/WorldGame.css';
+---
+
+<BaseLayout bodyStyle="margin:0;overflow:hidden;min-height:100vh;background:#FFFFFF;">
+  <WorldGame client:only="react">
+    <div class="world-game-fallback" slot="fallback">Loading…</div>
+  </WorldGame>
+</BaseLayout>
