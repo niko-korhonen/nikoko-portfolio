@@ -1,14 +1,16 @@
 ---
 import '../styles/global.css';
 
-const { themeColor, bodyStyle } = Astro.props;
+const { themeColor, bodyStyle, viewport } = Astro.props;
+const viewportContent =
+  viewport ?? 'width=device-width, viewport-fit=cover';
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, viewport-fit=cover" />
+    <meta name="viewport" content={viewportContent} />
     <link rel="icon" href="/favicon.svg" />
     <title>Niko Korhonen</title>
 

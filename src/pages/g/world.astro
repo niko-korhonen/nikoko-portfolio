@@ -4,7 +4,10 @@ import WorldGame from '../../components/games/WorldGame.tsx';
 import '../../components/games/WorldGame.css';
 ---
 
-<BaseLayout bodyStyle="margin:0;overflow:hidden;min-height:100vh;background:#FFFFFF;">
+<BaseLayout
+  bodyStyle="margin:0;overflow:hidden;min-height:100dvh;background:#FFFFFF;"
+  viewport="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual"
+>
   <WorldGame client:only="react">
     <div class="world-game-fallback" slot="fallback">Loading…</div>
   </WorldGame>

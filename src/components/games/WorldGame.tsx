@@ -56,13 +56,29 @@ const GAME_OVER_CONFETTI: {
   delay: string;
 }[] = [
   { fill: '#009f38', w: 5, h: 11, x0: '7vw', y0: '16vh', x1: '3vw', y1: '84vh', rot: '195deg', delay: '0ms' },
-  { fill: '#ea580c', w: 6, h: 9, x0: '22vw', y0: '11vh', x1: '28vw', y1: '90vh', rot: '-175deg', delay: '45ms' },
-  { fill: '#171717', w: 4, h: 12, x0: '42vw', y0: '13vh', x1: '48vw', y1: '82vh', rot: '160deg', delay: '90ms' },
-  { fill: '#2563eb', w: 5, h: 10, x0: '58vw', y0: '18vh', x1: '62vw', y1: '88vh', rot: '-210deg', delay: '20ms' },
-  { fill: '#ca8a04', w: 5, h: 10, x0: '78vw', y0: '12vh', x1: '88vw', y1: '86vh', rot: '185deg', delay: '70ms' },
-  { fill: '#009f38', w: 4, h: 9, x0: '88vw', y0: '20vh', x1: '92vw', y1: '80vh', rot: '-150deg', delay: '110ms' },
-  { fill: '#ea580c', w: 5, h: 11, x0: '14vw', y0: '8vh', x1: '8vw', y1: '72vh', rot: '220deg', delay: '55ms' },
-  { fill: '#171717', w: 5, h: 8, x0: '66vw', y0: '9vh', x1: '72vw', y1: '78vh', rot: '-190deg', delay: '100ms' },
+  { fill: '#ea580c', w: 6, h: 9, x0: '22vw', y0: '11vh', x1: '28vw', y1: '90vh', rot: '-175deg', delay: '14ms' },
+  { fill: '#171717', w: 4, h: 12, x0: '42vw', y0: '13vh', x1: '48vw', y1: '82vh', rot: '160deg', delay: '28ms' },
+  { fill: '#2563eb', w: 5, h: 10, x0: '58vw', y0: '18vh', x1: '62vw', y1: '88vh', rot: '-210deg', delay: '6ms' },
+  { fill: '#ca8a04', w: 5, h: 10, x0: '78vw', y0: '12vh', x1: '88vw', y1: '86vh', rot: '185deg', delay: '22ms' },
+  { fill: '#009f38', w: 4, h: 9, x0: '88vw', y0: '20vh', x1: '92vw', y1: '80vh', rot: '-150deg', delay: '35ms' },
+  { fill: '#ea580c', w: 5, h: 11, x0: '14vw', y0: '8vh', x1: '8vw', y1: '72vh', rot: '220deg', delay: '17ms' },
+  { fill: '#171717', w: 5, h: 8, x0: '66vw', y0: '9vh', x1: '72vw', y1: '78vh', rot: '-190deg', delay: '32ms' },
+  { fill: '#2563eb', w: 5, h: 9, x0: '5vw', y0: '6vh', x1: '12vw', y1: '92vh', rot: '170deg', delay: '40ms' },
+  { fill: '#ca8a04', w: 6, h: 10, x0: '33vw', y0: '22vh', x1: '38vw', y1: '75vh', rot: '-200deg', delay: '5ms' },
+  { fill: '#009f38', w: 5, h: 8, x0: '50vw', y0: '5vh', x1: '45vw', y1: '88vh', rot: '200deg', delay: '48ms' },
+  { fill: '#ea580c', w: 4, h: 11, x0: '72vw', y0: '15vh', x1: '68vw', y1: '70vh', rot: '-165deg', delay: '26ms' },
+  { fill: '#171717', w: 5, h: 9, x0: '95vw', y0: '10vh', x1: '85vw', y1: '85vh', rot: '175deg', delay: '12ms' },
+  { fill: '#2563eb', w: 4, h: 10, x0: '18vw', y0: '28vh', x1: '25vw', y1: '65vh', rot: '-185deg', delay: '44ms' },
+  { fill: '#ca8a04', w: 5, h: 8, x0: '38vw', y0: '4vh', x1: '52vw', y1: '95vh', rot: '210deg', delay: '20ms' },
+  { fill: '#009f38', w: 6, h: 9, x0: '61vw', y0: '25vh', x1: '55vw', y1: '60vh', rot: '-155deg', delay: '38ms' },
+  { fill: '#ea580c', w: 5, h: 10, x0: '82vw', y0: '28vh', x1: '75vw', y1: '78vh', rot: '190deg', delay: '30ms' },
+  { fill: '#171717', w: 5, h: 11, x0: '10vw', y0: '45vh', x1: '20vw', y1: '55vh', rot: '-220deg', delay: '42ms' },
+  { fill: '#2563eb', w: 6, h: 8, x0: '48vw', y0: '35vh', x1: '58vw', y1: '68vh', rot: '165deg', delay: '8ms' },
+  { fill: '#ca8a04', w: 4, h: 12, x0: '27vw', y0: '40vh', x1: '35vw', y1: '58vh', rot: '-175deg', delay: '46ms' },
+  { fill: '#009f38', w: 5, h: 10, x0: '92vw', y0: '40vh', x1: '78vw', y1: '62vh', rot: '205deg', delay: '15ms' },
+  { fill: '#ea580c', w: 5, h: 9, x0: '3vw', y0: '70vh', x1: '15vw', y1: '32vh', rot: '-160deg', delay: '48ms' },
+  { fill: '#171717', w: 5, h: 10, x0: '55vw', y0: '48vh', x1: '48vw', y1: '42vh', rot: '180deg', delay: '24ms' },
+  { fill: '#2563eb', w: 5, h: 11, x0: '74vw', y0: '52vh', x1: '65vw', y1: '48vh', rot: '-195deg', delay: '34ms' },
 ];
 
 function GameOverConfetti() {
@@ -135,7 +151,12 @@ function applyMapTerritoryDefaults(container: HTMLElement | null): void {
 
 type Phase = 'intro' | 'playing' | 'over';
 
+type GuessToast = { id: number; variant: 'correct' | 'duplicate' };
+
 const defaultDurationMs = 15 * 60 * 1000;
+
+const TOAST_MS = 1150;
+const TOAST_CAP = 8;
 
 export interface WorldGameProps {
   /** Countdown length in milliseconds (default: 15 minutes). */
@@ -151,10 +172,14 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
   /** Bumps remount so Start / Try again reset the SVG to its original fills. */
   const [mapMountKey, setMapMountKey] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [guessToasts, setGuessToasts] = useState<GuessToast[]>([]);
 
+  const gameRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const guessedRef = useRef<Set<string>>(new Set());
+  const toastIdRef = useRef(0);
+  const toastTimeoutsRef = useRef<Map<number, number>>(new Map());
 
   const mapInnerHtml = useMemo(() => (mapSvg ? { __html: mapSvg } : null), [mapSvg]);
 
@@ -182,6 +207,39 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     configureMapSvg(mapRef.current);
     applyMapTerritoryDefaults(mapRef.current);
   }, [mapSvg, mapMountKey]);
+
+  /** Pin shell to visual viewport so mobile keyboard does not shove map/HUD off-screen. */
+  useLayoutEffect(() => {
+    const root = gameRef.current;
+    if (!root) return;
+
+    const apply = () => {
+      const vv = window.visualViewport;
+      if (vv) {
+        root.style.setProperty('--world-vv-top', `${vv.offsetTop}px`);
+        root.style.setProperty('--world-vv-left', `${vv.offsetLeft}px`);
+        root.style.setProperty('--world-vv-width', `${vv.width}px`);
+        root.style.setProperty('--world-vv-height', `${vv.height}px`);
+      } else {
+        root.style.setProperty('--world-vv-top', '0px');
+        root.style.setProperty('--world-vv-left', '0px');
+        root.style.setProperty('--world-vv-width', `${window.innerWidth}px`);
+        root.style.setProperty('--world-vv-height', `${window.innerHeight}px`);
+      }
+    };
+
+    apply();
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', apply);
+    vv?.addEventListener('scroll', apply);
+    window.addEventListener('resize', apply);
+
+    return () => {
+      vv?.removeEventListener('resize', apply);
+      vv?.removeEventListener('scroll', apply);
+      window.removeEventListener('resize', apply);
+    };
+  }, []);
 
   /** Re-apply greens after defaults: survives timer/input re-renders and any innerHTML churn. */
   useLayoutEffect(() => {
@@ -216,6 +274,47 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     if (phase === 'playing' && remainingMs === 0) setPhase('over');
   }, [phase, remainingMs]);
 
+  const clearGuessToasts = useCallback(() => {
+    for (const tid of toastTimeoutsRef.current.values()) window.clearTimeout(tid);
+    toastTimeoutsRef.current.clear();
+    setGuessToasts([]);
+  }, []);
+
+  useEffect(() => {
+    if (phase === 'playing') return;
+    clearGuessToasts();
+  }, [phase, clearGuessToasts]);
+
+  const pushGuessToast = useCallback((variant: GuessToast['variant']) => {
+    const id = ++toastIdRef.current;
+    setGuessToasts((prev) => {
+      const next = [...prev, { id, variant }];
+      if (next.length <= TOAST_CAP) return next;
+      const evicted = next.slice(0, next.length - TOAST_CAP);
+      for (const t of evicted) {
+        const oldTid = toastTimeoutsRef.current.get(t.id);
+        if (oldTid !== undefined) {
+          window.clearTimeout(oldTid);
+          toastTimeoutsRef.current.delete(t.id);
+        }
+      }
+      return next.slice(-TOAST_CAP);
+    });
+    const timeoutId = window.setTimeout(() => {
+      toastTimeoutsRef.current.delete(id);
+      setGuessToasts((prev) => prev.filter((t) => t.id !== id));
+    }, TOAST_MS);
+    toastTimeoutsRef.current.set(id, timeoutId);
+  }, []);
+
+  useEffect(
+    () => () => {
+      for (const tid of toastTimeoutsRef.current.values()) window.clearTimeout(tid);
+      toastTimeoutsRef.current.clear();
+    },
+    []
+  );
+
   const resetRound = useCallback(() => {
     guessedRef.current = new Set();
     setScore(0);
@@ -224,7 +323,8 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     setPaused(false);
     setPhase('intro');
     setMapMountKey((k) => k + 1);
-  }, [durationMs]);
+    clearGuessToasts();
+  }, [durationMs, clearGuessToasts]);
 
   const startGame = useCallback(() => {
     guessedRef.current = new Set();
@@ -234,7 +334,8 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     setPaused(false);
     setPhase('playing');
     setMapMountKey((k) => k + 1);
-  }, [durationMs]);
+    clearGuessToasts();
+  }, [durationMs, clearGuessToasts]);
 
   const onInputChange = (raw: string) => {
     setInput(raw);
@@ -244,15 +345,21 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     if (!key) return;
 
     const iso = COUNTRY_TO_ISO[key];
-    if (!iso || guessedRef.current.has(iso)) return;
+    if (!iso) return;
+
+    if (guessedRef.current.has(iso)) {
+      pushGuessToast('duplicate');
+      return;
+    }
 
     guessedRef.current.add(iso);
     setScore((s) => s + 1);
     setInput('');
+    pushGuessToast('correct');
   };
 
   return (
-    <div className="world-game">
+    <div className="world-game" ref={gameRef}>
       <div
         key={mapMountKey}
         ref={mapRef}
@@ -284,6 +391,22 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
           </div>
           <label className="world-game__input-wrap">
             <span className="visually-hidden">Country name</span>
+            <div className="world-game__toast-stack" aria-live="polite" aria-relevant="additions">
+              {guessToasts.map((t) => (
+                <div
+                  key={t.id}
+                  className={
+                    t.variant === 'correct'
+                      ? 'world-game__guess-toast world-game__guess-toast--correct'
+                      : 'world-game__guess-toast world-game__guess-toast--duplicate'
+                  }
+                >
+                  <span className="world-game__guess-toast-label">
+                    {t.variant === 'correct' ? 'Correct' : 'Already guessed'}
+                  </span>
+                </div>
+              ))}
+            </div>
             <input
               ref={inputRef}
               className="world-game__input"
@@ -383,7 +506,7 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
             </h1>
             <p id="world-game-over-desc" className="world-game__modal-text">
               You guessed {score} countries out of {WORLD_MAP_COUNTRY_COUNT} in{' '}
-              {formatGameOverElapsed(durationMs - remainingMs)}. Great job!
+              {formatGameOverElapsed(durationMs - remainingMs)}.
             </p>
             <button type="button" className="world-game__btn" onClick={resetRound}>
               Try again
