@@ -14,6 +14,8 @@ import { COUNTRY_TO_ISO, WORLD_MAP_COUNTRY_COUNT } from './worldCountryMap';
 const GUESSED_FILL = '#009F38';
 const MAP_STROKE = '#FFFFFF';
 const MAP_DEFAULT_FILL = '#CCCCCC';
+/** End-game review only: fill for territories not guessed (softer than Give up button). */
+const MAP_NOT_GUESSED_REVIEW_FILL = '#FFB89B';
 
 function formatTime(totalMs: number): string {
   const s = Math.max(0, Math.ceil(totalMs / 1000));
@@ -107,6 +109,16 @@ function GameOverConfetti() {
   );
 }
 
+function paintNotGuessedCountriesReview(root: HTMLElement | null, guessed: Set<string>): void {
+  if (!root) return;
+  for (const path of root.querySelectorAll('path[id]')) {
+    const id = path.getAttribute('id');
+    if (!id || !/^[A-Z]{2}$/.test(id)) continue;
+    if (guessed.has(id)) continue;
+    paintCountry(root, id, MAP_NOT_GUESSED_REVIEW_FILL);
+  }
+}
+
 function paintCountry(root: HTMLElement | null, iso: string, fill: string): void {
   if (!root) return;
   let node: Element | null = null;
@@ -144,14 +156,70 @@ function applyMapTerritoryDefaults(container: HTMLElement | null): void {
     if (!id || !/^[A-Z]{2}$/.test(id)) continue;
     if (!(path instanceof SVGElement)) continue;
     path.removeAttribute('fill');
+    path.style.removeProperty('stroke-width');
+    path.style.removeProperty('stroke-opacity');
+    path.style.removeProperty('pointer-events');
     path.style.setProperty('stroke', MAP_STROKE, 'important');
     path.style.setProperty('fill', MAP_DEFAULT_FILL, 'important');
   }
 }
 
+/** Widen invisible strokes so small countries are easier to hit (game over review only). */
+function applyReviewHitTargets(container: HTMLElement | null): void {
+  if (!container) return;
+  for (const path of container.querySelectorAll('path[id]')) {
+    const id = path.getAttribute('id');
+    if (!id || !/^[A-Z]{2}$/.test(id)) continue;
+    if (!(path instanceof SVGElement)) continue;
+    path.style.setProperty('stroke-width', '14', 'important');
+    path.style.setProperty('stroke', '#ffffff', 'important');
+    path.style.setProperty('stroke-opacity', '0', 'important');
+    path.style.setProperty('pointer-events', 'all', 'important');
+  }
+}
+
+function isIsoCountryPath(el: EventTarget | null): el is SVGPathElement {
+  if (!(el instanceof SVGPathElement)) return false;
+  const id = el.getAttribute('id');
+  return !!id && /^[A-Z]{2}$/.test(id);
+}
+
+const MAP_ZOOM_MIN = 1;
+const MAP_ZOOM_MAX_LEVEL = 3;
+const MAP_DRAG_THRESHOLD_PX = 6;
+
+type MapPan = { x: number; y: number };
+
+function clampPanForZoom(
+  px: number,
+  py: number,
+  zoom: number,
+  vw: number,
+  vh: number,
+  cw: number,
+  ch: number
+): MapPan {
+  if (zoom <= MAP_ZOOM_MIN) return { x: 0, y: 0 };
+  const scaledW = cw * zoom;
+  const scaledH = ch * zoom;
+  const minX = Math.min(0, vw - scaledW);
+  const minY = Math.min(0, vh - scaledH);
+  return {
+    x: Math.min(0, Math.max(minX, px)),
+    y: Math.min(0, Math.max(minY, py)),
+  };
+}
+
+function isMapZoomChromeTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return false;
+  return !!target.closest('button, a, input, textarea, select, label, [role="dialog"]');
+}
+
 type Phase = 'intro' | 'playing' | 'over';
 
 type GuessToast = { id: number; variant: 'correct' | 'duplicate' };
+
+type MapCountryHover = { iso: string; name: string; guessed: boolean; x: number; y: number };
 
 const defaultDurationMs = 15 * 60 * 1000;
 
@@ -173,15 +241,106 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
   const [mapMountKey, setMapMountKey] = useState(0);
   const [paused, setPaused] = useState(false);
   const [guessToasts, setGuessToasts] = useState<GuessToast[]>([]);
+  const [mapCountryHover, setMapCountryHover] = useState<MapCountryHover | null>(null);
+  const [mapZoom, setMapZoom] = useState(MAP_ZOOM_MIN);
+  const [mapPan, setMapPan] = useState<MapPan>({ x: 0, y: 0 });
 
   const gameRef = useRef<HTMLDivElement>(null);
+  const mapViewportRef = useRef<HTMLDivElement>(null);
+  const panZoomRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const guessedRef = useRef<Set<string>>(new Set());
+  const mapZoomRef = useRef(MAP_ZOOM_MIN);
+  const mapPanRef = useRef<MapPan>({ x: 0, y: 0 });
+  const mapDragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startPanX: number;
+    startPanY: number;
+  } | null>(null);
+  const mapTapRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
   const toastIdRef = useRef(0);
   const toastTimeoutsRef = useRef<Map<number, number>>(new Map());
 
   const mapInnerHtml = useMemo(() => (mapSvg ? { __html: mapSvg } : null), [mapSvg]);
+
+  const readMapMetrics = useCallback((): { vw: number; vh: number; cw: number; ch: number } => {
+    const vp = mapViewportRef.current;
+    const pz = panZoomRef.current;
+    const mapEl = mapRef.current;
+    if (!vp || !pz || !mapEl) return { vw: 0, vh: 0, cw: 0, ch: 0 };
+    return {
+      vw: vp.clientWidth,
+      vh: vp.clientHeight,
+      cw: pz.offsetWidth,
+      ch: mapEl.offsetHeight,
+    };
+  }, []);
+
+  const resetMapZoom = useCallback(() => {
+    mapZoomRef.current = MAP_ZOOM_MIN;
+    mapPanRef.current = { x: 0, y: 0 };
+    setMapZoom(MAP_ZOOM_MIN);
+    setMapPan({ x: 0, y: 0 });
+  }, []);
+
+  const refocusPlayingInput = useCallback(() => {
+    if (phase !== 'playing' || paused) return;
+    requestAnimationFrame(() => {
+      inputRef.current?.focus({ preventScroll: true });
+    });
+  }, [phase, paused]);
+
+  /** 100% → 200% → 300% → 100%; focal point stays under cursor between steps. */
+  const cycleMapZoomAt = useCallback(
+    (clientX: number, clientY: number) => {
+      const zOld = mapZoomRef.current;
+      const zNew = zOld >= MAP_ZOOM_MAX_LEVEL ? MAP_ZOOM_MIN : zOld + 1;
+
+      if (zNew === MAP_ZOOM_MIN) {
+        resetMapZoom();
+        refocusPlayingInput();
+        return;
+      }
+
+      const vp = mapViewportRef.current;
+      const pz = panZoomRef.current;
+      if (!vp || !pz) return;
+      const vr = vp.getBoundingClientRect();
+      const vx = clientX - vr.left;
+      const vy = clientY - vr.top;
+
+      let localX: number;
+      let localY: number;
+      if (zOld === MAP_ZOOM_MIN) {
+        const pr = pz.getBoundingClientRect();
+        localX = clientX - pr.left;
+        localY = clientY - pr.top;
+      } else {
+        const pan = mapPanRef.current;
+        localX = (vx - pan.x) / zOld;
+        localY = (vy - pan.y) / zOld;
+      }
+
+      const panX = vx - localX * zNew;
+      const panY = vy - localY * zNew;
+      const m = readMapMetrics();
+      const clamped = clampPanForZoom(panX, panY, zNew, m.vw, m.vh, m.cw, m.ch);
+      mapZoomRef.current = zNew;
+      mapPanRef.current = clamped;
+      setMapZoom(zNew);
+      setMapPan(clamped);
+      refocusPlayingInput();
+    },
+    [readMapMetrics, resetMapZoom, refocusPlayingInput]
+  );
+
+  useEffect(() => {
+    mapZoomRef.current = mapZoom;
+    mapPanRef.current = mapPan;
+  }, [mapZoom, mapPan]);
 
   useEffect(() => {
     let cancelled = false;
@@ -249,7 +408,201 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     for (const iso of guessedRef.current) {
       paintCountry(root, iso, GUESSED_FILL);
     }
+    if (phase === 'over') {
+      paintNotGuessedCountriesReview(root, guessedRef.current);
+      applyReviewHitTargets(root);
+    }
   }, [phase, score, remainingMs, mapSvg, mapMountKey]);
+
+  useEffect(() => {
+    if (phase !== 'playing' && phase !== 'over') {
+      setMapCountryHover(null);
+      return;
+    }
+    if (phase === 'playing' && paused) {
+      setMapCountryHover(null);
+      return;
+    }
+
+    const root = mapRef.current;
+    const svg = root?.querySelector('svg');
+    if (!svg) return;
+
+    const updateFromPointer = (e: PointerEvent) => {
+      const path = isIsoCountryPath(e.target) ? e.target : null;
+      if (!path) {
+        setMapCountryHover(null);
+        return;
+      }
+      const iso = path.getAttribute('id')!;
+      const name = path.getAttribute('data-name')?.trim() || iso;
+      setMapCountryHover({
+        iso,
+        name,
+        guessed: guessedRef.current.has(iso),
+        x: e.clientX,
+        y: e.clientY,
+      });
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      updateFromPointer(e);
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') return;
+      updateFromPointer(e);
+    };
+
+    const onPointerLeave = () => setMapCountryHover(null);
+
+    svg.addEventListener('pointermove', onPointerMove);
+    svg.addEventListener('pointerdown', onPointerDown);
+    svg.addEventListener('pointerleave', onPointerLeave);
+    svg.addEventListener('pointercancel', onPointerLeave);
+
+    return () => {
+      svg.removeEventListener('pointermove', onPointerMove);
+      svg.removeEventListener('pointerdown', onPointerDown);
+      svg.removeEventListener('pointerleave', onPointerLeave);
+      svg.removeEventListener('pointercancel', onPointerLeave);
+    };
+  }, [phase, paused, mapSvg, mapMountKey]);
+
+  /** Update mystery tooltip when the hovered country is guessed mid-hover. */
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    setMapCountryHover((prev) => {
+      if (!prev) return prev;
+      const g = guessedRef.current.has(prev.iso);
+      if (g === prev.guessed) return prev;
+      return { ...prev, guessed: g };
+    });
+  }, [phase, score]);
+
+  useEffect(() => {
+    if (phase !== 'playing' && phase !== 'over') return;
+    const vp = mapViewportRef.current;
+    if (!vp) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      if (isMapZoomChromeTarget(e.target)) return;
+      if (phase === 'playing' && !paused) {
+        e.preventDefault();
+      }
+
+      if (mapZoomRef.current > MAP_ZOOM_MIN) {
+        mapDragRef.current = {
+          pointerId: e.pointerId,
+          startX: e.clientX,
+          startY: e.clientY,
+          startPanX: mapPanRef.current.x,
+          startPanY: mapPanRef.current.y,
+        };
+        vp.classList.add('world-game__map-viewport--dragging');
+        try {
+          vp.setPointerCapture(e.pointerId);
+        } catch {
+          /* ignore */
+        }
+      } else {
+        mapTapRef.current = { x: e.clientX, y: e.clientY, pointerId: e.pointerId };
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      const d = mapDragRef.current;
+      if (!d || d.pointerId !== e.pointerId) return;
+      const dx = e.clientX - d.startX;
+      const dy = e.clientY - d.startY;
+      const z = mapZoomRef.current;
+      const m = readMapMetrics();
+      const next = clampPanForZoom(d.startPanX + dx, d.startPanY + dy, z, m.vw, m.vh, m.cw, m.ch);
+      mapPanRef.current = next;
+      setMapPan(next);
+    };
+
+    const finishPointer = (e: PointerEvent) => {
+      const d = mapDragRef.current;
+      if (d && d.pointerId === e.pointerId) {
+        vp.classList.remove('world-game__map-viewport--dragging');
+        try {
+          if (vp.hasPointerCapture(e.pointerId)) vp.releasePointerCapture(e.pointerId);
+        } catch {
+          /* ignore */
+        }
+        const dist = Math.hypot(e.clientX - d.startX, e.clientY - d.startY);
+        mapDragRef.current = null;
+        if (dist < MAP_DRAG_THRESHOLD_PX) {
+          if (mapZoomRef.current >= MAP_ZOOM_MAX_LEVEL) {
+            resetMapZoom();
+            refocusPlayingInput();
+          } else {
+            cycleMapZoomAt(e.clientX, e.clientY);
+          }
+        }
+        mapTapRef.current = null;
+        return;
+      }
+
+      const tap = mapTapRef.current;
+      if (tap && tap.pointerId === e.pointerId) {
+        const z = mapZoomRef.current;
+        const dist = Math.hypot(e.clientX - tap.x, e.clientY - tap.y);
+        mapTapRef.current = null;
+        if (dist < MAP_DRAG_THRESHOLD_PX) {
+          if (z >= MAP_ZOOM_MAX_LEVEL) {
+            resetMapZoom();
+            refocusPlayingInput();
+          } else {
+            cycleMapZoomAt(e.clientX, e.clientY);
+          }
+        }
+        return;
+      }
+      mapTapRef.current = null;
+    };
+
+    vp.addEventListener('pointerdown', onPointerDown);
+    vp.addEventListener('pointermove', onPointerMove);
+    vp.addEventListener('pointerup', finishPointer);
+    vp.addEventListener('pointercancel', finishPointer);
+
+    return () => {
+      vp.removeEventListener('pointerdown', onPointerDown);
+      vp.removeEventListener('pointermove', onPointerMove);
+      vp.removeEventListener('pointerup', finishPointer);
+      vp.removeEventListener('pointercancel', finishPointer);
+      mapDragRef.current = null;
+      mapTapRef.current = null;
+      vp.classList.remove('world-game__map-viewport--dragging');
+    };
+  }, [phase, paused, readMapMetrics, cycleMapZoomAt, resetMapZoom, refocusPlayingInput]);
+
+  useEffect(() => {
+    if (phase !== 'playing' && phase !== 'over') return;
+    const vp = mapViewportRef.current;
+    if (!vp) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (mapZoomRef.current <= MAP_ZOOM_MIN) return;
+      e.preventDefault();
+      const mult = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? vp.clientHeight : 1;
+      const sdx = e.deltaX * mult;
+      const sdy = e.deltaY * mult;
+      setMapPan((prev) => {
+        const z = mapZoomRef.current;
+        const m = readMapMetrics();
+        const next = clampPanForZoom(prev.x - sdx, prev.y - sdy, z, m.vw, m.vh, m.cw, m.ch);
+        mapPanRef.current = next;
+        return next;
+      });
+    };
+
+    vp.addEventListener('wheel', onWheel, { passive: false });
+    return () => vp.removeEventListener('wheel', onWheel);
+  }, [phase, readMapMetrics]);
 
   useEffect(() => {
     if (phase !== 'playing' || paused) return;
@@ -324,6 +677,10 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     setPhase('intro');
     setMapMountKey((k) => k + 1);
     clearGuessToasts();
+    mapZoomRef.current = MAP_ZOOM_MIN;
+    mapPanRef.current = { x: 0, y: 0 };
+    setMapZoom(MAP_ZOOM_MIN);
+    setMapPan({ x: 0, y: 0 });
   }, [durationMs, clearGuessToasts]);
 
   const startGame = useCallback(() => {
@@ -335,6 +692,10 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
     setPhase('playing');
     setMapMountKey((k) => k + 1);
     clearGuessToasts();
+    mapZoomRef.current = MAP_ZOOM_MIN;
+    mapPanRef.current = { x: 0, y: 0 };
+    setMapZoom(MAP_ZOOM_MIN);
+    setMapPan({ x: 0, y: 0 });
   }, [durationMs, clearGuessToasts]);
 
   const onInputChange = (raw: string) => {
@@ -361,13 +722,81 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
   return (
     <div className="world-game" ref={gameRef}>
       <div
-        key={mapMountKey}
-        ref={mapRef}
-        className="world-game__map"
-        style={{ opacity: phase === 'playing' ? 1 : 0.35 }}
-        aria-hidden
-        {...(mapInnerHtml ? { dangerouslySetInnerHTML: mapInnerHtml } : {})}
-      />
+        ref={mapViewportRef}
+        className={[
+          'world-game__map-viewport',
+          phase === 'over' ? 'world-game__map-viewport--review' : '',
+          mapZoom === MAP_ZOOM_MIN
+            ? 'world-game__map-viewport--fit'
+            : 'world-game__map-viewport--zoomed',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        style={{ opacity: phase === 'intro' ? 0.35 : 1 }}
+      >
+        <div
+          ref={panZoomRef}
+          className="world-game__map-panzoom"
+          style={{
+            transform: `translate3d(${mapPan.x}px, ${mapPan.y}px, 0) scale(${mapZoom})`,
+          }}
+        >
+          <div
+            key={mapMountKey}
+            ref={mapRef}
+            className={[
+              'world-game__map',
+              phase === 'over' && 'world-game__map--review',
+              phase === 'playing' && !paused && 'world-game__map--playing-hover',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            aria-hidden
+            {...(mapInnerHtml ? { dangerouslySetInnerHTML: mapInnerHtml } : {})}
+          />
+        </div>
+      </div>
+
+      {(phase === 'playing' || phase === 'over') && (
+        <button
+          type="button"
+          className="world-game__hud world-game__hud--center world-game__hud--zoom"
+          aria-label={mapZoom >= MAP_ZOOM_MAX_LEVEL ? 'Reset map zoom' : 'Zoom map in'}
+          onClick={(e) => {
+            e.stopPropagation();
+            const vp = mapViewportRef.current;
+            if (!vp) return;
+            const r = vp.getBoundingClientRect();
+            cycleMapZoomAt(r.left + r.width / 2, r.top + r.height / 2);
+          }}
+        >
+          <img
+            className="world-game__hud-zoom-icon"
+            src={mapZoom >= MAP_ZOOM_MAX_LEVEL ? '/games/world/icon-zoomOut.svg' : '/games/world/icon-zoomIn.svg'}
+            alt=""
+            width={18}
+            height={18}
+            draggable={false}
+          />
+          <span>{mapZoom * 100}%</span>
+        </button>
+      )}
+
+      {(phase === 'playing' || phase === 'over') && mapCountryHover && (
+        <div
+          className={
+            mapCountryHover.guessed
+              ? 'world-game__review-toast world-game__review-toast--guessed'
+              : phase === 'over'
+                ? 'world-game__review-toast world-game__review-toast--missed-review'
+                : 'world-game__review-toast world-game__review-toast--missed'
+          }
+          style={{ left: mapCountryHover.x, top: mapCountryHover.y }}
+          role="status"
+        >
+          {phase === 'playing' && !mapCountryHover.guessed ? '?' : mapCountryHover.name}
+        </div>
+      )}
 
       {phase === 'playing' && (
         <>
@@ -389,8 +818,10 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
               {formatScoreProgressSentence(score)}
             </span>
           </div>
-          <label className="world-game__input-wrap">
-            <span className="visually-hidden">Country name</span>
+          <div className="world-game__input-wrap">
+            <label htmlFor="world-game-country-input" className="visually-hidden">
+              Country name
+            </label>
             <div className="world-game__toast-stack" aria-live="polite" aria-relevant="additions">
               {guessToasts.map((t) => (
                 <div
@@ -407,18 +838,32 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
                 </div>
               ))}
             </div>
-            <input
-              ref={inputRef}
-              className="world-game__input"
-              type="text"
+            <form
+              className="world-game__guess-form"
               autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              placeholder="Type a country name…"
-            />
-          </label>
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                id="world-game-country-input"
+                ref={inputRef}
+                className="world-game__input"
+                type="text"
+                name="world-country-guess"
+                inputMode="text"
+                enterKeyHint="done"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                data-1p-ignore
+                data-lpignore="true"
+                data-form-type="other"
+                value={input}
+                onChange={(e) => onInputChange(e.target.value)}
+                placeholder="Type a country name…"
+              />
+            </form>
+          </div>
         </>
       )}
 
@@ -489,24 +934,24 @@ export default function WorldGame({ durationMs = defaultDurationMs }: WorldGameP
         <div className="world-game__modal-backdrop world-game__modal-backdrop--game-over">
           <GameOverConfetti />
           <div
-            className="world-game__modal"
+            className="world-game__modal world-game__modal--game-over-sheet"
             role="dialog"
             aria-labelledby="world-game-over-title"
             aria-describedby="world-game-over-desc"
           >
             <img
-              className="world-game__globe"
+              className="world-game__globe world-game__globe--sheet"
               src="/games/world/icon-globe.svg"
               alt=""
-              width={48}
-              height={48}
+              width={40}
+              height={40}
             />
-            <h1 id="world-game-over-title" className="world-game__modal-title">
+            <h1 id="world-game-over-title" className="world-game__modal-title world-game__modal-title--sheet">
               Game over
             </h1>
-            <p id="world-game-over-desc" className="world-game__modal-text">
+            <p id="world-game-over-desc" className="world-game__modal-text world-game__modal-text--sheet">
               You guessed {score} countries out of {WORLD_MAP_COUNTRY_COUNT} in{' '}
-              {formatGameOverElapsed(durationMs - remainingMs)}.
+              {formatGameOverElapsed(durationMs - remainingMs)}. Hover or tap the map to review.
             </p>
             <button type="button" className="world-game__btn" onClick={resetRound}>
               Try again

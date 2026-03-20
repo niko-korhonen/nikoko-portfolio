@@ -12,13 +12,58 @@
   overflow: hidden;
 }
 
-.world-game__map {
+.world-game__map-viewport {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  z-index: 0;
+}
+
+.world-game__map-viewport--review {
+  z-index: 1;
+}
+
+.world-game__map-viewport--fit {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.world-game__map-viewport--fit .world-game__map-panzoom {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.world-game__map-viewport--zoomed {
+  display: block;
+  touch-action: none;
+}
+
+.world-game__map-viewport--zoomed .world-game__map-panzoom {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.world-game__map-viewport--zoomed:not(.world-game__map-viewport--dragging) {
+  cursor: grab;
+}
+
+.world-game__map-viewport--zoomed.world-game__map-viewport--dragging {
+  cursor: grabbing;
+}
+
+.world-game__map-panzoom {
+  transform-origin: 0 0;
+}
+
+.world-game__map {
+  width: 100%;
+  display: block;
+  overflow: visible;
 }
 
 .world-game__map svg {
@@ -32,6 +77,76 @@
 .world-game__map #svg2 {
   margin-left: 0;
   margin-right: 0;
+}
+
+.world-game__map--review {
+  position: relative;
+  z-index: 1;
+}
+
+.world-game__map--playing-hover {
+  position: relative;
+}
+
+.world-game__map--review svg path[id],
+.world-game__map--playing-hover svg path[id] {
+  cursor: default;
+  transition: filter 0.08s ease;
+}
+
+.world-game__map--review svg path[id]:hover,
+.world-game__map--playing-hover svg path[id]:hover {
+  filter: brightness(0.88);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-game__map--review svg path[id],
+  .world-game__map--playing-hover svg path[id] {
+    transition: none;
+  }
+
+  .world-game__map--review svg path[id]:hover,
+  .world-game__map--playing-hover svg path[id]:hover {
+    filter: none;
+  }
+}
+
+.world-game__review-toast {
+  position: fixed;
+  z-index: 8;
+  pointer-events: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  max-width: min(calc(100vw - 24px), 320px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  border: 1px solid transparent;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.world-game__review-toast--guessed {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+.world-game__review-toast--missed {
+  color: #525252;
+  background: #f5f5f5;
+  border-color: #e5e5e5;
+}
+
+/** End-game only: unguessed country tooltip; matches `.world-game__btn--danger`. */
+.world-game__review-toast--missed-review {
+  color: #fff;
+  background: #ea580c;
+  border-color: #c2410c;
 }
 
 .world-game__hud {
@@ -68,6 +183,45 @@
 
 .world-game__hud--right {
   right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.world-game__hud--center {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.world-game__hud--zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  color: inherit;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Keep taps on the button; inner content must not steal selection or pointer handling. */
+.world-game__hud--zoom * {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.world-game__hud--zoom:hover {
+  background: #fafafa;
+}
+
+.world-game__hud-zoom-icon {
+  display: block;
+  flex-shrink: 0;
 }
 
 .world-game__hud--score {
@@ -119,6 +273,11 @@
   z-index: 2;
   width: min(420px, calc(100% - 32px));
   margin: 0;
+}
+
+.world-game__guess-form {
+  margin: 0;
+  width: 100%;
 }
 
 .world-game__toast-stack {
@@ -271,9 +430,40 @@
   z-index: 4;
 }
 
+.world-game__modal-backdrop--game-over {
+  pointer-events: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: max(8px, env(safe-area-inset-bottom, 0px)) 16px max(20px, env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.07) 0%, transparent 42%);
+}
+
 .world-game__modal-backdrop--game-over .world-game__modal {
   position: relative;
   z-index: 1;
+  pointer-events: auto;
+}
+
+.world-game__modal--game-over-sheet {
+  max-width: min(400px, 100%);
+  padding: 18px 20px 20px;
+  border-radius: 18px;
+  box-shadow:
+    0 -6px 28px rgba(0, 0, 0, 0.12),
+    0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.world-game__globe--sheet {
+  margin: 0 auto 10px;
+}
+
+.world-game__modal-title--sheet {
+  font-size: 1.125rem;
+}
+
+.world-game__modal-text--sheet {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
 }
 
 .world-game__confetti {
