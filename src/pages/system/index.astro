@@ -1,0 +1,1006 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Cluster from '../../system/primitives/Cluster.astro';
+import Container from '../../system/primitives/Container.astro';
+import Inline from '../../system/primitives/Inline.astro';
+import Section from '../../system/primitives/Section.astro';
+import Stack from '../../system/primitives/Stack.astro';
+import Surface from '../../system/primitives/Surface.astro';
+import Badge from '../../system/components/Badge.astro';
+import Button from '../../system/components/Button.astro';
+import ButtonIcon from '../../system/components/ButtonIcon.astro';
+import Radio from '../../system/components/Radio.astro';
+import Toggle from '../../system/components/Toggle.astro';
+import Tooltip from '../../system/components/Tooltip.astro';
+import Icon from '../../system/icons/Icon.astro';
+
+const colorGroups: { title: string; tokens: string[] }[] = [
+  {
+    title: 'Content',
+    tokens: [
+      'content-primary',
+      'content-secondary',
+      'content-tertiary',
+      'content-primary-inverse',
+      'content-secondary-inverse',
+      'content-tertiary-inverse',
+      'content-static-black',
+      'content-static-white',
+      'content-blue',
+      'content-purple',
+      'content-positive',
+      'content-warning',
+      'content-negative',
+    ],
+  },
+  {
+    title: 'Container',
+    tokens: [
+      'container-primary',
+      'container-primary-inverse',
+      'container-floating',
+      'container-accent-blue',
+      'container-accent-purple',
+      'container-accent-positive',
+      'container-accent-warning',
+      'container-accent-negative',
+      'container-accent-subtle-blue',
+      'container-accent-subtle-purple',
+      'container-accent-subtle-positive',
+      'container-accent-subtle-warning',
+      'container-accent-subtle-negative',
+    ],
+  },
+  {
+    title: 'Surface',
+    tokens: [
+      'surface-base',
+      'surface-elevation',
+      'surface-floating',
+      'surface-blue',
+      'surface-purple',
+      'surface-positive',
+      'surface-warning',
+      'surface-negative',
+      'surface-subtle-blue',
+      'surface-subtle-purple',
+      'surface-subtle-positive',
+      'surface-subtle-warning',
+      'surface-subtle-negative',
+    ],
+  },
+  {
+    title: 'Outline',
+    tokens: [
+      'outline-primary',
+      'outline-secondary',
+      'outline-tertiary',
+      'outline-blue',
+      'outline-purple',
+      'outline-positive',
+      'outline-warning',
+      'outline-negative',
+      'outline-subtle-blue',
+      'outline-subtle-purple',
+      'outline-subtle-positive',
+      'outline-subtle-warning',
+      'outline-subtle-negative',
+    ],
+  },
+  {
+    title: 'Component',
+    tokens: [
+      'component-active',
+      'component-hover',
+      'component-hover-inverse',
+      'component-pressed',
+      'component-pressed-inverse',
+      'component-focused',
+    ],
+  },
+  {
+    title: 'Overlay',
+    tokens: ['overlay-primary'],
+  },
+];
+
+const radiusTokens = ['none', 'lowest', 'low', 'medium', 'high', 'highest'] as const;
+
+const iconSizes = [
+  { key: 'l', label: 'L' },
+  { key: 'm', label: 'M' },
+  { key: 's', label: 'S' },
+  { key: 'xs', label: 'XS' },
+] as const;
+
+type TypoCat = {
+  name: string;
+  label: string;
+  sizes: { classSuffix: string; sample: string }[];
+};
+
+const typoCategories: TypoCat[] = [
+  {
+    name: 'display',
+    label: 'Display',
+    sizes: [
+      { classSuffix: 'display-l', sample: 'Display L' },
+      { classSuffix: 'display-m', sample: 'Display M' },
+      { classSuffix: 'display-s', sample: 'Display S' },
+    ],
+  },
+  {
+    name: 'headline',
+    label: 'Headline',
+    sizes: [
+      { classSuffix: 'headline-l', sample: 'Headline L' },
+      { classSuffix: 'headline-m', sample: 'Headline M' },
+      { classSuffix: 'headline-s', sample: 'Headline S' },
+    ],
+  },
+  {
+    name: 'label',
+    label: 'Label',
+    sizes: [
+      { classSuffix: 'label-l', sample: 'Label L' },
+      { classSuffix: 'label-m', sample: 'Label M' },
+      { classSuffix: 'label-s', sample: 'Label S' },
+      { classSuffix: 'label-xs', sample: 'Label XS' },
+      { classSuffix: 'label-xxs', sample: 'Label XXS' },
+    ],
+  },
+  {
+    name: 'body',
+    label: 'Body',
+    sizes: [
+      { classSuffix: 'body-l', sample: 'Body L' },
+      { classSuffix: 'body-m', sample: 'Body M' },
+      { classSuffix: 'body-s', sample: 'Body S' },
+      { classSuffix: 'body-xs', sample: 'Body XS' },
+      { classSuffix: 'body-xxs', sample: 'Body XXS' },
+    ],
+  },
+  {
+    name: 'code',
+    label: 'Code',
+    sizes: [
+      { classSuffix: 'code-l', sample: 'const x = 1' },
+      { classSuffix: 'code-m', sample: 'const x = 1' },
+      { classSuffix: 'code-s', sample: 'const x = 1' },
+      { classSuffix: 'code-xs', sample: 'const x = 1' },
+      { classSuffix: 'code-xxs', sample: 'const x = 1' },
+    ],
+  },
+];
+
+/** Spacing scale from misc.tokens.json (generated as --space-*) */
+const spacingTokens = [
+  'space-2',
+  'space-4',
+  'space-6',
+  'space-8',
+  'space-10',
+  'space-12',
+  'space-14',
+  'space-16',
+  'space-18',
+  'space-20',
+  'space-22',
+  'space-24',
+  'space-28',
+  'space-32',
+  'space-36',
+  'space-40',
+  'space-44',
+  'space-50',
+  'space-56',
+  'space-62',
+  'space-68',
+  'space-74',
+] as const;
+
+const btnMatrixVariants = ['primary', 'secondary', 'ghost', 'accent'] as const;
+const btnMatrixSizes = ['l', 'm', 's'] as const;
+const btnMatrixRows = [
+  { id: 'default', label: 'Default' },
+  { id: 'disabled', label: 'Disabled' },
+] as const;
+
+const btnIconMatrixRows = [
+  { id: 'default', label: 'Default' },
+  { id: 'disabled', label: 'Disabled' },
+] as const;
+
+function variantLabel(v: string) {
+  return v.charAt(0).toUpperCase() + v.slice(1);
+}
+
+function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
+  return size === 'l' ? 'm' : 's';
+}
+---
+
+<BaseLayout title="System — Niko UI">
+  <div class="page">
+    <header class="page__header">
+      <p class="text-label-s-plain page__eyebrow">Design tokens</p>
+      <h1 class="text-headline-l-emphasized">System foundation</h1>
+      <p class="text-body-m-plain page__lede">
+        Semantic colors follow the active theme. Typography, radius, and icon sizes are shared across themes.
+      </p>
+      <div class="page__toolbar">
+        <label class="text-label-s-plain toolbar__label" for="theme-mode">Theme</label>
+        <select class="toolbar__select text-body-m-plain" id="theme-mode" name="theme-mode">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+        <a class="page__home text-label-m-plain" href="/">← Home</a>
+      </div>
+    </header>
+
+    <section class="section" aria-labelledby="colors-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="colors-heading">Colors</h2>
+      {
+        colorGroups.map((group) => (
+          <div class="subsection">
+            <h3 class="text-label-l-emphasized subsection__title">{group.title}</h3>
+            <ul class="swatch-grid">
+              {group.tokens.map((token) => (
+                <li class="swatch">
+                  {token.startsWith('outline-') ? (
+                    <div
+                      class="swatch__outline"
+                      style={`border-color: var(--color-${token}); background: var(--color-surface-base);`}
+                    />
+                  ) : token.startsWith('overlay-') ? (
+                    <div class="swatch__alpha-bg">
+                      <div
+                        class="swatch__fill"
+                        style={`background: var(--color-${token});`}
+                      />
+                    </div>
+                  ) : token.startsWith('component-') &&
+                    (token.includes('active') ||
+                      token.includes('hover') ||
+                      token.includes('pressed')) ? (
+                    <div class="swatch__alpha-bg">
+                      <div
+                        class="swatch__fill"
+                        style={`background: var(--color-${token});`}
+                      />
+                    </div>
+                  ) : (
+                    <div class="swatch__fill" style={`background: var(--color-${token});`} />
+                  )}
+                  <span class="text-body-xs-plain swatch__name">{`--color-${token}`}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Other</h3>
+        <p class="text-body-s-plain">
+          <code class="code-inline">--opacity-component-disabled</code>
+          <span class="muted"> → </span>
+          <span class="text-body-s-emphasized">{`var(--opacity-component-disabled)`}</span>
+          <span
+            class="opacity-demo"
+            style={`opacity: var(--opacity-component-disabled);`}
+            aria-hidden="true"
+          >
+            Sample
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="type-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="type-heading">Typography</h2>
+      {
+        typoCategories.map((cat) => (
+          <div class="subsection">
+            <h3 class="text-label-l-emphasized subsection__title">{cat.label}</h3>
+            <ul class="type-list">
+              {cat.sizes.map((row) => (
+                <li class="type-row">
+                  <div class="type-pair">
+                    <p class={`text-${row.classSuffix}-plain`}>{row.sample} · plain</p>
+                    <p class={`text-${row.classSuffix}-emphasized`}>{row.sample} · emphasized</p>
+                  </div>
+                  <code class="text-code-xs-plain type-meta">
+                    {`.text-${row.classSuffix}-plain`} / {`.text-${row.classSuffix}-emphasized`}
+                  </code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="section" aria-labelledby="radius-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="radius-heading">Radius</h2>
+      <ul class="radius-grid">
+        {
+          radiusTokens.map((r) => (
+            <li class="radius-item">
+              <div
+                class="radius-swatch"
+                style={`border-radius: var(--radius-${r}); background: var(--color-surface-elevation);`}
+              />
+              <span class="text-body-xs-plain">{`--radius-${r}`}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="icons-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="icons-heading">Icon sizes</h2>
+      <p class="text-body-s-plain section__note">
+        Same SVG scaled with <code class="code-inline">width</code> / <code class="code-inline">height</code> →
+        <code class="code-inline">var(--icon-*)</code>
+      </p>
+      <ul class="icon-row">
+        {
+          iconSizes.map(({ key, label }) => (
+            <li class="icon-item">
+              <Icon name="check" style="outline" size={key} />
+              <span class="text-body-xs-plain">{`--icon-${key}`} ({label})</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="spacing-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="spacing-heading">Spacing</h2>
+      <p class="text-body-s-plain section__note">
+        Layout rhythm from <code class="code-inline">misc.tokens.json</code> → <code class="code-inline">--space-*</code> (generated).
+        Bar width equals each token value.
+      </p>
+      <ul class="spacing-scale">
+        {
+          spacingTokens.map((t) => (
+            <li class="spacing-scale__row">
+              <code class="text-code-xs-plain spacing-scale__name">{`--${t}`}</code>
+              <div class="spacing-scale__track">
+                <div class="spacing-scale__bar" style={`width: var(--${t});`} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="layout-primitives-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="layout-primitives-heading">
+        Layout primitives
+      </h2>
+      <p class="text-body-s-plain section__note">
+        Structural building blocks from <code class="code-inline">src/system/primitives/</code>. Pass spacing token
+        names (e.g. <code class="code-inline">gap=&quot;space-8&quot;</code>, <code class="code-inline">padding=&quot;space-16&quot;</code>).
+      </p>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Container</h3>
+        <p class="text-body-s-plain subsection__hint">Centers content, horizontal padding, max width.</p>
+        <Stack gap="space-8">
+          <Container size="default">
+            <div class="lp-demo-cell text-label-s-plain">size=&quot;default&quot; (max: --layout-container-max)</div>
+          </Container>
+          <Container size="wide">
+            <div class="lp-demo-cell text-label-s-plain">size=&quot;wide&quot; (max: --layout-container-max-wide)</div>
+          </Container>
+        </Stack>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Stack</h3>
+        <p class="text-body-s-plain subsection__hint">Vertical flex; gap and align-items.</p>
+        <Stack gap="space-8" align="stretch">
+          <div class="lp-demo-cell text-body-s-plain">Row one</div>
+          <div class="lp-demo-cell text-body-s-plain">Row two</div>
+          <div class="lp-demo-cell text-body-s-plain">Row three</div>
+        </Stack>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Inline</h3>
+        <p class="text-body-s-plain subsection__hint">Horizontal row; gap, align, justify.</p>
+        <Inline gap="space-8" align="center" justify="between">
+          <span class="text-label-s-plain lp-demo-pill">Left</span>
+          <span class="text-label-s-plain lp-demo-pill">Center area</span>
+          <span class="text-label-s-plain lp-demo-pill">Right</span>
+        </Inline>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Cluster</h3>
+        <p class="text-body-s-plain subsection__hint">Wraps items to new rows.</p>
+        <Cluster gap="space-8" align="center">
+          <span class="text-label-s-plain lp-demo-pill">One</span>
+          <span class="text-label-s-plain lp-demo-pill">Two</span>
+          <span class="text-label-s-plain lp-demo-pill">Three</span>
+          <span class="text-label-s-plain lp-demo-pill">Four</span>
+          <span class="text-label-s-plain lp-demo-pill">Five</span>
+        </Cluster>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Section</h3>
+        <p class="text-body-s-plain subsection__hint">Padding and optional surface background.</p>
+        <Section padding="space-16" surface="elevation">
+          <p class="text-body-s-plain">padding=&quot;space-16&quot; · surface=&quot;elevation&quot;</p>
+        </Section>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Surface</h3>
+        <p class="text-body-s-plain subsection__hint">Surface token, padding, radius.</p>
+        <Surface variant="floating" padding="space-16" radius="medium">
+          <p class="text-body-s-plain">variant=&quot;floating&quot; · padding=&quot;space-16&quot; · radius=&quot;medium&quot;</p>
+        </Surface>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Composition</h3>
+        <p class="text-body-s-plain subsection__hint">Container → Stack → Surface.</p>
+        <Container size="default">
+          <Stack gap="space-16">
+            <Surface variant="elevation" padding="space-8" radius="low">
+              <p class="text-body-s-plain">Nested example</p>
+            </Surface>
+          </Stack>
+        </Container>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="components-heading">
+      <h2 class="text-headline-s-emphasized section__title" id="components-heading">Components (v1)</h2>
+      <p class="text-body-s-plain section__note">
+        First-pass building blocks from <code class="code-inline">src/system/components/</code>. Props stay small;
+        styling uses semantic tokens in <code class="code-inline">components.css</code>.
+      </p>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Button</h3>
+        <p class="text-body-s-plain subsection__hint">Columns = variant · rows = default and disabled.</p>
+        {
+          btnMatrixSizes.map((size) => (
+            <div class="demo-btn-subsection">
+              <h4 class="text-label-m-emphasized demo-btn-subsection__title">Size {size.toUpperCase()}</h4>
+              <div class="demo-matrix-wrap">
+                <div class="demo-matrix">
+                  <div class="demo-matrix__row demo-matrix__row--head">
+                    <span class="demo-matrix__corner" aria-hidden="true" />
+                    {btnMatrixVariants.map((v) => (
+                      <span class="text-label-xs-plain demo-matrix__head">{variantLabel(v)}</span>
+                    ))}
+                  </div>
+                  {btnMatrixRows.map((row) => (
+                    <div class="demo-matrix__row">
+                      <span class="text-body-xs-plain demo-matrix__state">{row.label}</span>
+                      {btnMatrixVariants.map((v) => (
+                        <div class="demo-matrix__cell">
+                          {row.id === 'disabled' ? (
+                            <Button size={size} variant={v} disabled>
+                              Label
+                            </Button>
+                          ) : (
+                            <Button size={size} variant={v}>
+                              Label
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">ButtonIcon</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Same grid as Button · icon-only (<code class="code-inline">icon-placeholder-outline</code>) · L uses icon M; M / S use
+          icon S · <code class="code-inline">label</code> is fixed for the matrix.
+        </p>
+        {
+          btnMatrixSizes.map((size) => (
+            <div class="demo-btn-subsection">
+              <h4 class="text-label-m-emphasized demo-btn-subsection__title">Size {size.toUpperCase()}</h4>
+              <div class="demo-matrix-wrap">
+                <div class="demo-matrix">
+                  <div class="demo-matrix__row demo-matrix__row--head">
+                    <span class="demo-matrix__corner" aria-hidden="true" />
+                    {btnMatrixVariants.map((v) => (
+                      <span class="text-label-xs-plain demo-matrix__head">{variantLabel(v)}</span>
+                    ))}
+                  </div>
+                  {btnIconMatrixRows.map((row) => (
+                    <div class="demo-matrix__row">
+                      <span class="text-body-xs-plain demo-matrix__state">{row.label}</span>
+                      {btnMatrixVariants.map((v) => (
+                        <div class="demo-matrix__cell">
+                          {row.id === 'disabled' ? (
+                            <ButtonIcon size={size} variant={v} label="Action" disabled>
+                              <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
+                            </ButtonIcon>
+                          ) : (
+                            <ButtonIcon size={size} variant={v} label="Action">
+                              <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
+                            </ButtonIcon>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Badge</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Primary = container primary-inverse · accent = container accent-blue (no borders).
+        </p>
+        <Inline gap="space-8" align="center">
+          <Badge variant="primary">Beta</Badge>
+          <Badge variant="inverse">New</Badge>
+          <Badge variant="accent">Info</Badge>
+        </Inline>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Toggle</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Single size · off = outline only, tertiary knob · on = accent-blue fill, static white knob.
+        </p>
+        <Cluster gap="space-8" align="center">
+          <Toggle name="demo-toggle-a" />
+          <Toggle name="demo-toggle-b" checked />
+          <Toggle name="demo-toggle-c" disabled />
+        </Cluster>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Radio</h3>
+        <p class="text-body-s-plain subsection__hint">Grouped with a shared <code class="code-inline">name</code> · sizes L / M / S.</p>
+        <Stack gap="space-12">
+          <fieldset class="ds-fieldset">
+            <legend class="text-label-s-plain ds-fieldset__legend">Option (M)</legend>
+            <Stack gap="space-8">
+              <Radio name="demo-radio-m" value="a" size="m" checked>Option A</Radio>
+              <Radio name="demo-radio-m" value="b" size="m">Option B</Radio>
+            </Stack>
+          </fieldset>
+          <Inline gap="space-16" align="center">
+            <Radio name="demo-radio-sizes" value="l" size="l" checked>Large</Radio>
+            <Radio name="demo-radio-sizes" value="m" size="m">Medium</Radio>
+            <Radio name="demo-radio-sizes" value="s" size="s">Small</Radio>
+          </Inline>
+        </Stack>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Tooltip</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Hover or focus the anchor · pair <code class="code-inline">id</code> with
+          <code class="code-inline">aria-describedby</code> on the trigger.
+        </p>
+        <Cluster gap="space-12" align="center">
+          <Tooltip id="sys-tooltip-1">
+            <button
+              type="button"
+              slot="trigger"
+              class="text-label-s-plain ui-focus-ring"
+              aria-describedby="sys-tooltip-1"
+            >
+              Keyboard or hover
+            </button>
+            <span slot="content">Short help copy using body XS typography tokens.</span>
+          </Tooltip>
+          <Tooltip id="sys-tooltip-2">
+            <span
+              slot="trigger"
+              tabindex="0"
+              role="button"
+              class="text-body-s-plain ui-focus-ring"
+              aria-describedby="sys-tooltip-2"
+            >
+              Inline text trigger
+            </span>
+            <span slot="content">Tooltip surface uses surface, outline, and spacing tokens.</span>
+          </Tooltip>
+        </Cluster>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const select = document.getElementById('theme-mode');
+      if (!(select instanceof HTMLSelectElement)) return;
+
+      const storageKey = 'niko-ui-theme';
+
+      function apply(value) {
+        const root = document.documentElement;
+        if (value === 'system') {
+          root.removeAttribute('data-theme');
+        } else {
+          root.setAttribute('data-theme', value);
+        }
+        try {
+          localStorage.setItem(storageKey, value);
+        } catch {
+          /* ignore */
+        }
+      }
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved === 'light' || saved === 'dark' || saved === 'system') {
+          select.value = saved;
+          apply(saved);
+        }
+      } catch {
+        /* ignore */
+      }
+
+      select.addEventListener('change', () => {
+        apply(select.value);
+      });
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: var(--radius-high, 32px) var(--radius-medium, 16px) var(--radius-high, 48px);
+  }
+
+  .page__header {
+    margin-bottom: var(--radius-high, 32px);
+  }
+
+  .page__eyebrow {
+    margin: 0 0 var(--radius-low, 8px);
+    color: var(--color-content-tertiary);
+  }
+
+  .page__lede {
+    margin: var(--radius-low, 8px) 0 0;
+    max-width: 40rem;
+    color: var(--color-content-secondary);
+  }
+
+  .page__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--radius-low, 8px);
+    margin-top: var(--radius-medium, 16px);
+  }
+
+  .toolbar__label {
+    margin: 0;
+  }
+
+  .toolbar__select {
+    padding: var(--radius-lowest, 4px) var(--radius-low, 8px);
+    border-radius: var(--radius-low);
+    border: 1px solid var(--color-outline-secondary);
+    background: var(--color-surface-base);
+    color: var(--color-content-primary);
+    font: inherit;
+  }
+
+  .page__home {
+    margin-left: auto;
+    color: var(--color-content-secondary);
+    text-decoration: none;
+  }
+
+  .page__home:hover {
+    color: var(--color-content-primary);
+  }
+
+  .section {
+    margin-top: var(--radius-high, 32px);
+  }
+
+  .section__title {
+    margin: 0 0 var(--radius-medium, 16px);
+    padding-bottom: var(--radius-low);
+    border-bottom: 1px solid var(--color-outline-tertiary);
+  }
+
+  .section__note {
+    margin: 0 0 var(--radius-medium, 16px);
+    color: var(--color-content-secondary);
+  }
+
+  .subsection {
+    margin-top: var(--radius-medium, 24px);
+  }
+
+  .subsection__title {
+    margin: 0 0 var(--radius-low, 8px);
+    color: var(--color-content-secondary);
+  }
+
+  .subsection__hint {
+    margin: 0 0 var(--space-16);
+    color: var(--color-content-tertiary);
+  }
+
+  .spacing-scale {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .spacing-scale__row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .spacing-scale__name {
+    word-break: break-word;
+  }
+
+  .spacing-scale__track {
+    height: var(--space-8);
+    background: var(--color-surface-elevation);
+    border-radius: var(--radius-lowest);
+    border: 1px solid var(--color-outline-tertiary);
+  }
+
+  .spacing-scale__bar {
+    height: 100%;
+    background: var(--color-content-tertiary);
+    max-width: 100%;
+  }
+
+  .lp-demo-cell {
+    border: 1px solid var(--color-outline-secondary);
+    padding: var(--space-8);
+    border-radius: var(--radius-low);
+  }
+
+  .lp-demo-pill {
+    display: inline-block;
+    padding: var(--space-4) var(--space-8);
+    border: 1px solid var(--color-outline-secondary);
+    border-radius: var(--radius-low);
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--radius-low, 8px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-lowest, 4px);
+  }
+
+  .swatch__fill {
+    height: 3rem;
+    border-radius: var(--radius-low);
+    border: 1px solid var(--color-outline-tertiary);
+  }
+
+  .swatch__outline {
+    height: 3rem;
+    border-radius: var(--radius-low);
+    border-width: 3px;
+    border-style: solid;
+  }
+
+  .swatch__alpha-bg {
+    height: 3rem;
+    border-radius: var(--radius-low);
+    padding: var(--radius-lowest);
+    background: repeating-conic-gradient(
+        var(--color-surface-elevation) 0% 25%,
+        var(--color-surface-floating) 0% 50%
+      )
+      50% / var(--radius-low) var(--radius-low);
+    border: 1px solid var(--color-outline-tertiary);
+  }
+
+  .swatch__alpha-bg .swatch__fill {
+    height: 100%;
+    border: none;
+  }
+
+  .swatch__name {
+    word-break: break-word;
+    color: var(--color-content-tertiary);
+  }
+
+  .muted {
+    color: var(--color-content-tertiary);
+  }
+
+  .code-inline {
+    font-family: 'Google Sans Code', monospace;
+    font-size: 0.9em;
+  }
+
+  .opacity-demo {
+    margin-left: var(--radius-low);
+  }
+
+  .type-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-medium, 16px);
+  }
+
+  .type-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-lowest);
+    padding-bottom: var(--radius-medium);
+    border-bottom: 1px solid var(--color-outline-tertiary);
+  }
+
+  .type-row:last-child {
+    border-bottom: none;
+  }
+
+  .type-pair {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-lowest);
+  }
+
+  .type-meta {
+    color: var(--color-content-tertiary);
+  }
+
+  @media (min-width: 40rem) {
+    .type-row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+    gap: var(--radius-medium);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .radius-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-lowest);
+    align-items: flex-start;
+  }
+
+  .radius-swatch {
+    width: 100%;
+    height: 4rem;
+    border: 1px solid var(--color-outline-tertiary);
+  }
+
+  .icon-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--radius-medium);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--radius-low);
+    color: var(--color-content-secondary);
+  }
+
+  .icon-item .ui-icon {
+    color: var(--color-content-primary);
+  }
+
+  .ds-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 0;
+  }
+
+  .ds-fieldset__legend {
+    padding: 0;
+    margin-bottom: var(--space-8);
+    color: var(--color-content-secondary);
+  }
+
+  /* Button / ButtonIcon matrix */
+  .demo-btn-subsection {
+    margin-top: var(--space-16);
+  }
+
+  .demo-btn-subsection__title {
+    margin: 0 0 var(--space-8);
+  }
+
+  .demo-matrix-wrap {
+    overflow-x: auto;
+    padding-bottom: var(--space-4);
+  }
+
+  .demo-matrix {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    min-width: min(100%, 40rem);
+  }
+
+  .demo-matrix__row {
+    display: grid;
+    grid-template-columns: minmax(4.5rem, auto) repeat(4, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-8);
+    align-items: center;
+  }
+
+  .demo-matrix__row--head {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-outline-tertiary);
+  }
+
+  .demo-matrix__corner {
+    display: block;
+  }
+
+  .demo-matrix__head {
+    text-align: center;
+    color: var(--color-content-secondary);
+  }
+
+  .demo-matrix__state {
+    color: var(--color-content-tertiary);
+  }
+
+  .demo-matrix__cell {
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+  }
+</style>

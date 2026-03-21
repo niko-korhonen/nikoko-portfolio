@@ -1,0 +1,7 @@
+/*
+ * Layout-only values (no page-width token in the design export).
+ */
+:root {
+  --layout-container-max: 48rem;
+  --layout-container-max-wide: 72rem;
+}

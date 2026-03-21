@@ -1,0 +1,20 @@
+---
+interface Props {
+  /**
+   * Id for the tooltip surface (`role="tooltip"`). Use the same value for
+   * `aria-describedby` on the trigger. Auto-generated when omitted.
+   */
+  id?: string;
+}
+
+const tooltipId = Astro.props.id ?? `tt-${Math.random().toString(36).slice(2, 11)}`;
+---
+
+<div class="ui-tooltip">
+  <span class="ui-tooltip__anchor">
+    <slot name="trigger" />
+  </span>
+  <span id={tooltipId} class="ui-tooltip__surface text-body-xs-plain" role="tooltip">
+    <slot name="content" />
+  </span>
+</div>

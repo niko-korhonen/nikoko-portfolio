@@ -1,0 +1,36 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { prepareInlineIcon } from './inlineIcon';
+
+export type IconStyle = 'fill' | 'outline';
+export type IconSize = 'l' | 'm' | 's' | 'xs';
+
+interface Props {
+  /** File stem after `icon-` and before `-fill` / `-outline`, e.g. `check` → `icon-check-outline.svg` */
+  name: string;
+  style: IconStyle;
+  size?: IconSize;
+  class?: string;
+}
+
+const { name, style, size = 'm', class: className = '' } = Astro.props;
+
+const filename = `icon-${name}-${style}.svg`;
+const filePath = path.join(process.cwd(), 'public/icons', filename);
+
+let markup = '';
+if (fs.existsSync(filePath)) {
+  markup = prepareInlineIcon(fs.readFileSync(filePath, 'utf8'));
+} else {
+  console.warn(`[Icon] Missing icon file: public/icons/${filename}`);
+}
+---
+
+{
+  markup ? (
+    <span class:list={['ui-icon', className]} data-size={size} set:html={markup} />
+  ) : (
+    <span class:list={['ui-icon', 'ui-icon--missing', className]} data-size={size} aria-hidden="true" />
+  )
+}

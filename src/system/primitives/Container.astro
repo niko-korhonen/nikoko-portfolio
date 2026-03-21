@@ -1,0 +1,17 @@
+---
+export interface Props {
+  size?: 'default' | 'wide';
+  /** Horizontal padding: spacing token name, e.g. `space-16` */
+  paddingInline?: string;
+}
+
+const { size = 'default', paddingInline = 'space-16' } = Astro.props;
+---
+
+<div
+  class="lp-container"
+  data-size={size}
+  style={`--lp-container-padding-inline: var(--${paddingInline});`}
+>
+  <slot />
+</div>

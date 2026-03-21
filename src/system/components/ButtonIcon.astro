@@ -1,0 +1,34 @@
+---
+export type ButtonIconVariant = 'primary' | 'secondary' | 'ghost' | 'accent';
+export type ButtonIconSize = 'l' | 'm' | 's';
+
+interface Props {
+  variant?: ButtonIconVariant;
+  size?: ButtonIconSize;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  /** Required for icon-only control accessibility */
+  label: string;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'm',
+  disabled = false,
+  type = 'button',
+  label,
+  class: className = '',
+} = Astro.props;
+---
+
+<button
+  class={['ui-btn-icon', 'ui-focus-ring', className].filter(Boolean).join(' ')}
+  type={type}
+  disabled={disabled}
+  data-variant={variant}
+  data-size={size}
+  aria-label={label}
+>
+  <slot />
+</button>

@@ -1,0 +1,18 @@
+---
+export interface Props {
+  /** Semantic surface suffix, e.g. `elevation` → `var(--color-surface-elevation)` */
+  variant: string;
+  /** Spacing token name, e.g. `space-16` */
+  padding?: string;
+  radius?: 'none' | 'lowest' | 'low' | 'medium' | 'high';
+}
+
+const { variant, padding = 'space-16', radius = 'low' } = Astro.props;
+---
+
+<div
+  class="lp-surface"
+  style={`background: var(--color-surface-${variant}); --lp-surface-padding: var(--${padding}); --lp-surface-radius: var(--radius-${radius});`}
+>
+  <slot />
+</div>

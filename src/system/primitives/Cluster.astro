@@ -1,0 +1,13 @@
+---
+export interface Props {
+  /** Spacing token name, e.g. `space-8` */
+  gap?: string;
+  align?: 'start' | 'center';
+}
+
+const { gap = 'space-8', align = 'start' } = Astro.props;
+---
+
+<div class="lp-cluster" data-align={align} style={`--lp-gap: var(--${gap});`}>
+  <slot />
+</div>

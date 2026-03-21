@@ -1,8 +1,9 @@
 {
-  "name": "nikoko-portfolio",
+  "name": "niko-ui-portfolio",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "tokens": "node scripts/generate-tokens.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

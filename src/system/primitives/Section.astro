@@ -1,0 +1,21 @@
+---
+export interface Props {
+  /** Spacing token name for padding, e.g. `space-16` */
+  padding?: string;
+  /** Semantic surface suffix, e.g. `elevation` → `var(--color-surface-elevation)` */
+  surface?: string;
+}
+
+const { padding = 'space-16', surface } = Astro.props;
+
+const sectionStyle = [
+  `--lp-section-padding: var(--${padding});`,
+  surface ? `background: var(--color-surface-${surface});` : '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<section class="lp-section" style={sectionStyle}>
+  <slot />
+</section>

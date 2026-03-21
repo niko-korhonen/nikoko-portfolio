@@ -1,0 +1,14 @@
+---
+export interface Props {
+  /** Spacing token name, e.g. `space-8` */
+  gap?: string;
+  align?: 'start' | 'center' | 'end';
+  justify?: 'start' | 'center' | 'between';
+}
+
+const { gap = 'space-8', align = 'center', justify = 'start' } = Astro.props;
+---
+
+<div class="lp-inline" data-align={align} data-justify={justify} style={`--lp-gap: var(--${gap});`}>
+  <slot />
+</div>
