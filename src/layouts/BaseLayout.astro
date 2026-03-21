@@ -1,39 +1,17 @@
 ---
 import '../styles/global.css';
-
-const { themeColor, bodyStyle, viewport, colorScheme, appleMobileWebAppStatusBarStyle } =
-  Astro.props;
-const viewportContent =
-  viewport ?? 'width=device-width, viewport-fit=cover';
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content={viewportContent} />
-    <link rel="icon" href="/favicon.svg" />
-    <title>Niko Korhonen</title>
-
-    <!-- Open Graph preview -->
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:image" content="/og.png" />
-    {colorScheme && <meta name="color-scheme" content={colorScheme} />}
-    {themeColor && <meta name="theme-color" content={themeColor} />}
-    {appleMobileWebAppStatusBarStyle && (
-      <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content={appleMobileWebAppStatusBarStyle}
-      />
-    )}
-    <script is:inline>
-      (function() {
-        if (sessionStorage.getItem('theme') === 'dark') {
-          document.documentElement.setAttribute('data-theme-hint', 'dark');
-        }
-      })();
-    </script>
+    <title>nikoko</title>
   </head>
-  <body style={bodyStyle}>
+  <body>
     <slot />
   </body>
 </html>
