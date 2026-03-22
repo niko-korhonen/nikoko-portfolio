@@ -29,8 +29,13 @@ if (fs.existsSync(filePath)) {
 
 {
   markup ? (
-    <span class:list={['ui-icon', className]} data-size={size} set:html={markup} />
+    <span class:list={['ui-icon', className]} data-size={size} data-style={style} set:html={markup} />
   ) : (
-    <span class:list={['ui-icon', 'ui-icon--missing', className]} data-size={size} aria-hidden="true" />
+    <span
+      class:list={['ui-icon', 'ui-icon--missing', className]}
+      data-size={size}
+      data-style={style}
+      aria-hidden="true"
+    />
   )
 }

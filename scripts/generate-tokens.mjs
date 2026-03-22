@@ -79,6 +79,31 @@ function emitSpacingVars(misc) {
   return lines.join("\n");
 }
 
+/**
+ * Box-shadow tokens from misc.shadow (e.g. shadow-L → --shadow-l).
+ */
+function emitShadowVars(misc) {
+  const shadowRoot = misc.shadow;
+  if (!shadowRoot || typeof shadowRoot !== "object") return "";
+  const lines = [];
+  for (const [name, def] of Object.entries(shadowRoot)) {
+    if (name.startsWith("$") || typeof def !== "object") continue;
+    const x = def["position-x"]?.$value ?? 0;
+    const y = def["position-y"]?.$value ?? 0;
+    const blur = def["blur"]?.$value ?? 0;
+    const spread = def["spread"]?.$value ?? 0;
+    const colorNode = def["color"];
+    let colorCss = "rgba(0, 0, 0, 0.15)";
+    if (colorNode?.$type === "color" && colorNode.$value) {
+      const c = colorToCss(colorNode.$value);
+      if (c) colorCss = c;
+    }
+    const suffix = name.replace(/^shadow-/i, "").toLowerCase();
+    lines.push(`  --shadow-${suffix}: ${x}px ${y}px ${blur}px ${spread}px ${colorCss};`);
+  }
+  return lines.join("\n");
+}
+
 function emitMiscVars(misc) {
   const lines = [];
 
@@ -101,6 +126,9 @@ function emitMiscVars(misc) {
       lines.push(`  --icon-${key}: ${v.$value}px;`);
     }
   }
+
+  const shadowLines = emitShadowVars(misc);
+  if (shadowLines) lines.push(shadowLines);
 
   const typeRoot = misc.type;
   if (typeRoot) {

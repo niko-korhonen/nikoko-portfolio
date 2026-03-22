@@ -95,6 +95,8 @@
   --icon-m: 20px;
   --icon-s: 16px;
   --icon-xs: 12px;
+  --shadow-l: 0px 24px 54px 0px rgba(0, 0, 0, 0.15000000596046448);
+  --shadow-m: 0px 8px 16px 0px rgba(0, 0, 0, 0.15000000596046448);
   --text-display-l-size: 80px;
   --text-display-l-line-height: 80px;
   --text-display-l-letter-spacing: -1px;

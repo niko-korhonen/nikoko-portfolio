@@ -1,0 +1,99 @@
+---
+import { randomUUID } from 'node:crypto';
+import type { PopoverAlign, PopoverPosition } from '../placement';
+import ElevatedPanel from './ElevatedPanel.astro';
+import MenuList from './MenuList.astro';
+
+interface Props {
+  /**
+   * Which side of the trigger the menu opens toward.
+   * @default 'bottom'
+   */
+  position?: PopoverPosition;
+  /**
+   * Cross-axis alignment (e.g. for bottom/top: start = inline-start with trigger).
+   * @default 'start'
+   */
+  align?: PopoverAlign;
+}
+
+const { position = 'bottom', align = 'start' } = Astro.props;
+
+const panelId = `menu-panel-${randomUUID()}`;
+---
+
+<div class="ui-menu-dropdown" data-menu-dropdown>
+  <div class="ui-menu-dropdown__trigger-wrap">
+    <slot name="trigger" />
+  </div>
+  <div
+    id={panelId}
+    class="ui-menu-dropdown__panel"
+    data-menu-dropdown-panel
+    data-popover-position={position}
+    data-popover-align={align}
+    hidden
+    role="menu"
+    aria-label="Menu"
+  >
+    <ElevatedPanel>
+      <MenuList>
+        <slot />
+      </MenuList>
+    </ElevatedPanel>
+  </div>
+</div>
+
+<script define:vars={{ panelId }}>
+  (function () {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const root = panel.closest('[data-menu-dropdown]');
+    if (!root) return;
+    const trigger = root.querySelector('[data-menu-dropdown-trigger]');
+    if (!(trigger instanceof HTMLElement)) return;
+
+    function isOpen() {
+      return !panel.hasAttribute('hidden');
+    }
+
+    function setOpen(open) {
+      if (open) {
+        panel.removeAttribute('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
+      } else {
+        panel.setAttribute('hidden', '');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    trigger.setAttribute('aria-haspopup', 'true');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', panelId);
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(!isOpen());
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!isOpen()) return;
+      if (e.target instanceof Node && root.contains(e.target)) return;
+      setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+
+    panel.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t instanceof HTMLElement && t.closest('button, a[href], [role="menuitem"]')) {
+        setOpen(false);
+      }
+    });
+  })();
+</script>

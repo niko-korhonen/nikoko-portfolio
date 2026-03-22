@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Cluster from '../../system/primitives/Cluster.astro';
 import Container from '../../system/primitives/Container.astro';
@@ -12,7 +14,27 @@ import ButtonIcon from '../../system/components/ButtonIcon.astro';
 import Radio from '../../system/components/Radio.astro';
 import Toggle from '../../system/components/Toggle.astro';
 import Tooltip from '../../system/components/Tooltip.astro';
+import ItemAction from '../../system/components/ItemAction.astro';
+import ItemDivider from '../../system/components/ItemDivider.astro';
+import ItemHeader from '../../system/components/ItemHeader.astro';
+import ItemStatic from '../../system/components/ItemStatic.astro';
+import ButtonDropdown from '../../system/components/ButtonDropdown.astro';
+import ElevatedPanel from '../../system/components/ElevatedPanel.astro';
+import MenuDropdown from '../../system/components/MenuDropdown.astro';
+import MenuItemAction from '../../system/components/MenuItemAction.astro';
 import Icon from '../../system/icons/Icon.astro';
+
+const iconsDir = path.join(process.cwd(), 'public/icons');
+const iconSvgFiles = fs.existsSync(iconsDir)
+  ? fs.readdirSync(iconsDir).filter((f) => f.endsWith('.svg'))
+  : [];
+const allIconEntries: { name: string; style: 'fill' | 'outline' }[] = [];
+for (const f of iconSvgFiles) {
+  const m = f.match(/^icon-(.+)-(fill|outline)\.svg$/);
+  if (!m) continue;
+  allIconEntries.push({ name: m[1], style: m[2] as 'fill' | 'outline' });
+}
+allIconEntries.sort((a, b) => `${a.name}-${a.style}`.localeCompare(`${b.name}-${b.style}`));
 
 const colorGroups: { title: string; tokens: string[] }[] = [
   {
@@ -223,20 +245,33 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
 <BaseLayout title="System — Niko UI">
   <div class="page">
     <header class="page__header">
+      <div class="page__toolbar">
+        <Button variant="secondary" size="m" href="/">
+          <Icon slot="icon-start" name="chevronleft" style="outline" size="s" />
+          Home
+        </Button>
+        <div class="page__toolbar-end">
+          <MenuDropdown position="bottom" align="end">
+            <ButtonDropdown slot="trigger" variant="secondary" size="m">
+              <span id="theme-mode-label">System</span>
+            </ButtonDropdown>
+            <MenuItemAction type="button" class="js-theme-option" data-theme-value="system">
+              System
+            </MenuItemAction>
+            <MenuItemAction type="button" class="js-theme-option" data-theme-value="light">
+              Light
+            </MenuItemAction>
+            <MenuItemAction type="button" class="js-theme-option" data-theme-value="dark">
+              Dark
+            </MenuItemAction>
+          </MenuDropdown>
+        </div>
+      </div>
       <p class="text-label-s-plain page__eyebrow">Design tokens</p>
       <h1 class="text-headline-l-emphasized">System foundation</h1>
       <p class="text-body-m-plain page__lede">
         Semantic colors follow the active theme. Typography, radius, and icon sizes are shared across themes.
       </p>
-      <div class="page__toolbar">
-        <label class="text-label-s-plain toolbar__label" for="theme-mode">Theme</label>
-        <select class="toolbar__select text-body-m-plain" id="theme-mode" name="theme-mode">
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-        <a class="page__home text-label-m-plain" href="/">← Home</a>
-      </div>
     </header>
 
     <section class="section" aria-labelledby="colors-heading">
@@ -348,8 +383,43 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
         {
           iconSizes.map(({ key, label }) => (
             <li class="icon-item">
-              <Icon name="check" style="outline" size={key} />
+              <Icon name="placeholder" style="outline" size={key} />
               <span class="text-body-xs-plain">{`--icon-${key}`} ({label})</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="subsection icon-sizes-toolbar">
+        <MenuDropdown>
+          <ButtonDropdown slot="trigger" variant="secondary" size="m">
+            Grid icon size
+          </ButtonDropdown>
+          <MenuItemAction type="button" class="js-icon-size-option icon-size--l">
+            Large
+          </MenuItemAction>
+          <MenuItemAction type="button" class="js-icon-size-option icon-size--m">
+            Medium
+          </MenuItemAction>
+          <MenuItemAction type="button" class="js-icon-size-option icon-size--s">
+            Small
+          </MenuItemAction>
+          <MenuItemAction type="button" class="js-icon-size-option icon-size--xs">
+            Extra Small
+          </MenuItemAction>
+        </MenuDropdown>
+      </div>
+
+      <h3 class="text-label-l-emphasized icon-library-heading">All icons</h3>
+      <p class="text-body-s-plain section__note icon-library-note">
+        Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the menu
+        above to resize the grid.
+      </p>
+      <ul class="icon-grid-all" id="icon-grid-all" aria-label="All icons">
+        {
+          allIconEntries.map(({ name, style }) => (
+            <li class="icon-grid-cell" title={`${name} (${style})`}>
+              <Icon name={name} style={style} size="l" />
             </li>
           ))
         }
@@ -624,15 +694,168 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
           </Tooltip>
         </Cluster>
       </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Item header &amp; divider</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Structural rows for stacked lists · header uses label S · divider uses <code class="code-inline">outline-tertiary</code>.
+        </p>
+        <div class="ds-item-demo">
+          <Stack gap="space-2" align="stretch">
+            <ItemHeader>Section</ItemHeader>
+            <ItemDivider />
+          </Stack>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">ItemAction</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Floating and inline · optional description, detail, chevron · <code class="code-inline">slot-start</code> /{' '}
+          <code class="code-inline">slot-end</code> · interactive states match ghost buttons.
+        </p>
+        <div class="ds-item-demo">
+          <Stack gap="space-12" align="stretch">
+          <ItemAction variant="floating">Label only</ItemAction>
+          <ItemAction variant="floating" description="Supporting line">
+            With description
+          </ItemAction>
+          <ItemAction variant="floating" description="Supporting line" detail="Detail">
+            Full text row
+          </ItemAction>
+          <ItemAction variant="floating" description="Supporting line" detail="Detail" chevron>
+            With chevron
+          </ItemAction>
+          <ItemAction variant="floating" description="Icons in slots" detail="⌘K" chevron>
+            <Icon slot="slot-start" name="search" style="outline" size="s" />
+            <Icon slot="slot-end" name="copy" style="outline" size="s" />
+            Search
+          </ItemAction>
+          <ItemAction variant="floating" active description="Current page" chevron href="/system">
+            Active link
+          </ItemAction>
+          <ItemAction variant="inline" description="Ghost background">
+            Inline variant
+          </ItemAction>
+          <ItemAction variant="floating" disabled description="Unavailable">
+            Disabled
+          </ItemAction>
+          </Stack>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">ItemAction as label (radio)</h3>
+        <p class="text-body-s-plain subsection__hint">
+          <code class="code-inline">as=&quot;label&quot;</code> · use <code class="code-inline">span.ui-radio</code> with raw input + control (do not nest{' '}
+          <code class="code-inline">Radio.astro</code> here).
+        </p>
+        <div class="ds-item-demo">
+          <Stack gap="space-8" align="stretch">
+          <ItemAction as="label" variant="floating" description="Whole row selects this option" chevron={false}>
+            <span slot="slot-start" class="ui-radio" data-size="m">
+              <input
+                type="radio"
+                class="ui-radio__input"
+                name="demo-item-radio"
+                value="a"
+                checked
+              />
+              <span class="ui-radio__control" aria-hidden="true"></span>
+            </span>
+            Option A
+          </ItemAction>
+          <ItemAction as="label" variant="floating" description="Second row" chevron={false}>
+            <span slot="slot-start" class="ui-radio" data-size="m">
+              <input type="radio" class="ui-radio__input" name="demo-item-radio" value="b" />
+              <span class="ui-radio__control" aria-hidden="true"></span>
+            </span>
+            Option B
+          </ItemAction>
+          </Stack>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">ItemStatic</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Non-interactive row · nest controls in slots (e.g. toggle) without the row stealing clicks.
+        </p>
+        <div class="ds-item-demo">
+          <Stack gap="space-12" align="stretch">
+          <ItemStatic variant="floating" description="Read-only copy" detail="Value">
+            Setting name
+          </ItemStatic>
+          <ItemStatic variant="floating" description="Badge or button in the trailing slot">
+            Notifications
+            <Badge slot="slot-end" variant="accent">3</Badge>
+          </ItemStatic>
+          <ItemStatic variant="inline" description="Toggle on the right">
+            Wi‑Fi
+            <Toggle slot="slot-end" name="demo-item-static-toggle" />
+          </ItemStatic>
+          </Stack>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Elevated panel &amp; shadows</h3>
+        <p class="text-body-s-plain subsection__hint">
+          <code class="code-inline">ElevatedPanel</code> uses <code class="code-inline">surface-base</code>,{' '}
+          <code class="code-inline">radius-medium</code>, <code class="code-inline">outline-tertiary</code>, and{' '}
+          <code class="code-inline">--shadow-l</code> · utilities <code class="code-inline">.ui-shadow-l</code> /{' '}
+          <code class="code-inline">.ui-shadow-m</code> map to token shadows.
+        </p>
+        <Cluster gap="space-16" align="end">
+          <div class="ds-shadow-swatch ui-shadow-l">
+            <span class="text-label-xs-plain">Shadow L</span>
+          </div>
+          <div class="ds-shadow-swatch ui-shadow-m">
+            <span class="text-label-xs-plain">Shadow M</span>
+          </div>
+          <ElevatedPanel class="ds-elevated-demo">
+            <p class="text-body-s-plain" style="margin:0">Reusable elevated panel (same shell as menu surface).</p>
+          </ElevatedPanel>
+        </Cluster>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Menu dropdown</h3>
+        <p class="text-body-s-plain subsection__hint">
+          <code class="code-inline">ButtonDropdown</code> matches button variants &amp; sizes; end icon is always chevron down{' '}
+          · <code class="code-inline">MenuItemAction</code> defaults to <code class="code-inline">variant=&quot;inline&quot;</code> · panel uses{' '}
+          <code class="code-inline">MenuList</code> + <code class="code-inline">ElevatedPanel</code> (0 gap between items).
+        </p>
+        <MenuDropdown>
+          <ButtonDropdown slot="trigger" variant="secondary" size="m">
+            Actions
+          </ButtonDropdown>
+          <MenuItemAction type="button">
+            <Icon slot="slot-start" name="copy" style="outline" size="s" />
+            Copy
+          </MenuItemAction>
+          <MenuItemAction type="button">
+            <Icon slot="slot-start" name="folder" style="outline" size="s" />
+            Duplicate
+          </MenuItemAction>
+          <MenuItemAction type="button" disabled description="Unavailable">
+            Paste
+          </MenuItemAction>
+        </MenuDropdown>
+      </div>
     </section>
   </div>
 
   <script>
     (function () {
-      const select = document.getElementById('theme-mode');
-      if (!(select instanceof HTMLSelectElement)) return;
-
+      const label = document.getElementById('theme-mode-label');
       const storageKey = 'niko-ui-theme';
+
+      const themeLabels = {
+        system: 'System',
+        light: 'Light',
+        dark: 'Dark',
+      };
 
       function apply(value) {
         const root = document.documentElement;
@@ -646,20 +869,49 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
         } catch {
           /* ignore */
         }
+        if (label) {
+          label.textContent = themeLabels[value] ?? 'System';
+        }
       }
 
       try {
         const saved = localStorage.getItem(storageKey);
         if (saved === 'light' || saved === 'dark' || saved === 'system') {
-          select.value = saved;
           apply(saved);
         }
       } catch {
         /* ignore */
       }
 
-      select.addEventListener('change', () => {
-        apply(select.value);
+      document.querySelectorAll('.js-theme-option').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const v = btn.getAttribute('data-theme-value');
+          if (v === 'light' || v === 'dark' || v === 'system') {
+            apply(v);
+          }
+        });
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      const grid = document.getElementById('icon-grid-all');
+      if (!grid) return;
+
+      function applyIconSize(btn) {
+        let size = 'l';
+        if (btn.classList.contains('icon-size--xs')) size = 'xs';
+        else if (btn.classList.contains('icon-size--l')) size = 'l';
+        else if (btn.classList.contains('icon-size--m')) size = 'm';
+        else if (btn.classList.contains('icon-size--s')) size = 's';
+        grid.querySelectorAll('.ui-icon').forEach((el) => {
+          el.setAttribute('data-size', size);
+        });
+      }
+
+      document.querySelectorAll('.js-icon-size-option').forEach((btn) => {
+        btn.addEventListener('click', () => applyIconSize(btn));
       });
     })();
   </script>
@@ -691,31 +943,14 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--radius-low, 8px);
-    margin-top: var(--radius-medium, 16px);
+    justify-content: space-between;
+    gap: var(--space-8);
+    width: 100%;
+    margin-bottom: var(--radius-high, 32px);
   }
 
-  .toolbar__label {
-    margin: 0;
-  }
-
-  .toolbar__select {
-    padding: var(--radius-lowest, 4px) var(--radius-low, 8px);
-    border-radius: var(--radius-low);
-    border: 1px solid var(--color-outline-secondary);
-    background: var(--color-surface-base);
-    color: var(--color-content-primary);
-    font: inherit;
-  }
-
-  .page__home {
-    margin-left: auto;
-    color: var(--color-content-secondary);
-    text-decoration: none;
-  }
-
-  .page__home:hover {
-    color: var(--color-content-primary);
+  .page__toolbar-end {
+    flex-shrink: 0;
   }
 
   .section {
@@ -791,6 +1026,27 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
     padding: var(--space-4) var(--space-8);
     border: 1px solid var(--color-outline-secondary);
     border-radius: var(--radius-low);
+  }
+
+  .ds-item-demo {
+    max-width: 28rem;
+  }
+
+  .ds-shadow-swatch {
+    width: 100%;
+    max-width: 9rem;
+    min-height: 4.5rem;
+    padding: var(--space-12);
+    border-radius: var(--radius-low);
+    background: var(--color-surface-base);
+    border: 1px solid var(--color-outline-tertiary);
+    box-sizing: border-box;
+  }
+
+  .ds-elevated-demo {
+    flex: 1 1 12rem;
+    min-width: 0;
+    max-width: 16rem;
   }
 
   .swatch-grid {
@@ -936,6 +1192,43 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
   }
 
   .icon-item .ui-icon {
+    color: var(--color-content-primary);
+  }
+
+  .icon-sizes-toolbar {
+    margin-top: var(--space-16);
+  }
+
+  .icon-library-heading {
+    margin: var(--space-24) 0 var(--space-8);
+    color: var(--color-content-secondary);
+  }
+
+  .icon-library-note {
+    margin: 0 0 var(--space-16);
+  }
+
+  .icon-grid-all {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: stretch;
+    justify-items: stretch;
+  }
+
+  .icon-grid-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-24);
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .icon-grid-cell .ui-icon {
     color: var(--color-content-primary);
   }
 

@@ -1,0 +1,73 @@
+---
+import Icon from '../icons/Icon.astro';
+
+export type ButtonDropdownVariant = 'primary' | 'secondary' | 'ghost' | 'accent';
+export type ButtonDropdownSize = 'l' | 'm' | 's';
+
+interface Props {
+  variant?: ButtonDropdownVariant;
+  size?: ButtonDropdownSize;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  /** When set, renders an anchor with the same button styles. */
+  href?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'm',
+  disabled = false,
+  type = 'button',
+  class: className = '',
+  href,
+} = Astro.props;
+
+const typoClass =
+  size === 'l' ? 'text-label-m-plain' : size === 's' ? 'text-label-xs-plain' : 'text-label-s-plain';
+
+const btnClass = ['ui-btn', 'ui-focus-ring', typoClass, className].filter(Boolean).join(' ');
+
+const chevronSize = size === 'l' ? 'm' : 's';
+---
+
+{
+  href ? (
+    <a
+      class={btnClass}
+      href={href}
+      data-variant={variant}
+      data-size={size}
+      data-menu-dropdown-trigger
+    >
+      <span class="ui-btn__icon">
+        <slot name="icon-start" />
+      </span>
+      <span class="ui-btn__label">
+        <slot />
+      </span>
+      <span class="ui-btn__icon">
+        <Icon name="chevrondown" style="outline" size={chevronSize} />
+      </span>
+    </a>
+  ) : (
+    <button
+      class={btnClass}
+      type={type}
+      disabled={disabled}
+      data-variant={variant}
+      data-size={size}
+      data-menu-dropdown-trigger
+    >
+      <span class="ui-btn__icon">
+        <slot name="icon-start" />
+      </span>
+      <span class="ui-btn__label">
+        <slot />
+      </span>
+      <span class="ui-btn__icon">
+        <Icon name="chevrondown" style="outline" size={chevronSize} />
+      </span>
+    </button>
+  )
+}

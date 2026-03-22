@@ -1,0 +1,139 @@
+---
+import Icon from '../icons/Icon.astro';
+
+export type ItemVariant = 'floating' | 'inline';
+
+interface Props {
+  variant?: ItemVariant;
+  description?: string;
+  detail?: string;
+  chevron?: boolean;
+  active?: boolean;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  /** When set, renders an anchor with item styles. */
+  href?: string;
+  /** Use `label` to wrap radio markup for a full-row hit target (do not nest another `<label>` inside). */
+  as?: 'button' | 'label';
+}
+
+const {
+  variant = 'floating',
+  description,
+  detail,
+  chevron = false,
+  active = false,
+  disabled = false,
+  type = 'button',
+  class: className = '',
+  href,
+  as,
+  ...rest
+} = Astro.props;
+
+const itemClass = ['ui-item-action', 'ui-focus-ring', className].filter(Boolean).join(' ');
+
+const dataActive = active ? 'true' : 'false';
+
+const hasSlotStart = Astro.slots.has('slot-start');
+const hasSlotEnd = Astro.slots.has('slot-end');
+const showTrailing = Boolean(detail) || hasSlotEnd || chevron;
+---
+
+{
+  href != null && href !== '' ? (
+    <a class={itemClass} href={href} data-variant={variant} data-active={dataActive} {...rest}>
+      <div class="ui-item__row">
+        {hasSlotStart ? (
+          <span class="ui-item__slot-start">
+            <slot name="slot-start" />
+          </span>
+        ) : null}
+        <span class="ui-item__text">
+          <span class="ui-item__label text-label-s-plain">
+            <slot />
+          </span>
+          {description ? <span class="ui-item__description text-body-s-plain">{description}</span> : null}
+        </span>
+        {showTrailing ? (
+          <span class="ui-item__trailing">
+            {detail ? <span class="ui-item__detail text-body-s-plain">{detail}</span> : null}
+            {hasSlotEnd ? (
+              <span class="ui-item__slot-end">
+                <slot name="slot-end" />
+              </span>
+            ) : null}
+            {chevron ? (
+              <span class="ui-item__chevron" aria-hidden="true">
+                <Icon name="chevronright" style="outline" size="s" />
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </div>
+    </a>
+  ) : as === 'label' ? (
+    <label class={itemClass} data-variant={variant} data-active={dataActive} {...rest}>
+      <div class="ui-item__row">
+        {hasSlotStart ? (
+          <span class="ui-item__slot-start">
+            <slot name="slot-start" />
+          </span>
+        ) : null}
+        <span class="ui-item__text">
+          <span class="ui-item__label text-label-s-plain">
+            <slot />
+          </span>
+          {description ? <span class="ui-item__description text-body-s-plain">{description}</span> : null}
+        </span>
+        {showTrailing ? (
+          <span class="ui-item__trailing">
+            {detail ? <span class="ui-item__detail text-body-s-plain">{detail}</span> : null}
+            {hasSlotEnd ? (
+              <span class="ui-item__slot-end">
+                <slot name="slot-end" />
+              </span>
+            ) : null}
+            {chevron ? (
+              <span class="ui-item__chevron" aria-hidden="true">
+                <Icon name="chevronright" style="outline" size="s" />
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </div>
+    </label>
+  ) : (
+    <button class={itemClass} type={type} disabled={disabled} data-variant={variant} data-active={dataActive} {...rest}>
+      <div class="ui-item__row">
+        {hasSlotStart ? (
+          <span class="ui-item__slot-start">
+            <slot name="slot-start" />
+          </span>
+        ) : null}
+        <span class="ui-item__text">
+          <span class="ui-item__label text-label-s-plain">
+            <slot />
+          </span>
+          {description ? <span class="ui-item__description text-body-s-plain">{description}</span> : null}
+        </span>
+        {showTrailing ? (
+          <span class="ui-item__trailing">
+            {detail ? <span class="ui-item__detail text-body-s-plain">{detail}</span> : null}
+            {hasSlotEnd ? (
+              <span class="ui-item__slot-end">
+                <slot name="slot-end" />
+              </span>
+            ) : null}
+            {chevron ? (
+              <span class="ui-item__chevron" aria-hidden="true">
+                <Icon name="chevronright" style="outline" size="s" />
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </div>
+    </button>
+  )
+}

@@ -1,0 +1,11 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['ui-item-divider', className]}>
+  <hr class="ui-item-divider__line" />
+</div>
