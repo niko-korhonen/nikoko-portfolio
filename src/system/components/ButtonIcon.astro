@@ -10,6 +10,8 @@ interface Props {
   /** Required for icon-only control accessibility */
   label: string;
   class?: string;
+  /** When used inside ModalDialog, closes the dialog on click. */
+  dialogClose?: boolean;
 }
 
 const {
@@ -19,6 +21,7 @@ const {
   type = 'button',
   label,
   class: className = '',
+  dialogClose = false,
 } = Astro.props;
 ---
 
@@ -29,6 +32,7 @@ const {
   data-variant={variant}
   data-size={size}
   aria-label={label}
+  {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
 >
   <slot />
 </button>

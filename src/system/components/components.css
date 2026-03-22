@@ -49,15 +49,16 @@
 /*
  * Outline icons: only elements that actually use stroke get stroke + width.
  * (Do not target all paths under fill="none" roots — fill-style assets use that too and would pick up a fake outline.)
- * Stroke width 1.5 (SVG user units, 24×24 artboard) for all sizes L / M / S / XS unless design tokens say otherwise later.
+ * Constant 1.5px stroke on screen at every icon size (non-scaling-stroke ignores the SVG scale transform).
  */
 .ui-icon[data-style="outline"] {
-  --icon-stroke-width: 1.5;
+  --icon-stroke-width: 1.5px;
 }
 
 .ui-icon[data-style="outline"] .ui-icon__svg [stroke]:not([stroke="none"]) {
   stroke: currentColor;
   stroke-width: var(--icon-stroke-width);
+  vector-effect: non-scaling-stroke;
 }
 
 /* ——— Button ——— */
@@ -1501,4 +1502,427 @@ a.ui-btn[data-variant="accent"]:visited {
 .ui-field__description-text {
   flex: 1;
   min-width: 0;
+}
+
+/* ——— Anchored toast (placement: data-popover-position / data-popover-align) ——— */
+
+.ui-anchored-toast {
+  position: relative;
+  display: inline-flex;
+  vertical-align: bottom;
+}
+
+.ui-anchored-toast__trigger-wrap {
+  display: inline-flex;
+}
+
+.ui-anchored-toast__trigger-proxy {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.ui-anchored-toast__stack {
+  --popover-gap: var(--space-8);
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 0;
+  width: max-content;
+  max-width: min(300px, calc(100vw - var(--space-32)));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+/* top */
+.ui-anchored-toast__stack[data-popover-position='top'] {
+  bottom: calc(100% + var(--popover-gap));
+  top: auto;
+}
+
+.ui-anchored-toast__stack[data-popover-position='top'][data-popover-align='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  transform: none;
+}
+
+.ui-anchored-toast__stack[data-popover-position='top'][data-popover-align='center'] {
+  inset-inline-start: 50%;
+  inset-inline-end: auto;
+  transform: translateX(-50%);
+}
+
+.ui-anchored-toast__stack[data-popover-position='top'][data-popover-align='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  transform: none;
+}
+
+/* bottom */
+.ui-anchored-toast__stack[data-popover-position='bottom'] {
+  top: calc(100% + var(--popover-gap));
+  bottom: auto;
+}
+
+.ui-anchored-toast__stack[data-popover-position='bottom'][data-popover-align='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  transform: none;
+}
+
+.ui-anchored-toast__stack[data-popover-position='bottom'][data-popover-align='center'] {
+  inset-inline-start: 50%;
+  inset-inline-end: auto;
+  transform: translateX(-50%);
+}
+
+.ui-anchored-toast__stack[data-popover-position='bottom'][data-popover-align='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  transform: none;
+}
+
+/* inline-end */
+.ui-anchored-toast__stack[data-popover-position='right'] {
+  inset-inline-start: calc(100% + var(--popover-gap));
+  inset-inline-end: auto;
+}
+
+.ui-anchored-toast__stack[data-popover-position='right'][data-popover-align='start'] {
+  top: 0;
+  bottom: auto;
+  transform: none;
+}
+
+.ui-anchored-toast__stack[data-popover-position='right'][data-popover-align='center'] {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+.ui-anchored-toast__stack[data-popover-position='right'][data-popover-align='end'] {
+  top: auto;
+  bottom: 0;
+  transform: none;
+}
+
+/* inline-start */
+.ui-anchored-toast__stack[data-popover-position='left'] {
+  inset-inline-end: calc(100% + var(--popover-gap));
+  inset-inline-start: auto;
+}
+
+.ui-anchored-toast__stack[data-popover-position='left'][data-popover-align='start'] {
+  top: 0;
+  bottom: auto;
+  transform: none;
+}
+
+.ui-anchored-toast__stack[data-popover-position='left'][data-popover-align='center'] {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+.ui-anchored-toast__stack[data-popover-position='left'][data-popover-align='end'] {
+  top: auto;
+  bottom: 0;
+  transform: none;
+}
+
+.ui-anchored-toast__item {
+  max-width: 300px;
+}
+
+.ui-anchored-toast__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  max-width: 300px;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-highest);
+  box-sizing: border-box;
+}
+
+.ui-anchored-toast__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: inherit;
+}
+
+.ui-anchored-toast__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-anchored-toast__item--success .ui-anchored-toast__inner {
+  background: var(--color-container-accent-subtle-positive);
+  color: var(--color-content-positive);
+}
+
+.ui-anchored-toast__item--error .ui-anchored-toast__inner {
+  background: var(--color-container-accent-subtle-negative);
+  color: var(--color-content-negative);
+}
+
+.ui-anchored-toast__item--info .ui-anchored-toast__inner {
+  background: var(--color-container-accent-subtle-blue);
+  color: var(--color-content-blue);
+}
+
+.ui-anchored-toast__item--neutral .ui-anchored-toast__inner {
+  background: var(--color-container-floating);
+  color: var(--color-content-primary);
+}
+
+@keyframes anchored-toast-enter-success {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes anchored-toast-enter-error {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(-5px);
+  }
+  28% {
+    transform: translateX(4px);
+  }
+  44% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+  76% {
+    transform: translateX(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes anchored-toast-enter-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes anchored-toast-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.ui-anchored-toast__item--success.ui-anchored-toast__item--shown .ui-anchored-toast__inner {
+  animation: anchored-toast-enter-success 0.42s cubic-bezier(0.34, 1.45, 0.64, 1) both;
+}
+
+.ui-anchored-toast__item--error.ui-anchored-toast__item--shown .ui-anchored-toast__inner {
+  animation: anchored-toast-enter-error 0.55s ease both;
+}
+
+.ui-anchored-toast__item--info.ui-anchored-toast__item--shown .ui-anchored-toast__inner {
+  animation: anchored-toast-enter-fade 0.32s ease both;
+}
+
+.ui-anchored-toast__item--neutral.ui-anchored-toast__item--shown .ui-anchored-toast__inner {
+  animation: anchored-toast-enter-fade 0.32s ease both;
+}
+
+.ui-anchored-toast__item--exit .ui-anchored-toast__inner {
+  animation: anchored-toast-exit 0.28s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-anchored-toast__item--success.ui-anchored-toast__item--shown .ui-anchored-toast__inner,
+  .ui-anchored-toast__item--error.ui-anchored-toast__item--shown .ui-anchored-toast__inner,
+  .ui-anchored-toast__item--info.ui-anchored-toast__item--shown .ui-anchored-toast__inner,
+  .ui-anchored-toast__item--neutral.ui-anchored-toast__item--shown .ui-anchored-toast__inner {
+    animation: anchored-toast-enter-fade 0.01ms linear both;
+  }
+
+  .ui-anchored-toast__item--exit .ui-anchored-toast__inner {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* ——— Modal dialog (native <dialog>, viewport overlay) ——— */
+
+/*
+ * Closed <dialog> must stay `display: none` (UA default). Only style when [open],
+ * otherwise a rule like `display: flex` would show the panel in-flow (broken + not dismissible).
+ */
+.ui-modal-dialog {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog[open] {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--space-16);
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog::backdrop {
+  background: var(--color-overlay-primary);
+}
+
+.ui-modal-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100vw - var(--space-32)));
+  max-height: min(90vh, calc(100vh - var(--space-32)));
+  overflow: hidden;
+  border-radius: var(--radius-high);
+  background: var(--color-surface-base);
+  box-shadow: var(--shadow-l);
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog__toolbar {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.ui-modal-dialog__toolbar-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding: var(--space-16);
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog__toolbar[data-toolbar-align='start'] .ui-modal-dialog__toolbar-inner {
+  justify-content: flex-start;
+}
+
+.ui-modal-dialog__toolbar[data-toolbar-align='end'] .ui-modal-dialog__toolbar-inner {
+  justify-content: flex-end;
+}
+
+.ui-modal-dialog__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.ui-modal-dialog[data-layout='centered'] .ui-modal-dialog__body {
+  padding-inline: var(--space-56);
+}
+
+.ui-modal-dialog[data-layout='footer'] .ui-modal-dialog__body {
+  padding-inline: var(--space-16);
+  /* Space below description before footer bar (+32 vs prior token-only gap) */
+  padding-bottom: calc(var(--space-40) + var(--space-32));
+}
+
+.ui-modal-dialog__hero {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  /* No top padding: keeps hero tight under toolbar (−16px vs former uniform 16px edge) */
+  padding: 0 var(--space-16) var(--space-16);
+  box-sizing: border-box;
+  /* Outline icons use stroke currentColor — ensure contrast on surface-base */
+  color: var(--color-content-primary);
+}
+
+/* Empty hero (no slot content): collapse. Do not use :has() here — it can fail in some
+   environments and incorrectly hide the hero even when an icon is present. */
+.ui-modal-dialog__hero:empty {
+  display: none;
+  padding: 0;
+  min-height: 0;
+}
+
+.ui-modal-dialog__title {
+  margin: 0;
+  color: var(--color-content-primary);
+}
+
+.ui-modal-dialog__description {
+  margin: 0;
+  margin-top: var(--space-6);
+  color: var(--color-content-secondary);
+}
+
+.ui-modal-dialog[data-layout='centered'] .ui-modal-dialog__center {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  /* Description → primary action (footer layout uses body padding instead) */
+  margin-top: var(--space-24);
+  /* Button → modal bottom inset (72px; footer layout is independent) */
+  padding-bottom: calc(var(--space-56) + var(--space-16));
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog__footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: 0 var(--space-16) var(--space-16);
+  box-sizing: border-box;
+}
+
+.ui-modal-dialog__footer .ui-btn {
+  width: 100%;
+  justify-content: center;
 }

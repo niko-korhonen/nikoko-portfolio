@@ -10,6 +10,8 @@ interface Props {
   class?: string;
   /** When set, renders an anchor with the same button styles (navigation). */
   href?: string;
+  /** When used inside ModalDialog (button only), closes the dialog on click. */
+  dialogClose?: boolean;
 }
 
 const {
@@ -19,6 +21,7 @@ const {
   type = 'button',
   class: className = '',
   href,
+  dialogClose = false,
 } = Astro.props;
 
 const typoClass =
@@ -41,7 +44,14 @@ const btnClass = ['ui-btn', 'ui-focus-ring', typoClass, className].filter(Boolea
       </span>
     </a>
   ) : (
-    <button class={btnClass} type={type} disabled={disabled} data-variant={variant} data-size={size}>
+    <button
+      class={btnClass}
+      type={type}
+      disabled={disabled}
+      data-variant={variant}
+      data-size={size}
+      {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
+    >
       <span class="ui-btn__icon">
         <slot name="icon-start" />
       </span>

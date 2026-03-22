@@ -1,0 +1,87 @@
+---
+import type { PopoverAlign, PopoverPosition } from '../placement';
+import Icon from '../icons/Icon.astro';
+
+export type AnchoredToastVariant = 'success' | 'error' | 'info' | 'neutral';
+
+interface Props {
+  /**
+   * Toast tone and enter animation. The trigger shows this variant when clicked.
+   */
+  variant: AnchoredToastVariant;
+  /**
+   * Message shown in the toast (short copy; truncates after max width).
+   * @default 'Label'
+   */
+  message?: string;
+  /**
+   * Which side of the trigger the stack opens toward.
+   * @default 'top'
+   */
+  position?: PopoverPosition;
+  /**
+   * Cross-axis alignment relative to the trigger.
+   * @default 'center'
+   */
+  align?: PopoverAlign;
+  /** Max simultaneous toasts (default 4). */
+  maxVisible?: number;
+  /** Time each toast stays visible before exiting (ms). */
+  dwellMs?: number;
+  class?: string;
+}
+
+const {
+  variant,
+  message = 'Label',
+  position = 'top',
+  align = 'center',
+  maxVisible = 4,
+  dwellMs = 2800,
+  class: className = '',
+} = Astro.props;
+
+const rootClass = ['ui-anchored-toast', className].filter(Boolean).join(' ');
+---
+
+<div
+  class={rootClass}
+  data-anchored-toast
+  data-anchored-toast-max={maxVisible}
+  data-anchored-toast-dwell={dwellMs}
+>
+  <div class="ui-anchored-toast__trigger-wrap">
+    <span
+      class="ui-anchored-toast__trigger-proxy"
+      data-anchored-toast-trigger
+      data-anchored-toast-variant={variant}
+      data-anchored-toast-message={message}
+    >
+      <slot name="trigger" />
+    </span>
+  </div>
+
+  <div
+    class="ui-anchored-toast__stack"
+    data-anchored-toast-stack
+    data-popover-position={position}
+    data-popover-align={align}
+    aria-live="polite"
+  >
+  </div>
+
+  <template data-anchored-toast-icon="success">
+    <Icon name="checksmall" style="outline" size="s" />
+  </template>
+  <template data-anchored-toast-icon="error">
+    <Icon name="warning" style="outline" size="s" />
+  </template>
+  <template data-anchored-toast-icon="info">
+    <Icon name="info" style="outline" size="s" />
+  </template>
+</div>
+
+<script>
+  import { initAnchoredToasts } from './anchored-toast.ts';
+  initAnchoredToasts();
+</script>

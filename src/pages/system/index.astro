@@ -16,6 +16,8 @@ import TextField from '../../system/components/TextField.astro';
 import SegmentControl from '../../system/components/SegmentControl.astro';
 import Toggle from '../../system/components/Toggle.astro';
 import Tooltip from '../../system/components/Tooltip.astro';
+import AnchoredToast from '../../system/components/AnchoredToast.astro';
+import ModalDialog from '../../system/components/ModalDialog.astro';
 import ItemAction from '../../system/components/ItemAction.astro';
 import ItemDivider from '../../system/components/ItemDivider.astro';
 import ItemHeader from '../../system/components/ItemHeader.astro';
@@ -408,6 +410,8 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
       <p class="text-body-s-plain section__note">
         Same SVG scaled with <code class="code-inline">width</code> / <code class="code-inline">height</code> →
         <code class="code-inline">var(--icon-*)</code>
+        · outline icons use <code class="code-inline">1.5px</code> strokes with{' '}
+        <code class="code-inline">vector-effect: non-scaling-stroke</code> (constant on screen)
       </p>
       <ul class="icon-row">
         {
@@ -894,6 +898,63 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
       </div>
 
       <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Anchored toast</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Compact feedback anchored to a trigger; placement matches <code class="code-inline">Tooltip</code> /{' '}
+          <code class="code-inline">MenuDropdown</code>. Queue up to four visible; spamming dismisses the oldest
+          first. Success: pop · error: shake · info / neutral: fade.
+        </p>
+        <Cluster gap="space-12" align="center" wrap>
+          <AnchoredToast variant="success" message="Saved" position="top" align="center">
+            <Button slot="trigger" variant="primary" size="m">Success</Button>
+          </AnchoredToast>
+          <AnchoredToast variant="error" message="Could not save" position="top" align="center">
+            <Button slot="trigger" variant="primary" size="m">Error</Button>
+          </AnchoredToast>
+          <AnchoredToast variant="info" message="Draft synced" position="top" align="center">
+            <Button slot="trigger" variant="primary" size="m">Info</Button>
+          </AnchoredToast>
+          <AnchoredToast variant="neutral" message="Label" position="top" align="center">
+            <Button slot="trigger" variant="primary" size="m">Neutral</Button>
+          </AnchoredToast>
+        </Cluster>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Modal dialog</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Native <code class="code-inline">&lt;dialog&gt;</code> · overlay <code class="code-inline">--color-overlay-primary</code> ·{' '}
+          <code class="code-inline">hero</code> slot = optional single L icon above the title; omit for no hero ·{' '}
+          <code class="code-inline">layout=&quot;centered&quot;</code> (center slot) or{' '}
+          <code class="code-inline">footer</code> (stacked actions). <code class="code-inline">dismissible=&#123;false&#125;</code> blocks
+          Escape and backdrop; use <code class="code-inline">dialogClose</code> on <code class="code-inline">Button</code> /{' '}
+          <code class="code-inline">ButtonIcon</code> for explicit close. Dialogs sit at the end of the page; open with{' '}
+          <code class="code-inline">showModal()</code> from triggers below.
+        </p>
+        <p class="text-label-s-plain ds-modal-demo-triggers-label">Open a sample</p>
+        <Cluster gap="space-12" align="center" wrap>
+          <button
+            type="button"
+            class="ui-btn ui-focus-ring text-label-s-plain"
+            data-variant="primary"
+            data-size="m"
+            onclick="document.getElementById('demo-modal-centered')?.showModal()"
+          >
+            Centered layout
+          </button>
+          <button
+            type="button"
+            class="ui-btn ui-focus-ring text-label-s-plain"
+            data-variant="secondary"
+            data-size="m"
+            onclick="document.getElementById('demo-modal-footer')?.showModal()"
+          >
+            Footer actions
+          </button>
+        </Cluster>
+      </div>
+
+      <div class="subsection">
         <h3 class="text-label-l-emphasized subsection__title">Item header &amp; divider</h3>
         <p class="text-body-s-plain subsection__hint">
           Structural rows for stacked lists · header uses label S · divider uses <code class="code-inline">outline-tertiary</code>.
@@ -1044,6 +1105,27 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
     </section>
   </div>
 
+  <ModalDialog id="demo-modal-centered" layout="centered">
+    <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+      <Icon name="cross" style="outline" size="s" />
+    </ButtonIcon>
+    <Icon slot="hero" name="placeholder" style="outline" size="l" />
+    <span slot="title">Label</span>
+    <span slot="description">Description copy for the centered layout.</span>
+    <Button slot="center" variant="primary" size="l" dialogClose>Label</Button>
+  </ModalDialog>
+
+  <ModalDialog id="demo-modal-footer" layout="footer">
+    <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+      <Icon name="cross" style="outline" size="s" />
+    </ButtonIcon>
+    <Icon slot="hero" name="placeholder" style="outline" size="l" />
+    <span slot="title">Label</span>
+    <span slot="description">Description for the footer layout.</span>
+    <Button slot="footer" variant="primary" size="l" dialogClose>Label</Button>
+    <Button slot="footer" variant="secondary" size="l" dialogClose>Label</Button>
+  </ModalDialog>
+
   <script>
     (function () {
       const label = document.getElementById('theme-mode-label');
@@ -1179,6 +1261,11 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
 
   .subsection__hint {
     margin: 0 0 var(--space-16);
+    color: var(--color-content-tertiary);
+  }
+
+  .ds-modal-demo-triggers-label {
+    margin: var(--space-16) 0 var(--space-8);
     color: var(--color-content-tertiary);
   }
 
