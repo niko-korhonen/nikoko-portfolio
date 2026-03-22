@@ -1,0 +1,31 @@
+---
+import AnchoredToast from '../../components/AnchoredToast.astro';
+import Button from '../../components/Button.astro';
+import Cluster from '../../primitives/Cluster.astro';
+---
+
+<section class="section" aria-labelledby="anchored-toast-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="anchored-toast-heading">Anchored toast</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Anchored toast</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Compact feedback anchored to a trigger; placement matches <code class="code-inline">Tooltip</code> /{' '}
+      <code class="code-inline">MenuDropdown</code>. Queue up to four visible; spamming dismisses the oldest
+      first. Success: pop · error: shake · info / neutral: fade.
+    </p>
+    <Cluster gap="space-12" align="center">
+      <AnchoredToast variant="success" message="Saved" position="top" align="center">
+        <Button slot="trigger" variant="primary" size="m">Success</Button>
+      </AnchoredToast>
+      <AnchoredToast variant="error" message="Could not save" position="top" align="center">
+        <Button slot="trigger" variant="primary" size="m">Error</Button>
+      </AnchoredToast>
+      <AnchoredToast variant="info" message="Draft synced" position="top" align="center">
+        <Button slot="trigger" variant="primary" size="m">Info</Button>
+      </AnchoredToast>
+      <AnchoredToast variant="neutral" message="Label" position="top" align="center">
+        <Button slot="trigger" variant="primary" size="m">Neutral</Button>
+      </AnchoredToast>
+    </Cluster>
+  </div>
+</section>

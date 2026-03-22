@@ -1,0 +1,57 @@
+---
+import ButtonIcon from '../../components/ButtonIcon.astro';
+import Icon from '../../icons/Icon.astro';
+import {
+  btnMatrixSizes,
+  btnMatrixVariants,
+  btnIconMatrixRows,
+  variantLabel,
+  iconSizeForButton,
+} from '../data';
+---
+
+<section class="section" aria-labelledby="button-icon-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="button-icon-heading">ButtonIcon</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">ButtonIcon</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Same grid as Button · icon-only (<code class="code-inline">icon-placeholder-outline</code>) · L uses icon M; M / S use
+      icon S · <code class="code-inline">label</code> is fixed for the matrix.
+    </p>
+    {
+      btnMatrixSizes.map((size) => (
+        <div class="demo-btn-subsection">
+          <h4 class="text-label-m-emphasized demo-btn-subsection__title">Size {size.toUpperCase()}</h4>
+          <div class="demo-matrix-wrap">
+            <div class="demo-matrix">
+              <div class="demo-matrix__row demo-matrix__row--head">
+                <span class="demo-matrix__corner" aria-hidden="true" />
+                {btnMatrixVariants.map((v) => (
+                  <span class="text-label-xs-plain demo-matrix__head">{variantLabel(v)}</span>
+                ))}
+              </div>
+              {btnIconMatrixRows.map((row) => (
+                <div class="demo-matrix__row">
+                  <span class="text-body-xs-plain demo-matrix__state">{row.label}</span>
+                  {btnMatrixVariants.map((v) => (
+                    <div class="demo-matrix__cell">
+                      {row.id === 'disabled' ? (
+                        <ButtonIcon size={size} variant={v} label="Action" disabled>
+                          <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
+                        </ButtonIcon>
+                      ) : (
+                        <ButtonIcon size={size} variant={v} label="Action">
+                          <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
+                        </ButtonIcon>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -10,6 +10,8 @@ interface Props {
   /** Required for icon-only control accessibility */
   label: string;
   class?: string;
+  /** When set, renders an anchor with the same icon button styles. */
+  href?: string;
   /** When used inside ModalDialog, closes the dialog on click. */
   dialogClose?: boolean;
 }
@@ -21,18 +23,35 @@ const {
   type = 'button',
   label,
   class: className = '',
+  href,
   dialogClose = false,
 } = Astro.props;
+
+const iconClass = ['ui-btn-icon', 'ui-focus-ring', className].filter(Boolean).join(' ');
 ---
 
-<button
-  class={['ui-btn-icon', 'ui-focus-ring', className].filter(Boolean).join(' ')}
-  type={type}
-  disabled={disabled}
-  data-variant={variant}
-  data-size={size}
-  aria-label={label}
-  {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
->
-  <slot />
-</button>
+{
+  href ? (
+    <a
+      class={iconClass}
+      href={href}
+      data-variant={variant}
+      data-size={size}
+      aria-label={label}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      class={iconClass}
+      type={type}
+      disabled={disabled}
+      data-variant={variant}
+      data-size={size}
+      aria-label={label}
+      {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
+    >
+      <slot />
+    </button>
+  )
+}

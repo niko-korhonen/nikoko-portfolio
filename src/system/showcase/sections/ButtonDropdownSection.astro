@@ -1,0 +1,39 @@
+---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import Cluster from '../../primitives/Cluster.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import Icon from '../../icons/Icon.astro';
+import { btnDropdownVariants, btnDropdownSizes } from '../data';
+---
+
+<section class="section" aria-labelledby="button-dropdown-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="button-dropdown-heading">ButtonDropdown</h2>
+  <p class="text-body-s-plain section__note">
+    End icon is always chevron down · use as the trigger for <code class="code-inline">MenuDropdown</code>.
+  </p>
+  {
+    btnDropdownSizes.map((size) => (
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Size {size.toUpperCase()}</h3>
+        <div class="demo-bd-row">
+          <span class="text-body-xs-plain demo-bd-row__label">{size.toUpperCase()}</span>
+          <div class="demo-bd-cells">
+            {btnDropdownVariants.map((variant) => (
+              <MenuDropdown>
+                <ButtonDropdown slot="trigger" variant={variant} size={size}>
+                  Label
+                </ButtonDropdown>
+                <MenuItemAction type="button">
+                  <Icon slot="slot-start" name="copy" style="outline" size="s" />
+                  Copy
+                </MenuItemAction>
+                <MenuItemAction type="button">Duplicate</MenuItemAction>
+              </MenuDropdown>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</section>

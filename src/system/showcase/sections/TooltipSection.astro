@@ -1,0 +1,40 @@
+---
+import Cluster from '../../primitives/Cluster.astro';
+import Tooltip from '../../components/Tooltip.astro';
+---
+
+<section class="section" aria-labelledby="tooltip-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="tooltip-heading">Tooltip</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Tooltip</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Hover or focus the anchor · pair <code class="code-inline">id</code> with
+      <code class="code-inline">aria-describedby</code> on the trigger.
+    </p>
+    <Cluster gap="space-12" align="center">
+      <Tooltip id="sys-tooltip-1">
+        <button
+          type="button"
+          slot="trigger"
+          class="text-label-s-plain ui-focus-ring"
+          aria-describedby="sys-tooltip-1"
+        >
+          Keyboard or hover
+        </button>
+        <span slot="content">Short help copy using body XS typography tokens.</span>
+      </Tooltip>
+      <Tooltip id="sys-tooltip-2">
+        <span
+          slot="trigger"
+          tabindex="0"
+          role="button"
+          class="text-body-s-plain ui-focus-ring"
+          aria-describedby="sys-tooltip-2"
+        >
+          Inline text trigger
+        </span>
+        <span slot="content">Tooltip surface uses surface, outline, and spacing tokens.</span>
+      </Tooltip>
+    </Cluster>
+  </div>
+</section>

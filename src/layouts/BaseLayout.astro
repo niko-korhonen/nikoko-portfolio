@@ -13,6 +13,41 @@ const { title = 'Niko UI' } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <!--
+      Apply saved theme before stylesheets paint. Without this, :root:not([data-theme]) + prefers-color-scheme: dark
+      wins on first paint when the user chose "light", causing a black flash until deferred JS sets data-theme="light".
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var k = 'niko-ui-theme';
+          var v = localStorage.getItem(k);
+          var d = document.documentElement;
+          if (v === 'light') {
+            d.setAttribute('data-theme', 'light');
+            d.style.colorScheme = 'light';
+          } else if (v === 'dark') {
+            d.setAttribute('data-theme', 'dark');
+            d.style.colorScheme = 'dark';
+          } else {
+            d.removeAttribute('data-theme');
+            d.style.colorScheme = '';
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
+    <script is:inline>
+      (function () {
+        try {
+          var mq = window.matchMedia('(min-width: 48rem)');
+          document.documentElement.setAttribute('data-nav-drawer-open', mq.matches ? 'true' : 'false');
+        } catch (e) {
+          document.documentElement.setAttribute('data-nav-drawer-open', 'true');
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

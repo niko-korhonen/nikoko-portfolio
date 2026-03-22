@@ -1,0 +1,180 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ButtonIcon from '../system/components/ButtonIcon.astro';
+import NavigationDrawer from '../system/components/NavigationDrawer.astro';
+import Icon from '../system/icons/Icon.astro';
+import '../system/showcase/system-showcase.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Niko UI' } = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <div class="system-shell">
+    <div class="ui-nav-drawer-backdrop js-nav-drawer-backdrop" aria-hidden="true"></div>
+    <NavigationDrawer currentPath={Astro.url.pathname} />
+    <ButtonIcon
+      class="system-shell__menu-toggle js-nav-drawer-open"
+      variant="secondary"
+      size="m"
+      type="button"
+      label="Open navigation"
+    >
+      <Icon name="menubars" style="outline" size="m" />
+    </ButtonIcon>
+    <main class="system-shell__main" id="system-main">
+      <div class="page">
+        <slot />
+      </div>
+    </main>
+  </div>
+  <script>
+    (function () {
+      const storageKey = 'niko-ui-theme';
+
+      function apply(value: 'system' | 'light' | 'dark') {
+        const root = document.documentElement;
+        if (value === 'system') {
+          root.removeAttribute('data-theme');
+          root.style.colorScheme = '';
+        } else {
+          root.setAttribute('data-theme', value);
+          root.style.colorScheme = value;
+        }
+        try {
+          localStorage.setItem(storageKey, value);
+        } catch {
+          /* ignore */
+        }
+      }
+
+      document.addEventListener('segment-change', (e) => {
+        const t = e.target;
+        if (!(t instanceof Element) || !t.closest('.js-theme-segment')) return;
+        const ev = e as CustomEvent<{ value?: string }>;
+        const v = ev.detail?.value;
+        if (v === 'light' || v === 'dark' || v === 'system') {
+          apply(v);
+        }
+      });
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved === 'light' || saved === 'dark' || saved === 'system') {
+          apply(saved);
+        }
+      } catch {
+        /* ignore */
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      const KEY = 'niko-ui-drawer-scroll';
+
+      function restoreScroll(drawer: HTMLElement) {
+        try {
+          const saved = sessionStorage.getItem(KEY);
+          if (saved == null) return;
+          const y = parseInt(saved, 10);
+          if (!Number.isNaN(y)) drawer.scrollTop = y;
+        } catch {
+          /* ignore */
+        }
+      }
+
+      function bindDrawerScrollSave() {
+        const drawer = document.querySelector<HTMLElement>('.ui-nav-drawer');
+        if (!drawer) return;
+
+        let debounce: ReturnType<typeof setTimeout> | undefined;
+        drawer.addEventListener(
+          'scroll',
+          () => {
+            if (debounce) window.clearTimeout(debounce);
+            debounce = window.setTimeout(() => {
+              try {
+                sessionStorage.setItem(KEY, String(drawer.scrollTop));
+              } catch {
+                /* ignore */
+              }
+            }, 80);
+          },
+          { passive: true },
+        );
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindDrawerScrollSave);
+      } else {
+        bindDrawerScrollSave();
+      }
+
+      window.addEventListener('pageshow', (e) => {
+        const drawer = document.querySelector<HTMLElement>('.ui-nav-drawer');
+        if (!drawer) return;
+        if (e.persisted) {
+          restoreScroll(drawer);
+        }
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const doc = document.documentElement;
+
+      function isMobileLayout() {
+        return window.matchMedia('(max-width: 47.99rem)').matches;
+      }
+
+      function setNavDrawerOpen(open: boolean) {
+        doc.setAttribute('data-nav-drawer-open', open ? 'true' : 'false');
+        const drawer = document.getElementById('nav-drawer');
+        const menuBtn = document.querySelector<HTMLButtonElement>('.js-nav-drawer-open');
+        if (drawer) {
+          drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        }
+        if (menuBtn) {
+          menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          menuBtn.setAttribute('aria-controls', 'nav-drawer');
+        }
+      }
+
+      function bindNavDrawer() {
+        const openBtn = document.querySelector('.js-nav-drawer-open');
+        const closeBtns = document.querySelectorAll('.js-nav-drawer-close');
+        const backdrop = document.querySelector('.js-nav-drawer-backdrop');
+
+        openBtn?.addEventListener('click', () => setNavDrawerOpen(true));
+
+        closeBtns.forEach((btn) => {
+          btn.addEventListener('click', () => setNavDrawerOpen(false));
+        });
+
+        backdrop?.addEventListener('click', () => {
+          if (isMobileLayout()) setNavDrawerOpen(false);
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          if (!isMobileLayout()) return;
+          if (doc.getAttribute('data-nav-drawer-open') === 'true') {
+            setNavDrawerOpen(false);
+          }
+        });
+
+        const initial = doc.getAttribute('data-nav-drawer-open') === 'true';
+        setNavDrawerOpen(initial);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindNavDrawer);
+      } else {
+        bindNavDrawer();
+      }
+    })();
+  </script>
+</BaseLayout>

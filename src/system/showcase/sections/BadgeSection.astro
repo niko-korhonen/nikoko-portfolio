@@ -1,0 +1,19 @@
+---
+import Badge from '../../components/Badge.astro';
+import Inline from '../../primitives/Inline.astro';
+---
+
+<section class="section" aria-labelledby="badge-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="badge-heading">Badge</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Badge</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Primary = container primary-inverse · accent = container accent-blue (no borders).
+    </p>
+    <Inline gap="space-8" align="center">
+      <Badge variant="primary">Beta</Badge>
+      <Badge variant="inverse">New</Badge>
+      <Badge variant="accent">Info</Badge>
+    </Inline>
+  </div>
+</section>

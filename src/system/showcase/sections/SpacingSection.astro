@@ -1,0 +1,23 @@
+---
+import { spacingTokens } from '../data';
+---
+
+<section class="section" aria-labelledby="spacing-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="spacing-heading">Spacing</h2>
+  <p class="text-body-s-plain section__note">
+    Layout rhythm from <code class="code-inline">misc.tokens.json</code> → <code class="code-inline">--space-*</code> (generated).
+    Bar width equals each token value.
+  </p>
+  <ul class="spacing-scale">
+    {
+      spacingTokens.map((t) => (
+        <li class="spacing-scale__row">
+          <code class="text-code-xs-plain spacing-scale__name">{`--${t}`}</code>
+          <div class="spacing-scale__track">
+            <div class="spacing-scale__bar" style={`width: var(--${t});`} />
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -1,0 +1,87 @@
+---
+import Inline from '../primitives/Inline.astro';
+import ButtonIcon from './ButtonIcon.astro';
+import ItemAction from './ItemAction.astro';
+import ItemDivider from './ItemDivider.astro';
+import ItemHeader from './ItemHeader.astro';
+import SegmentControl from './SegmentControl.astro';
+import Icon from '../icons/Icon.astro';
+import { SYSTEM_NAV_GROUPS, isNavItemActive } from '../showcase/nav';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const themeSegmentItems = [
+  { value: 'system', icon: 'lock', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'System theme' },
+  { value: 'light', icon: 'sun', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Light theme' },
+  { value: 'dark', icon: 'moon', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Dark theme' },
+];
+---
+
+<aside class="ui-nav-drawer" id="nav-drawer" aria-label="Design system">
+  <div class="ui-nav-drawer__toolbar">
+    <Inline justify="between" align="center" gap="space-8">
+      <SegmentControl
+        class="js-theme-segment ui-nav-drawer__theme"
+        semantic="radiogroup"
+        size="m"
+        ariaLabel="Theme"
+        defaultValue="system"
+        items={themeSegmentItems}
+      />
+      <ButtonIcon
+        class="js-nav-drawer-close"
+        variant="secondary"
+        size="m"
+        type="button"
+        label="Close navigation"
+      >
+        <Icon name="cross" style="outline" size="m" />
+      </ButtonIcon>
+    </Inline>
+  </div>
+  <p class="text-display-s-plain ui-nav-drawer__brand">Niko UI</p>
+  <nav class="ui-nav-drawer__nav" aria-label="Sections">
+    {
+      SYSTEM_NAV_GROUPS.map((group, gi) => (
+        <>
+          {gi > 0 ? <ItemDivider /> : null}
+          <ItemHeader>{group.title}</ItemHeader>
+          {group.items.map((item) => {
+            const active = isNavItemActive(currentPath, item);
+            return (
+              <ItemAction
+                variant="inline"
+                href={item.href}
+                active={active}
+                aria-current={active ? 'page' : undefined}
+              >
+                {item.label}
+              </ItemAction>
+            );
+          })}
+        </>
+      ))
+    }
+  </nav>
+  <!-- Sync restore: run as soon as nav exists (inside aside), before </aside> and before <main>, so the drawer is not painted at scrollTop 0 while the shell parses. -->
+  <script is:inline>
+    (function () {
+      try {
+        var KEY = 'niko-ui-drawer-scroll';
+        var raw = sessionStorage.getItem(KEY);
+        if (raw == null) return;
+        var y = parseInt(raw, 10);
+        if (isNaN(y)) return;
+        var s = document.currentScript;
+        var d = s && s.parentElement;
+        if (d && d.classList && d.classList.contains('ui-nav-drawer')) d.scrollTop = y;
+      } catch (e) {
+        /* ignore */
+      }
+    })();
+  </script>
+</aside>

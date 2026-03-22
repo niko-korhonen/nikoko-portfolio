@@ -1,0 +1,65 @@
+---
+import Button from '../../components/Button.astro';
+import ButtonIcon from '../../components/ButtonIcon.astro';
+import Cluster from '../../primitives/Cluster.astro';
+import ModalDialog from '../../components/ModalDialog.astro';
+import Icon from '../../icons/Icon.astro';
+---
+
+<section class="section" aria-labelledby="modal-dialog-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="modal-dialog-heading">Modal dialog</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Modal dialog</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Native <code class="code-inline">&lt;dialog&gt;</code> · overlay <code class="code-inline">--color-overlay-primary</code> ·{' '}
+      <code class="code-inline">hero</code> slot = optional single L icon above the title; omit for no hero ·{' '}
+      <code class="code-inline">layout=&quot;centered&quot;</code> (center slot) or{' '}
+      <code class="code-inline">footer</code> (stacked actions). <code class="code-inline">dismissible=&#123;false&#125;</code> blocks
+      Escape and backdrop; use <code class="code-inline">dialogClose</code> on <code class="code-inline">Button</code> /{' '}
+      <code class="code-inline">ButtonIcon</code> for explicit close. Dialogs sit at the end of the page; open with{' '}
+      <code class="code-inline">showModal()</code> from triggers below.
+    </p>
+    <p class="text-label-s-plain ds-modal-demo-triggers-label">Open a sample</p>
+    <Cluster gap="space-12" align="center">
+      <button
+        type="button"
+        class="ui-btn ui-focus-ring text-label-s-plain"
+        data-variant="primary"
+        data-size="m"
+        onclick="document.getElementById('demo-modal-centered')?.showModal()"
+      >
+        Centered layout
+      </button>
+      <button
+        type="button"
+        class="ui-btn ui-focus-ring text-label-s-plain"
+        data-variant="secondary"
+        data-size="m"
+        onclick="document.getElementById('demo-modal-footer')?.showModal()"
+      >
+        Footer actions
+      </button>
+    </Cluster>
+  </div>
+</section>
+
+<ModalDialog id="demo-modal-centered" layout="centered">
+  <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+    <Icon name="cross" style="outline" size="s" />
+  </ButtonIcon>
+  <Icon slot="hero" name="placeholder" style="outline" size="l" />
+  <span slot="title">Label</span>
+  <span slot="description">Description copy for the centered layout.</span>
+  <Button slot="center" variant="primary" size="l" dialogClose>Label</Button>
+</ModalDialog>
+
+<ModalDialog id="demo-modal-footer" layout="footer">
+  <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+    <Icon name="cross" style="outline" size="s" />
+  </ButtonIcon>
+  <Icon slot="hero" name="placeholder" style="outline" size="l" />
+  <span slot="title">Label</span>
+  <span slot="description">Description for the footer layout.</span>
+  <Button slot="footer" variant="primary" size="l" dialogClose>Label</Button>
+  <Button slot="footer" variant="secondary" size="l" dialogClose>Label</Button>
+</ModalDialog>

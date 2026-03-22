@@ -1,0 +1,27 @@
+---
+import { typoCategories } from '../data';
+---
+
+<section class="section" aria-labelledby="type-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="type-heading">Typography</h2>
+  {
+    typoCategories.map((cat) => (
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">{cat.label}</h3>
+        <ul class="type-list">
+          {cat.sizes.map((row) => (
+            <li class="type-row">
+              <div class="type-pair">
+                <p class={`text-${row.classSuffix}-plain`}>{row.sample} · plain</p>
+                <p class={`text-${row.classSuffix}-emphasized`}>{row.sample} · emphasized</p>
+              </div>
+              <code class="text-code-xs-plain type-meta">
+                {`.text-${row.classSuffix}-plain`} / {`.text-${row.classSuffix}-emphasized`}
+              </code>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>

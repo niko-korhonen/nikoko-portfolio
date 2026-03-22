@@ -1,0 +1,49 @@
+---
+import { colorGroups } from '../data';
+---
+
+<section class="section" aria-labelledby="colors-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="colors-heading">Colors</h2>
+  {
+    colorGroups.map((group) => (
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">{group.title}</h3>
+        <ul class="swatch-grid">
+          {group.tokens.map((token) => (
+            <li class="swatch">
+              {token.startsWith('outline-') ? (
+                <div
+                  class="swatch__outline"
+                  style={`border-color: var(--color-${token}); background: var(--color-surface-base);`}
+                />
+              ) : token.startsWith('overlay-') ? (
+                <div class="swatch__alpha-bg">
+                  <div class="swatch__fill" style={`background: var(--color-${token});`} />
+                </div>
+              ) : token.startsWith('component-') &&
+                (token.includes('active') || token.includes('hover') || token.includes('pressed')) ? (
+                <div class="swatch__alpha-bg">
+                  <div class="swatch__fill" style={`background: var(--color-${token});`} />
+                </div>
+              ) : (
+                <div class="swatch__fill" style={`background: var(--color-${token});`} />
+              )}
+              <span class="text-body-xs-plain swatch__name">{`--color-${token}`}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Other</h3>
+    <p class="text-body-s-plain">
+      <code class="code-inline">--opacity-component-disabled</code>
+      <span class="muted"> → </span>
+      <span class="text-body-s-emphasized">{`var(--opacity-component-disabled)`}</span>
+      <span class="opacity-demo" style={`opacity: var(--opacity-component-disabled);`} aria-hidden="true">
+        Sample
+      </span>
+    </p>
+  </div>
+</section>

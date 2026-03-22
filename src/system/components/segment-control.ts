@@ -40,6 +40,7 @@ function setAriaState(
   cells: HTMLButtonElement[],
   selectedIndex: number,
   semantic: 'radiogroup' | 'tablist',
+  dispatchChange: boolean,
 ) {
   cells.forEach((cell, i) => {
     const selected = i === selectedIndex;
@@ -59,19 +60,32 @@ function setAriaState(
     field.value = cells[selectedIndex].dataset.value ?? '';
   }
 
-  root.dispatchEvent(
-    new CustomEvent('segment-change', {
-      bubbles: true,
-      detail: { value: cells[selectedIndex]?.dataset.value ?? '' },
-    }),
-  );
+  if (dispatchChange) {
+    root.dispatchEvent(
+      new CustomEvent('segment-change', {
+        bubbles: true,
+        detail: { value: cells[selectedIndex]?.dataset.value ?? '' },
+      }),
+    );
+  }
 }
 
-function layoutIndicator(root: HTMLElement, cells: HTMLButtonElement[], selectedIndex: number) {
+const THEME_STORAGE_KEY = 'niko-ui-theme';
+
+function layoutIndicator(
+  root: HTMLElement,
+  cells: HTMLButtonElement[],
+  selectedIndex: number,
+  animate: boolean,
+) {
   const track = root.querySelector<HTMLElement>(TRACK);
   const indicator = root.querySelector<HTMLElement>(INDICATOR);
   const cell = cells[selectedIndex];
   if (!track || !indicator || !cell || cell.disabled) return;
+
+  if (!animate) {
+    indicator.style.transition = 'none';
+  }
 
   const tr = track.getBoundingClientRect();
   const cr = cell.getBoundingClientRect();
@@ -84,6 +98,12 @@ function layoutIndicator(root: HTMLElement, cells: HTMLButtonElement[], selected
   indicator.style.transform = `translate3d(${left}px, ${top}px, 0)`;
   indicator.style.width = `${width}px`;
   indicator.style.height = `${height}px`;
+
+  if (!animate) {
+    requestAnimationFrame(() => {
+      indicator.style.transition = '';
+    });
+  }
 }
 
 function nextEnabledIndex(cells: HTMLButtonElement[], from: number, delta: number): number {
@@ -108,15 +128,27 @@ function bindRoot(root: HTMLElement) {
 
   let selectedIndex = findSelectedIndex(cells);
 
-  const apply = (index: number, focus: boolean) => {
+  if (root.classList.contains('js-theme-segment')) {
+    try {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark' || saved === 'system') {
+        const idx = cells.findIndex((c) => c.dataset.value === saved);
+        if (idx >= 0) selectedIndex = idx;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const apply = (index: number, focus: boolean, animateLayout = true) => {
     const semantic = getSemantic(root);
     let i = index;
     if (cells[i]?.disabled) {
       i = nextEnabledIndex(cells, i, 1);
     }
     selectedIndex = i;
-    setAriaState(root, cells, selectedIndex, semantic);
-    layoutIndicator(root, cells, selectedIndex);
+    setAriaState(root, cells, selectedIndex, semantic, true);
+    layoutIndicator(root, cells, selectedIndex, animateLayout);
     if (focus) {
       cells[selectedIndex]?.focus();
     }
@@ -125,7 +157,7 @@ function bindRoot(root: HTMLElement) {
   cells.forEach((cell, index) => {
     cell.addEventListener('click', () => {
       if (cell.disabled) return;
-      apply(index, true);
+      apply(index, true, true);
     });
   });
 
@@ -151,16 +183,16 @@ function bindRoot(root: HTMLElement) {
 
     let handled = false;
     if (e.key === prevKey || e.key === 'ArrowUp') {
-      apply(nextEnabledIndex(cells, current, -1), true);
+      apply(nextEnabledIndex(cells, current, -1), true, true);
       handled = true;
     } else if (e.key === nextKey || e.key === 'ArrowDown') {
-      apply(nextEnabledIndex(cells, current, 1), true);
+      apply(nextEnabledIndex(cells, current, 1), true, true);
       handled = true;
     } else if (e.key === 'Home') {
-      apply(firstEnabledIndex(cells), true);
+      apply(firstEnabledIndex(cells), true, true);
       handled = true;
     } else if (e.key === 'End') {
-      apply(lastEnabledIndex(cells), true);
+      apply(lastEnabledIndex(cells), true, true);
       handled = true;
     }
 
@@ -170,13 +202,13 @@ function bindRoot(root: HTMLElement) {
   });
 
   const ro = new ResizeObserver(() => {
-    layoutIndicator(root, cells, selectedIndex);
+    layoutIndicator(root, cells, selectedIndex, false);
   });
   ro.observe(track);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      apply(selectedIndex, false);
+      apply(selectedIndex, false, false);
     });
   });
 }

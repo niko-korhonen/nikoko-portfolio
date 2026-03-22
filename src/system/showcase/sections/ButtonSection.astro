@@ -1,0 +1,47 @@
+---
+import Button from '../../components/Button.astro';
+import { btnMatrixSizes, btnMatrixVariants, btnMatrixRows, variantLabel } from '../data';
+---
+
+<section class="section" aria-labelledby="button-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="button-heading">Button</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Button</h3>
+    <p class="text-body-s-plain subsection__hint">Columns = variant · rows = default and disabled.</p>
+    {
+      btnMatrixSizes.map((size) => (
+        <div class="demo-btn-subsection">
+          <h4 class="text-label-m-emphasized demo-btn-subsection__title">Size {size.toUpperCase()}</h4>
+          <div class="demo-matrix-wrap">
+            <div class="demo-matrix">
+              <div class="demo-matrix__row demo-matrix__row--head">
+                <span class="demo-matrix__corner" aria-hidden="true" />
+                {btnMatrixVariants.map((v) => (
+                  <span class="text-label-xs-plain demo-matrix__head">{variantLabel(v)}</span>
+                ))}
+              </div>
+              {btnMatrixRows.map((row) => (
+                <div class="demo-matrix__row">
+                  <span class="text-body-xs-plain demo-matrix__state">{row.label}</span>
+                  {btnMatrixVariants.map((v) => (
+                    <div class="demo-matrix__cell">
+                      {row.id === 'disabled' ? (
+                        <Button size={size} variant={v} disabled>
+                          Label
+                        </Button>
+                      ) : (
+                        <Button size={size} variant={v}>
+                          Label
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

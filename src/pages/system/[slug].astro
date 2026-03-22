@@ -1,0 +1,22 @@
+---
+import SystemLayout from '../../layouts/SystemLayout.astro';
+import { demoRegistry } from '../../system/showcase/demo-registry';
+import { getDemoPageTitle } from '../../system/showcase/nav';
+
+export function getStaticPaths() {
+  return Object.keys(demoRegistry).map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const Section = slug ? demoRegistry[slug as keyof typeof demoRegistry] : undefined;
+
+if (!slug || !Section) {
+  return Astro.redirect('/404');
+}
+
+const title = getDemoPageTitle(slug);
+---
+
+<SystemLayout title={title}>
+  <Section />
+</SystemLayout>

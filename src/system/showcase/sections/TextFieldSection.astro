@@ -1,0 +1,137 @@
+---
+import ButtonIcon from '../../components/ButtonIcon.astro';
+import TextField from '../../components/TextField.astro';
+import Icon from '../../icons/Icon.astro';
+import Stack from '../../primitives/Stack.astro';
+---
+
+<section class="section" aria-labelledby="text-field-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="text-field-heading">Text field</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Text field</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Slots: <code class="code-inline">slot-start</code>, <code class="code-inline">icon-start</code>,{' '}
+      <code class="code-inline">icon-end</code>, <code class="code-inline">slot-end</code> · helper below the control ·{' '}
+      <code class="code-inline">data-label=&quot;yes|no&quot;</code> sets radius (low vs pill).
+    </p>
+    <div class="tf-matrix-wrap">
+      <div class="tf-matrix">
+        <div class="tf-matrix__row tf-matrix__row--head">
+          <span class="tf-matrix__corner" aria-hidden="true" />
+          <span class="text-label-xs-plain tf-matrix__head">Filled, Label</span>
+          <span class="text-label-xs-plain tf-matrix__head">Filled, no label</span>
+          <span class="text-label-xs-plain tf-matrix__head">Outlined, Label</span>
+          <span class="text-label-xs-plain tf-matrix__head">Outlined, no label</span>
+        </div>
+        <div class="tf-matrix__row">
+          <span class="text-body-xs-plain tf-matrix__state">Default</span>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
+          </div>
+        </div>
+        <div class="tf-matrix__row">
+          <span class="text-body-xs-plain tf-matrix__state">Error</span>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" label="Label" placeholder="Input" tone="error" description="Error message." />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField
+              variant="filled"
+              ariaLabel="Demo input"
+              placeholder="Input"
+              tone="error"
+              description="Error message."
+            />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="outlined" label="Label" placeholder="Input" tone="error" description="Error message." />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField
+              variant="outlined"
+              ariaLabel="Demo input"
+              placeholder="Input"
+              tone="error"
+              description="Error message."
+            />
+          </div>
+        </div>
+        <div class="tf-matrix__row">
+          <span class="text-body-xs-plain tf-matrix__state">Success</span>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" label="Label" placeholder="Input" tone="success" description="Success message." />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField
+              variant="filled"
+              ariaLabel="Demo input"
+              placeholder="Input"
+              tone="success"
+              description="Success message."
+            />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField
+              variant="outlined"
+              label="Label"
+              placeholder="Input"
+              tone="success"
+              description="Success message."
+            />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField
+              variant="outlined"
+              ariaLabel="Demo input"
+              placeholder="Input"
+              tone="success"
+              description="Success message."
+            />
+          </div>
+        </div>
+        <div class="tf-matrix__row">
+          <span class="text-body-xs-plain tf-matrix__state">Disabled</span>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" disabled />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" disabled />
+          </div>
+          <div class="tf-matrix__cell">
+            <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="text-body-s-plain subsection__hint" style="margin-top: var(--space-16)">
+      Slots + icons (pink = custom slot placeholders) · chat-style trailing{' '}
+      <code class="code-inline">ButtonIcon</code> in <code class="code-inline">slot-end</code>.
+    </p>
+    <Stack gap="space-12" align="stretch">
+      <TextField variant="filled" label="Label" placeholder="Input" description="Helper text">
+        <span slot="slot-start" class="tf-demo-slot" aria-hidden="true" />
+        <Icon slot="icon-start" name="search" style="outline" size="m" />
+        <Icon slot="icon-end" name="copy" style="outline" size="m" />
+        <span slot="slot-end" class="tf-demo-slot" aria-hidden="true" />
+      </TextField>
+      <TextField variant="outlined" ariaLabel="Message" placeholder="Message…">
+        <Icon slot="icon-start" name="search" style="outline" size="m" />
+        <ButtonIcon slot="slot-end" variant="primary" size="m" label="Send message" type="button">
+          <Icon name="arrowup" style="outline" size="m" />
+        </ButtonIcon>
+      </TextField>
+    </Stack>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+import Cluster from '../../primitives/Cluster.astro';
+---
+
+<section class="section" aria-labelledby="shadows-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="shadows-heading">Shadows</h2>
+  <p class="text-body-s-plain section__note">
+    Utilities <code class="code-inline">.ui-shadow-l</code> / <code class="code-inline">.ui-shadow-m</code> map to token shadows.
+    Elevated surfaces (e.g. menus) use <code class="code-inline">--shadow-l</code> via the <code class="code-inline">ElevatedPanel</code> component.
+  </p>
+  <Cluster gap="space-16" align="end">
+    <div class="ds-shadow-swatch ui-shadow-l">
+      <span class="text-label-xs-plain">Shadow L</span>
+    </div>
+    <div class="ds-shadow-swatch ui-shadow-m">
+      <span class="text-label-xs-plain">Shadow M</span>
+    </div>
+  </Cluster>
+</section>

@@ -1,0 +1,76 @@
+---
+import SegmentControl from '../../components/SegmentControl.astro';
+import Icon from '../../icons/Icon.astro';
+import { iconSizes, iconGridSegmentItems, loadAllIconEntries } from '../data';
+
+const allIconEntries = loadAllIconEntries();
+---
+
+<section class="section" aria-labelledby="icons-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="icons-heading">Icon sizes</h2>
+  <p class="text-body-s-plain section__note">
+    Same SVG scaled with <code class="code-inline">width</code> / <code class="code-inline">height</code> →
+    <code class="code-inline">var(--icon-*)</code>
+    · outline icons use <code class="code-inline">1.5px</code> strokes with{' '}
+    <code class="code-inline">vector-effect: non-scaling-stroke</code> (constant on screen)
+  </p>
+  <ul class="icon-row">
+    {
+      iconSizes.map(({ key, label }) => (
+        <li class="icon-item">
+          <Icon name="placeholder" style="outline" size={key} />
+          <span class="text-body-xs-plain">{`--icon-${key}`} ({label})</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h3 class="text-label-l-emphasized icon-library-heading">All icons</h3>
+  <p class="text-body-s-plain section__note icon-library-note">
+    Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the control
+    below to resize the grid.
+  </p>
+  <div class="subsection icon-sizes-toolbar">
+    <SegmentControl
+      class="js-icon-size-segment"
+      semantic="radiogroup"
+      size="m"
+      ariaLabel="Grid icon size"
+      defaultValue="l"
+      items={[...iconGridSegmentItems]}
+    />
+  </div>
+  <ul class="icon-grid-all" id="icon-grid-all" aria-label="All icons">
+    {
+      allIconEntries.map(({ name, style }) => (
+        <li class="icon-grid-cell" title={`${name} (${style})`}>
+          <Icon name={name} style={style} size="l" />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script is:inline>
+  (function () {
+    const grid = document.getElementById('icon-grid-all');
+    if (!grid) return;
+
+    function applyIconSize(size) {
+      grid.querySelectorAll('.ui-icon').forEach((el) => {
+        el.setAttribute('data-size', size);
+      });
+    }
+
+    const segmentRoot = document.querySelector('.js-icon-size-segment');
+    if (segmentRoot) {
+      segmentRoot.addEventListener('segment-change', (e) => {
+        const v = e && e.detail && e.detail.value;
+        applyIconSize(typeof v === 'string' ? v : 'l');
+      });
+      const selected = segmentRoot.querySelector('.ui-segment__cell[data-selected="true"]');
+      const v = selected && selected.getAttribute('data-value');
+      if (typeof v === 'string' && v) applyIconSize(v);
+    }
+  })();
+</script>

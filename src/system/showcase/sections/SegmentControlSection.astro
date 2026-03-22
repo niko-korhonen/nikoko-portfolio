@@ -1,0 +1,58 @@
+---
+import SegmentControl from '../../components/SegmentControl.astro';
+import Stack from '../../primitives/Stack.astro';
+import { segmentShowcaseItems } from '../data';
+---
+
+<section class="section" aria-labelledby="segment-control-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="segment-control-heading">Segment control</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Segment control</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Button sizing tokens (L / M / S) · selected = primary fill with sliding indicator · unselected = ghost-like
+      overlay · <code class="code-inline">semantic=&quot;radiogroup&quot;</code> for a single value (forms);{' '}
+      <code class="code-inline">semantic=&quot;tablist&quot;</code> when pairing with tab panels.
+    </p>
+    <Stack gap="space-16">
+      <div>
+        <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+          Large
+        </p>
+        <SegmentControl
+          semantic="radiogroup"
+          size="l"
+          name="demo-segment-l"
+          ariaLabel="Segment demo (large)"
+          defaultValue="icon-label"
+          items={[...segmentShowcaseItems]}
+        />
+      </div>
+      <div>
+        <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+          Medium
+        </p>
+        <SegmentControl
+          semantic="radiogroup"
+          size="m"
+          name="demo-segment-m"
+          ariaLabel="Segment demo (medium)"
+          defaultValue="icon-label"
+          items={[...segmentShowcaseItems]}
+        />
+      </div>
+      <div>
+        <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+          Small
+        </p>
+        <SegmentControl
+          semantic="radiogroup"
+          size="s"
+          name="demo-segment-s"
+          ariaLabel="Segment demo (small)"
+          defaultValue="icon-label"
+          items={[...segmentShowcaseItems]}
+        />
+      </div>
+    </Stack>
+  </div>
+</section>

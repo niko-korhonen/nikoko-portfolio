@@ -1,0 +1,18 @@
+---
+import Cluster from '../../primitives/Cluster.astro';
+import ElevatedPanel from '../../components/ElevatedPanel.astro';
+---
+
+<section class="section" aria-labelledby="elevated-panel-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="elevated-panel-heading">Elevated panel</h2>
+  <p class="text-body-s-plain section__note">
+    <code class="code-inline">ElevatedPanel</code> uses <code class="code-inline">surface-base</code>,{' '}
+    <code class="code-inline">radius-medium</code>, <code class="code-inline">outline-tertiary</code>, and{' '}
+    <code class="code-inline">--shadow-l</code> (same shell as menu surface).
+  </p>
+  <Cluster gap="space-16" align="end">
+    <ElevatedPanel class="ds-elevated-demo">
+      <p class="text-body-s-plain" style="margin:0">Reusable elevated panel (same shell as menu surface).</p>
+    </ElevatedPanel>
+  </Cluster>
+</section>

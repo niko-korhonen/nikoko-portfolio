@@ -1,0 +1,145 @@
+---
+import Badge from '../../components/Badge.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import ItemAction from '../../components/ItemAction.astro';
+import ItemDivider from '../../components/ItemDivider.astro';
+import ItemHeader from '../../components/ItemHeader.astro';
+import ItemStatic from '../../components/ItemStatic.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import Toggle from '../../components/Toggle.astro';
+import Icon from '../../icons/Icon.astro';
+import Stack from '../../primitives/Stack.astro';
+---
+
+<section class="section" aria-labelledby="item-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="item-heading">Item</h2>
+
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Item header &amp; divider</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Structural rows for stacked lists · header uses label S · divider uses <code class="code-inline">outline-tertiary</code>.
+    </p>
+    <div class="ds-item-demo">
+      <Stack gap="space-2" align="stretch">
+        <ItemHeader>Section</ItemHeader>
+        <ItemDivider />
+      </Stack>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">ItemAction</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Floating and inline · optional description, detail, chevron · <code class="code-inline">slot-start</code> /{' '}
+      <code class="code-inline">slot-end</code> · interactive states match ghost buttons.
+    </p>
+    <div class="ds-item-demo">
+      <Stack gap="space-12" align="stretch">
+        <ItemAction variant="floating">Label only</ItemAction>
+        <ItemAction variant="floating" description="Supporting line">
+          With description
+        </ItemAction>
+        <ItemAction variant="floating" description="Supporting line" detail="Detail">
+          Full text row
+        </ItemAction>
+        <ItemAction variant="floating" description="Supporting line" detail="Detail" chevron>
+          With chevron
+        </ItemAction>
+        <ItemAction variant="floating" description="Icons in slots" detail="⌘K" chevron>
+          <Icon slot="slot-start" name="search" style="outline" size="s" />
+          <Icon slot="slot-end" name="copy" style="outline" size="s" />
+          Search
+        </ItemAction>
+        <ItemAction variant="floating" active description="Current page" chevron href="/system/item">
+          Active link
+        </ItemAction>
+        <ItemAction variant="inline" description="Ghost background">
+          Inline variant
+        </ItemAction>
+        <ItemAction variant="floating" disabled description="Unavailable">
+          Disabled
+        </ItemAction>
+      </Stack>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">ItemAction as label (radio)</h3>
+    <p class="text-body-s-plain subsection__hint">
+      <code class="code-inline">as=&quot;label&quot;</code> · use <code class="code-inline">span.ui-radio</code> with raw input + control (do not nest{' '}
+      <code class="code-inline">Radio.astro</code> here).
+    </p>
+    <div class="ds-item-demo">
+      <Stack gap="space-8" align="stretch">
+        <ItemAction as="label" variant="floating" description="Whole row selects this option" chevron={false}>
+          <span slot="slot-start" class="ui-radio" data-size="m">
+            <input
+              type="radio"
+              class="ui-radio__input"
+              name="demo-item-radio"
+              value="a"
+              checked
+            />
+            <span class="ui-radio__control" aria-hidden="true"></span>
+          </span>
+          Option A
+        </ItemAction>
+        <ItemAction as="label" variant="floating" description="Second row" chevron={false}>
+          <span slot="slot-start" class="ui-radio" data-size="m">
+            <input type="radio" class="ui-radio__input" name="demo-item-radio" value="b" />
+            <span class="ui-radio__control" aria-hidden="true"></span>
+          </span>
+          Option B
+        </ItemAction>
+      </Stack>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">ItemStatic</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Non-interactive row · nest controls in slots (e.g. toggle) without the row stealing clicks.
+    </p>
+    <div class="ds-item-demo">
+      <Stack gap="space-12" align="stretch">
+        <ItemStatic variant="floating" description="Read-only copy" detail="Value">
+          Setting name
+        </ItemStatic>
+        <ItemStatic variant="floating" description="Badge or button in the trailing slot">
+          Notifications
+          <Badge slot="slot-end" variant="accent">3</Badge>
+        </ItemStatic>
+        <ItemStatic variant="inline" description="Toggle on the right">
+          Wi‑Fi
+          <Toggle slot="slot-end" name="demo-item-static-toggle" />
+        </ItemStatic>
+      </Stack>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Menu dropdown</h3>
+    <p class="text-body-s-plain subsection__hint">
+      <code class="code-inline">ButtonDropdown</code> matches button variants &amp; sizes; end icon is always chevron down{' '}
+      · <code class="code-inline">MenuItemAction</code> defaults to <code class="code-inline">variant=&quot;inline&quot;</code> · panel uses{' '}
+      <code class="code-inline">MenuList</code> + <code class="code-inline">ElevatedPanel</code> (0 gap between items).
+    </p>
+    <MenuDropdown>
+      <ButtonDropdown slot="trigger" variant="secondary" size="m">
+        Actions
+      </ButtonDropdown>
+      <MenuItemAction type="button">
+        <Icon slot="slot-start" name="copy" style="outline" size="s" />
+        Copy
+      </MenuItemAction>
+      <MenuItemAction type="button">
+        <Icon slot="slot-start" name="folder" style="outline" size="s" />
+        Duplicate
+      </MenuItemAction>
+      <MenuItemAction type="button" disabled description="Unavailable">
+        Paste
+      </MenuItemAction>
+    </MenuDropdown>
+  </div>
+</section>

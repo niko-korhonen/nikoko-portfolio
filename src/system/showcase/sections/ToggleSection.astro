@@ -1,0 +1,19 @@
+---
+import Toggle from '../../components/Toggle.astro';
+import Cluster from '../../primitives/Cluster.astro';
+---
+
+<section class="section" aria-labelledby="toggle-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="toggle-heading">Toggle</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Toggle</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Single size · off = outline only, tertiary knob · on = accent-blue fill, static white knob.
+    </p>
+    <Cluster gap="space-8" align="center">
+      <Toggle name="demo-toggle-a" />
+      <Toggle name="demo-toggle-b" checked />
+      <Toggle name="demo-toggle-c" disabled />
+    </Cluster>
+  </div>
+</section>

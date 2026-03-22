@@ -1,0 +1,29 @@
+---
+import Radio from '../../components/Radio.astro';
+import Inline from '../../primitives/Inline.astro';
+import Stack from '../../primitives/Stack.astro';
+---
+
+<section class="section" aria-labelledby="radio-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="radio-heading">Radio</h2>
+  <div class="subsection">
+    <h3 class="text-label-l-emphasized subsection__title">Radio</h3>
+    <p class="text-body-s-plain subsection__hint">
+      Grouped with a shared <code class="code-inline">name</code> · sizes L / M / S.
+    </p>
+    <Stack gap="space-12">
+      <fieldset class="ds-fieldset">
+        <legend class="text-label-s-plain ds-fieldset__legend">Option (M)</legend>
+        <Stack gap="space-8">
+          <Radio name="demo-radio-m" value="a" size="m" checked>Option A</Radio>
+          <Radio name="demo-radio-m" value="b" size="m">Option B</Radio>
+        </Stack>
+      </fieldset>
+      <Inline gap="space-16" align="center">
+        <Radio name="demo-radio-sizes" value="l" size="l" checked>Large</Radio>
+        <Radio name="demo-radio-sizes" value="m" size="m">Medium</Radio>
+        <Radio name="demo-radio-sizes" value="s" size="s">Small</Radio>
+      </Inline>
+    </Stack>
+  </div>
+</section>

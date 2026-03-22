@@ -1,0 +1,20 @@
+---
+import { radiusTokens } from '../data';
+---
+
+<section class="section" aria-labelledby="radius-heading">
+  <h2 class="text-headline-s-emphasized section__title" id="radius-heading">Radius</h2>
+  <ul class="radius-grid">
+    {
+      radiusTokens.map((r) => (
+        <li class="radius-item">
+          <div
+            class="radius-swatch"
+            style={`border-radius: var(--radius-${r}); background: var(--color-surface-elevation);`}
+          />
+          <span class="text-body-xs-plain">{`--radius-${r}`}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

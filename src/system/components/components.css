@@ -47,15 +47,17 @@
 }
 
 /*
- * Outline icons: only elements that actually use stroke get stroke + width.
- * (Do not target all paths under fill="none" roots — fill-style assets use that too and would pick up a fake outline.)
+ * Outline and fill icons: only elements that have a stroke attribute get width + color.
+ * Flattened fill-only shapes (no stroke / stroke="none") are unchanged.
  * Constant 1.5px stroke on screen at every icon size (non-scaling-stroke ignores the SVG scale transform).
  */
-.ui-icon[data-style="outline"] {
+.ui-icon[data-style="outline"],
+.ui-icon[data-style="fill"] {
   --icon-stroke-width: 1.5px;
 }
 
-.ui-icon[data-style="outline"] .ui-icon__svg [stroke]:not([stroke="none"]) {
+.ui-icon[data-style="outline"] .ui-icon__svg [stroke]:not([stroke="none"]),
+.ui-icon[data-style="fill"] .ui-icon__svg [stroke]:not([stroke="none"]) {
   stroke: currentColor;
   stroke-width: var(--icon-stroke-width);
   vector-effect: non-scaling-stroke;
@@ -309,24 +311,34 @@ a.ui-btn[data-variant="accent"]:visited {
   transition: box-shadow 0.05s ease;
 }
 
-/* Sizes: match Button L / M / S (label + icon tokens) */
-
+/*
+ * Sizes: match Button L / M / S (label + icon tokens).
+ * Icon-only rows would otherwise shrink to the icon box; labeled rows follow label line-height.
+ * min-height uses the same label line-heights as the segment’s .text-label-* class and, for M,
+ * the same outer height as .ui-btn-icon[data-size="m"] (nav drawer vs close button).
+ */
 .ui-segment__cell[data-size="l"] {
   --ui-btn-icon-size: var(--icon-m);
   gap: var(--space-8);
   padding: var(--space-16) var(--space-24);
+  min-height: calc(var(--space-16) * 2 + max(var(--icon-m), var(--text-label-m-line-height)));
 }
 
 .ui-segment__cell[data-size="m"] {
   --ui-btn-icon-size: var(--icon-s);
   gap: var(--space-10);
   padding: var(--space-10) var(--space-16);
+  min-height: max(
+    calc(var(--space-10) * 2 + max(var(--icon-s), var(--text-label-s-line-height))),
+    calc(var(--space-12) + var(--icon-s) + var(--space-12))
+  );
 }
 
 .ui-segment__cell[data-size="s"] {
   --ui-btn-icon-size: var(--icon-s);
   gap: var(--space-6);
   padding: var(--space-6) var(--space-12);
+  min-height: calc(var(--space-6) * 2 + max(var(--icon-s), var(--text-label-xs-line-height)));
 }
 
 /* Ghost-like idle (unselected) — hover / pressed mirror .ui-btn[data-variant="ghost"] */
@@ -374,6 +386,7 @@ a.ui-btn[data-variant="accent"]:visited {
   border: 1px solid transparent;
   border-radius: var(--radius-highest);
   cursor: pointer;
+  text-decoration: none;
   background: transparent;
   box-sizing: border-box;
   isolation: isolate;
@@ -814,7 +827,7 @@ a.ui-btn[data-variant="accent"]:visited {
 
 .ui-item-header {
   padding: var(--space-8) var(--space-16);
-  color: var(--color-content-primary);
+  color: var(--color-content-tertiary);
 }
 
 .ui-item-divider {
@@ -858,7 +871,7 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-item-action[data-variant="floating"] {
-  background: var(--color-container-floating);
+  background: var(--color-container-elevation);
 }
 
 .ui-item-action[data-variant="inline"] {
@@ -866,7 +879,7 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-item-static[data-variant="floating"] {
-  background: var(--color-container-floating);
+  background: var(--color-container-elevation);
 }
 
 .ui-item-static[data-variant="inline"] {
@@ -1121,7 +1134,7 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-field[data-variant='filled'] .ui-field__control {
-  background: var(--color-container-floating);
+  background: var(--color-container-elevation);
 }
 
 .ui-field[data-variant='outlined'] .ui-field__control {
@@ -1682,7 +1695,7 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-anchored-toast__item--neutral .ui-anchored-toast__inner {
-  background: var(--color-container-floating);
+  background: var(--color-container-elevation);
   color: var(--color-content-primary);
 }
 
@@ -1925,4 +1938,42 @@ a.ui-btn[data-variant="accent"]:visited {
 .ui-modal-dialog__footer .ui-btn {
   width: 100%;
   justify-content: center;
+}
+
+/* ——— Navigation drawer (system showcase shell) ——— */
+
+.ui-nav-drawer {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 18rem;
+  height: 100vh;
+  min-height: 0;
+  padding: var(--space-32) var(--space-16);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-anchor: none;
+  background: var(--color-surface-elevation);
+}
+
+.ui-nav-drawer__theme {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.ui-nav-drawer__toolbar {
+  margin: 0 calc(-1 * var(--space-16)) var(--space-16);
+  padding: 0 var(--space-16);
+}
+
+.ui-nav-drawer__brand {
+  margin: var(--space-40) 0 var(--space-24);
+  padding-inline: var(--space-16);
+}
+
+.ui-nav-drawer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
 }
