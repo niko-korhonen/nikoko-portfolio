@@ -55,6 +55,9 @@ const ASSETS = [
   { id: 'rain-shape-block', src: '/rain/rain-shape-block.svg', w: 130, h: 35, shape: 'rect' as const },
 ];
 
+/** Black pill text assets: inverted in dark theme via CSS on the landing page */
+const INVERT_IN_DARK_IDS = new Set(['rain-text-tasteful', 'rain-text-versatile', 'rain-text-designer']);
+
 type Item = {
   body: Matter.Body;
   el: HTMLImageElement;
@@ -231,7 +234,12 @@ export function initRainBackdrop(container: HTMLElement): void {
     el.src = def.src;
     el.alt = '';
     el.draggable = false;
-    el.className = 'rain-backdrop__piece';
+    el.className = [
+      'rain-backdrop__piece',
+      INVERT_IN_DARK_IDS.has(def.id) ? 'rain-backdrop__piece--invert-dark' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
     el.width = Math.round(dw);
     el.height = Math.round(dh);
     el.style.width = `${dw}px`;

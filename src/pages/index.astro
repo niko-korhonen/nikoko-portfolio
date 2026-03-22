@@ -4,11 +4,29 @@ import AnchoredToast from '../system/components/AnchoredToast.astro';
 import Button from '../system/components/Button.astro';
 import ButtonIcon from '../system/components/ButtonIcon.astro';
 import ModalDialog from '../system/components/ModalDialog.astro';
+import SegmentControl from '../system/components/SegmentControl.astro';
 import Icon from '../system/icons/Icon.astro';
+
+const themeSegmentItems = [
+  { value: 'system', icon: 'lock', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'System theme' },
+  { value: 'light', icon: 'sun', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Light theme' },
+  { value: 'dark', icon: 'moon', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Dark theme' },
+];
 ---
 
 <BaseLayout title="Niko UI">
   <div class="home-shell">
+    <div class="home-theme-bar">
+      <SegmentControl
+        class="js-theme-segment ui-nav-drawer__theme"
+        semantic="radiogroup"
+        size="m"
+        ariaLabel="Theme"
+        defaultValue="system"
+        items={themeSegmentItems}
+      />
+    </div>
+
     <div id="rain-backdrop" class="rain-backdrop" aria-hidden="true"></div>
 
     <nav class="home-chrome" aria-label="Site">
@@ -40,6 +58,47 @@ import Icon from '../system/icons/Icon.astro';
     </ModalDialog>
   </div>
 </BaseLayout>
+
+<script>
+  (function () {
+    const storageKey = 'niko-ui-theme';
+
+    function apply(value: 'system' | 'light' | 'dark') {
+      const root = document.documentElement;
+      if (value === 'system') {
+        root.removeAttribute('data-theme');
+        root.style.colorScheme = '';
+      } else {
+        root.setAttribute('data-theme', value);
+        root.style.colorScheme = value;
+      }
+      try {
+        localStorage.setItem(storageKey, value);
+      } catch {
+        /* ignore */
+      }
+    }
+
+    document.addEventListener('segment-change', (e) => {
+      const t = e.target;
+      if (!(t instanceof Element) || !t.closest('.js-theme-segment')) return;
+      const ev = e as CustomEvent<{ value?: string }>;
+      const v = ev.detail?.value;
+      if (v === 'light' || v === 'dark' || v === 'system') {
+        apply(v);
+      }
+    });
+
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved === 'light' || saved === 'dark' || saved === 'system') {
+        apply(saved);
+      }
+    } catch {
+      /* ignore */
+    }
+  })();
+</script>
 
 <script>
   import { enqueueAnchoredToast, initAnchoredToasts } from '../system/components/anchored-toast.ts';
@@ -90,6 +149,15 @@ import Icon from '../system/icons/Icon.astro';
     background: var(--color-surface-base);
   }
 
+  .home-theme-bar {
+    position: fixed;
+    top: var(--space-8);
+    left: 50%;
+    z-index: 11;
+    transform: translateX(-50%);
+    pointer-events: auto;
+  }
+
   .rain-backdrop {
     position: fixed;
     inset: 0;
@@ -117,6 +185,17 @@ import Icon from '../system/icons/Icon.astro';
   /** Toast stack lives in dialog; keep above modal panel chrome */
   :global(#home-intro-modal .home-copy-toast .ui-anchored-toast__stack) {
     z-index: 2;
+  }
+
+  /** Black pill text SVGs: read on dark surfaces only after invert */
+  :global(html[data-theme="dark"] #rain-backdrop .rain-backdrop__piece--invert-dark) {
+    filter: invert(1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme]) #rain-backdrop .rain-backdrop__piece--invert-dark) {
+      filter: invert(1);
+    }
   }
 
   :global(.rain-backdrop__piece) {
