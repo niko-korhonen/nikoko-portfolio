@@ -2,38 +2,40 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AnchoredToast from '../system/components/AnchoredToast.astro';
 import Button from '../system/components/Button.astro';
+import ButtonDropdown from '../system/components/ButtonDropdown.astro';
 import ButtonIcon from '../system/components/ButtonIcon.astro';
+import MenuDropdown from '../system/components/MenuDropdown.astro';
+import MenuItemAction from '../system/components/MenuItemAction.astro';
 import ModalDialog from '../system/components/ModalDialog.astro';
-import SegmentControl from '../system/components/SegmentControl.astro';
 import Icon from '../system/icons/Icon.astro';
-
-const themeSegmentItems = [
-  { value: 'system', icon: 'lock', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'System theme' },
-  { value: 'light', icon: 'sun', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Light theme' },
-  { value: 'dark', icon: 'moon', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'Dark theme' },
-];
 ---
 
 <BaseLayout title="Niko UI">
   <div class="home-shell">
-    <div class="home-theme-bar">
-      <SegmentControl
-        class="js-theme-segment ui-nav-drawer__theme"
-        semantic="radiogroup"
-        size="m"
-        ariaLabel="Theme"
-        defaultValue="system"
-        items={themeSegmentItems}
-      />
-    </div>
-
     <div id="rain-backdrop" class="rain-backdrop" aria-hidden="true"></div>
 
     <nav class="home-chrome" aria-label="Site">
       <Button variant="ghost" size="m" class="home-open-modal" type="button">Niko</Button>
-      <ButtonIcon variant="ghost" size="m" label="Open design system showcase" href="/system">
-        <Icon name="code" style="outline" size="m" />
-      </ButtonIcon>
+      <div class="home-chrome__theme-next-icon home-theme-menu">
+        <MenuDropdown>
+          <ButtonDropdown slot="trigger" variant="ghost" size="m" type="button">Theme</ButtonDropdown>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="system">
+            <Icon slot="slot-start" name="lock" style="outline" size="s" />
+            System
+          </MenuItemAction>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="light">
+            <Icon slot="slot-start" name="sun" style="outline" size="s" />
+            Light
+          </MenuItemAction>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="dark">
+            <Icon slot="slot-start" name="moon" style="outline" size="s" />
+            Dark
+          </MenuItemAction>
+        </MenuDropdown>
+        <ButtonIcon variant="ghost" size="m" label="Open design system showcase" href="/system">
+          <Icon name="code" style="outline" size="m" />
+        </ButtonIcon>
+      </div>
     </nav>
 
     <ModalDialog id="home-intro-modal" layout="centered">
@@ -79,14 +81,13 @@ const themeSegmentItems = [
       }
     }
 
-    document.addEventListener('segment-change', (e) => {
-      const t = e.target;
-      if (!(t instanceof Element) || !t.closest('.js-theme-segment')) return;
-      const ev = e as CustomEvent<{ value?: string }>;
-      const v = ev.detail?.value;
-      if (v === 'light' || v === 'dark' || v === 'system') {
-        apply(v);
-      }
+    document.querySelectorAll('.home-theme-menu [data-theme-value]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = el.getAttribute('data-theme-value');
+        if (v === 'light' || v === 'dark' || v === 'system') {
+          apply(v);
+        }
+      });
     });
 
     try {
@@ -149,15 +150,6 @@ const themeSegmentItems = [
     background: var(--color-surface-base);
   }
 
-  .home-theme-bar {
-    position: fixed;
-    top: var(--space-8);
-    left: 50%;
-    z-index: 11;
-    transform: translateX(-50%);
-    pointer-events: auto;
-  }
-
   .rain-backdrop {
     position: fixed;
     inset: 0;
@@ -179,6 +171,15 @@ const themeSegmentItems = [
 
   .home-chrome :global(.ui-btn),
   .home-chrome :global(.ui-btn-icon) {
+    pointer-events: auto;
+  }
+
+  .home-chrome__theme-next-icon {
+    display: flex;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 0;
+    padding-block: 0;
     pointer-events: auto;
   }
 
