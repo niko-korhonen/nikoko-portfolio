@@ -1806,6 +1806,11 @@ a.ui-btn[data-variant="accent"]:visited {
   box-sizing: border-box;
 }
 
+/* Focus moved to <dialog> on open (see modal-dialog.ts); avoid a visible ring on the full-screen layer. */
+.ui-modal-dialog[open]:focus {
+  outline: none;
+}
+
 .ui-modal-dialog[open] {
   position: fixed;
   inset: 0;
@@ -1949,11 +1954,28 @@ a.ui-btn[data-variant="accent"]:visited {
   width: 18rem;
   height: 100vh;
   min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-anchor: none;
+  background: var(--color-surface-elevation);
+}
+
+.ui-nav-drawer__inner {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  max-height: 100%;
   padding: var(--space-32) var(--space-16);
   overflow-x: hidden;
   overflow-y: auto;
-  overflow-anchor: none;
-  background: var(--color-surface-elevation);
+}
+
+@media (min-width: 48rem) {
+  .ui-nav-drawer__inner {
+    width: 18rem;
+    min-width: 18rem;
+    max-width: 18rem;
+  }
 }
 
 .ui-nav-drawer__theme {

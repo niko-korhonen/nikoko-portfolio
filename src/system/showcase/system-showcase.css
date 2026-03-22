@@ -25,15 +25,12 @@
     transition:
       width 0.2s ease,
       opacity 0.2s ease,
-      padding 0.2s ease,
       visibility 0.2s;
   }
 
   html[data-nav-drawer-open='false'] .system-shell .ui-nav-drawer {
     width: 0;
     min-width: 0;
-    padding-left: 0;
-    padding-right: 0;
     margin: 0;
     overflow: hidden;
     opacity: 0;

@@ -1,34 +1,132 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AnchoredToast from '../system/components/AnchoredToast.astro';
 import Button from '../system/components/Button.astro';
+import ButtonIcon from '../system/components/ButtonIcon.astro';
+import ModalDialog from '../system/components/ModalDialog.astro';
+import Icon from '../system/icons/Icon.astro';
 ---
 
-<BaseLayout>
-  <main class="home">
-    <h1 class="text-headline-l-plain">Niko UI</h1>
-    <p class="text-body-m-plain home__muted">Creative lab — foundation only.</p>
-    <p class="text-body-m-plain home__cta">
-      <Button size="l" href="/system">Design system tokens</Button>
-    </p>
-  </main>
+<BaseLayout title="Niko UI">
+  <div class="home-shell">
+    <div id="rain-backdrop" class="rain-backdrop" aria-hidden="true"></div>
+
+    <nav class="home-chrome" aria-label="Site">
+      <Button variant="ghost" size="m" class="home-open-modal" type="button">Niko</Button>
+      <ButtonIcon variant="ghost" size="m" label="Open design system showcase" href="/system">
+        <Icon name="code" style="outline" size="m" />
+      </ButtonIcon>
+    </nav>
+
+    <ModalDialog id="home-intro-modal" layout="centered">
+      <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+        <Icon name="cross" style="outline" size="s" />
+      </ButtonIcon>
+      <Icon slot="hero" name="handraised" style="outline" size="l" />
+      <span slot="title">Hello stranger</span>
+      <span slot="description"
+        >If you want to chat about me or design, feel free to send me an email.</span
+      >
+      <AnchoredToast
+        slot="center"
+        class="home-copy-toast"
+        variant="success"
+        message="Copied to clipboard"
+        position="top"
+        align="center"
+      >
+        <Button slot="trigger" variant="primary" size="l" type="button" class="home-copy-email">Copy email</Button>
+      </AnchoredToast>
+    </ModalDialog>
+  </div>
 </BaseLayout>
 
+<script>
+  import { enqueueAnchoredToast, initAnchoredToasts } from '../system/components/anchored-toast.ts';
+  import { initRainBackdrop } from '../scripts/rain-backdrop';
+
+  const rain = document.getElementById('rain-backdrop');
+  if (rain) initRainBackdrop(rain);
+
+  function setupChrome() {
+    initAnchoredToasts();
+
+    document.querySelector('.home-open-modal')?.addEventListener('click', () => {
+      document.getElementById('home-intro-modal')?.showModal();
+    });
+
+    const toastRoot = document.querySelector<HTMLElement>('.home-copy-toast[data-anchored-toast]');
+    document.querySelector('.home-copy-email')?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        await navigator.clipboard.writeText('niko@nikoko.com');
+        if (toastRoot) enqueueAnchoredToast(toastRoot, 'success', 'Copied to clipboard');
+      } catch {
+        if (toastRoot) enqueueAnchoredToast(toastRoot, 'error', 'Could not copy');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupChrome, { once: true });
+  } else {
+    setupChrome();
+  }
+</script>
+
 <style>
-  .home {
-    min-height: 100vh;
-    display: grid;
-    place-content: center;
-    gap: var(--radius-low);
-    padding: var(--radius-medium);
-    text-align: center;
+  :global(html) {
+    height: 100%;
+    overflow: hidden;
   }
 
-  .home__muted {
-    margin: 0;
-    color: var(--color-content-secondary);
+  .home-shell {
+    position: relative;
+    box-sizing: border-box;
+    min-height: 100dvh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    background: var(--color-surface-base);
   }
 
-  .home__cta {
-    margin: 0;
+  .rain-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    touch-action: none;
+    overflow: hidden;
+  }
+
+  .home-chrome {
+    position: fixed;
+    z-index: 10;
+    inset: var(--space-8) var(--space-8) auto var(--space-8);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-8);
+    pointer-events: none;
+  }
+
+  .home-chrome :global(.ui-btn),
+  .home-chrome :global(.ui-btn-icon) {
+    pointer-events: auto;
+  }
+
+  /** Toast stack lives in dialog; keep above modal panel chrome */
+  :global(#home-intro-modal .home-copy-toast .ui-anchored-toast__stack) {
+    z-index: 2;
+  }
+
+  :global(.rain-backdrop__piece) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
   }
 </style>

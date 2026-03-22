@@ -13,6 +13,18 @@ export function initModalDialogs(): void {
 function initModalDialog(dialog: HTMLDialogElement): void {
   const dismissible = dialog.getAttribute('data-dismissible') !== 'false';
 
+  /** After showModal(), UA focuses the first focusable; move focus to the dialog root without blocking Tab to controls. */
+  const mo = new MutationObserver(() => {
+    if (!dialog.hasAttribute('open')) return;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!dialog.open) return;
+        dialog.focus({ preventScroll: true });
+      });
+    });
+  });
+  mo.observe(dialog, { attributes: true, attributeFilter: ['open'] });
+
   dialog.addEventListener('cancel', (e) => {
     if (!dismissible) e.preventDefault();
   });

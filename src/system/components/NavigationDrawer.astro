@@ -22,6 +22,7 @@ const themeSegmentItems = [
 ---
 
 <aside class="ui-nav-drawer" id="nav-drawer" aria-label="Design system">
+  <div class="ui-nav-drawer__inner">
   <div class="ui-nav-drawer__toolbar">
     <Inline justify="between" align="center" gap="space-8">
       <SegmentControl
@@ -67,6 +68,7 @@ const themeSegmentItems = [
       ))
     }
   </nav>
+  </div>
   <!-- Sync restore: run as soon as nav exists (inside aside), before </aside> and before <main>, so the drawer is not painted at scrollTop 0 while the shell parses. -->
   <script is:inline>
     (function () {
@@ -77,8 +79,9 @@ const themeSegmentItems = [
         var y = parseInt(raw, 10);
         if (isNaN(y)) return;
         var s = document.currentScript;
-        var d = s && s.parentElement;
-        if (d && d.classList && d.classList.contains('ui-nav-drawer')) d.scrollTop = y;
+        var aside = s && s.parentElement;
+        var inner = aside && aside.querySelector('.ui-nav-drawer__inner');
+        if (inner && inner.classList) inner.scrollTop = y;
       } catch (e) {
         /* ignore */
       }

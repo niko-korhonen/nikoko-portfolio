@@ -6,6 +6,18 @@
 
 export type AnchoredToastVariant = 'success' | 'error' | 'info' | 'neutral';
 
+const enqueueByRoot = new WeakMap<HTMLElement, (variant: AnchoredToastVariant, message: string) => void>();
+
+/** Programmatic toast (e.g. after async actions). Root must be a `[data-anchored-toast]` element initialized by `initAnchoredToasts`. */
+export function enqueueAnchoredToast(
+  root: HTMLElement,
+  variant: AnchoredToastVariant,
+  message: string,
+): void {
+  const fn = enqueueByRoot.get(root);
+  fn?.(variant, message);
+}
+
 interface ToastState {
   el: HTMLElement;
   timer: ReturnType<typeof setTimeout>;
@@ -138,4 +150,6 @@ function initRoot(root: HTMLElement) {
     const message = trigger.dataset.anchoredToastMessage?.trim() || 'Label';
     enqueue(variant, message);
   });
+
+  enqueueByRoot.set(root, enqueue);
 }
