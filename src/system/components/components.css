@@ -1100,3 +1100,405 @@ a.ui-btn[data-variant="accent"]:visited {
   bottom: 0;
   transform: none;
 }
+
+/* ——— Text field ——— */
+
+.ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  width: 100%;
+  color: var(--color-content-primary);
+}
+
+.ui-field[data-label='yes'] .ui-field__control {
+  border-radius: var(--radius-low);
+}
+
+.ui-field[data-label='no'] .ui-field__control {
+  border-radius: var(--radius-highest);
+}
+
+.ui-field[data-variant='filled'] .ui-field__control {
+  background: var(--color-container-floating);
+}
+
+.ui-field[data-variant='outlined'] .ui-field__control {
+  background: transparent;
+}
+
+.ui-field__control {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 54px;
+  border: 1px solid var(--color-outline-secondary);
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+.ui-field[data-multiline] .ui-field__control {
+  align-items: stretch;
+}
+
+/* Click-through to input: custom slots stay outside .ui-field__focus-area */
+.ui-field__focus-area {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  cursor: text;
+}
+
+.ui-field__focus-area--multiline-grid {
+  display: grid;
+  flex: 1;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  cursor: text;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 0;
+  row-gap: 0;
+}
+
+.ui-field__focus-area--multiline-grid .ui-field__icon-start {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.ui-field__focus-area--multiline-grid .ui-field__label--stacked {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  padding-top: var(--space-16);
+  padding-inline: var(--space-16);
+  padding-bottom: 0;
+}
+
+.ui-field__focus-area--multiline-grid .ui-field__textarea {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  padding-top: 0;
+  padding-bottom: var(--space-16);
+  padding-inline: var(--space-16);
+  margin-top: 0;
+}
+
+.ui-field__focus-area--multiline-grid .ui-field__icon-end {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.ui-field__slot-start,
+.ui-field__icon-start,
+.ui-field__icon-end,
+.ui-field__slot-end {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  align-self: center;
+  line-height: 0;
+}
+
+.ui-field[data-multiline] .ui-field__slot-start,
+.ui-field[data-multiline] .ui-field__icon-start,
+.ui-field[data-multiline] .ui-field__icon-end,
+.ui-field[data-multiline] .ui-field__slot-end {
+  align-self: center;
+}
+
+/* Avoid :empty — Astro/slots can leave whitespace text nodes */
+.ui-field__slot-start:not(:has(*)),
+.ui-field__icon-start:not(:has(*)),
+.ui-field__icon-end:not(:has(*)),
+.ui-field__slot-end:not(:has(*)) {
+  display: none;
+}
+
+.ui-field__slot-start:has(*) {
+  padding-inline: var(--space-8);
+}
+
+.ui-field__icon-start:has(*),
+.ui-field__icon-end:has(*) {
+  padding-inline: var(--space-16);
+}
+
+.ui-field__icon-start:has(*) .ui-icon,
+.ui-field__icon-end:has(*) .ui-icon {
+  flex-shrink: 0;
+}
+
+.ui-field__slot-end:has(*) {
+  padding-inline: var(--space-8);
+}
+
+.ui-field__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+  min-width: 0;
+  padding-block: var(--space-16);
+  padding-inline: var(--space-16);
+}
+
+.ui-field[data-label='no'] .ui-field__body {
+  flex-direction: row;
+  align-items: center;
+  padding-block: var(--space-16);
+}
+
+.ui-field[data-label='no'][data-multiline] .ui-field__body {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Floating label (single-line + label) — same outer height as no-label: 8+8 body + 16 input pad + 22 lh = 54 */
+.ui-field__body--float {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding-block: var(--space-8);
+  padding-inline: var(--space-16);
+}
+
+/*
+ * One label element, always position:absolute — animates top/transform/font-size (no layout swap).
+ * Padding swap vs .ui-field__body: tighter vertical padding on the body (8+8) + input padding-top (16)
+ * matches no-label (16+16 body + 0 input pad + 22 lh) without stacking two 16px bands.
+ */
+.ui-field__float-stack {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.ui-field[data-floating='yes'] .ui-field__float-stack .ui-field__label {
+  position: absolute;
+  z-index: 0;
+  inset-inline: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  color: inherit;
+  transform-origin: left center;
+  transition:
+    top 0.2s ease,
+    transform 0.2s ease,
+    font-size 0.2s ease,
+    line-height 0.2s ease,
+    font-weight 0.2s ease,
+    letter-spacing 0.2s ease;
+  font-size: var(--text-body-m-size);
+  line-height: var(--text-body-m-line-height);
+  font-weight: var(--text-body-m-weight-plain);
+  letter-spacing: var(--text-body-m-letter-spacing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-field[data-floating='yes'] .ui-field__float-stack .ui-field__label {
+    transition: none;
+  }
+}
+
+/* Idle empty: label centered in the stack (same element as floated — smooth transition) */
+.ui-field[data-floating='yes'] .ui-field__float-stack:not(:focus-within) .ui-field__input:placeholder-shown ~ .ui-field__label {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Floated: compact label in the input's padding-top band (same 16px as reserved text offset) */
+.ui-field[data-floating='yes'] .ui-field__float-stack:focus-within .ui-field__label,
+.ui-field[data-floating='yes'] .ui-field__float-stack:has(.ui-field__input:not(:placeholder-shown)) .ui-field__label {
+  top: 0;
+  transform: translateY(0);
+  font-size: var(--text-label-xs-size);
+  line-height: var(--text-label-xs-line-height);
+  font-weight: var(--text-label-xs-weight-plain);
+  letter-spacing: var(--text-label-xs-letter-spacing);
+}
+
+.ui-field[data-floating='yes'] .ui-field__float-stack:not(:focus-within) .ui-field__input:placeholder-shown {
+  color: transparent;
+  caret-color: transparent;
+}
+
+.ui-field[data-floating='yes'] .ui-field__float-stack:focus-within .ui-field__input,
+.ui-field[data-floating='yes'] .ui-field__float-stack:has(.ui-field__input:not(:placeholder-shown)) .ui-field__input {
+  color: inherit;
+  caret-color: auto;
+}
+
+.ui-field[data-floating='yes'] .ui-field__float-stack:not(:focus-within) .ui-field__input:placeholder-shown::placeholder {
+  opacity: 0;
+}
+
+.ui-field[data-floating='yes'] .ui-field__float-stack:focus-within .ui-field__input::placeholder {
+  color: var(--color-content-tertiary);
+}
+
+.ui-field__label--stacked {
+  margin: 0;
+  color: inherit;
+}
+
+.ui-field__label {
+  margin: 0;
+  color: inherit;
+}
+
+.ui-field__input,
+.ui-field__textarea {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  min-width: 0;
+  resize: none;
+}
+
+/* After .ui-field__input { padding: 0 } — 16px top pad matches no-label vertical budget with body--float 8+8 */
+.ui-field[data-floating='yes'] .ui-field__float-stack .ui-field__input {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  line-height: var(--text-body-m-line-height);
+  padding-top: var(--space-16);
+  padding-bottom: 0;
+}
+
+.ui-field__textarea {
+  min-height: calc(1.5em + var(--space-8));
+  resize: vertical;
+  field-sizing: content;
+}
+
+.ui-field__input::placeholder,
+.ui-field__textarea::placeholder {
+  color: var(--color-content-tertiary);
+}
+
+.ui-field[data-disabled] .ui-field__control {
+  cursor: not-allowed;
+  opacity: var(--opacity-component-disabled);
+}
+
+.ui-field[data-disabled] .ui-field__input,
+.ui-field[data-disabled] .ui-field__textarea {
+  cursor: not-allowed;
+}
+
+.ui-field[data-disabled] .ui-field__focus-area {
+  cursor: not-allowed;
+}
+
+/* Interactive states (default tone only; no hover/press while focused) */
+.ui-field[data-tone='default']:not([data-disabled]) .ui-field__control:hover:not(:focus-within) {
+  box-shadow: inset 0 0 0 9999px var(--color-component-hover);
+}
+
+.ui-field[data-tone='default']:not([data-disabled]) .ui-field__control:active:not(:focus-within) {
+  box-shadow: inset 0 0 0 9999px var(--color-component-pressed);
+}
+
+.ui-field:not([data-disabled]) .ui-field__control:focus-within {
+  outline: none;
+  border-color: var(--color-outline-primary);
+}
+
+.ui-field[data-tone='error']:not([data-disabled]) .ui-field__control:focus-within {
+  border-color: var(--color-outline-negative);
+}
+
+.ui-field[data-tone='success']:not([data-disabled]) .ui-field__control:focus-within {
+  border-color: var(--color-outline-positive);
+}
+
+.ui-field[data-tone='error'] .ui-field__control {
+  border-color: var(--color-outline-negative);
+  color: var(--color-content-negative);
+}
+
+.ui-field[data-tone='error'] .ui-field__input::placeholder,
+.ui-field[data-tone='error'] .ui-field__textarea::placeholder {
+  color: var(--color-content-negative);
+  opacity: 0.7;
+}
+
+.ui-field[data-tone='success'] .ui-field__control {
+  border-color: var(--color-outline-positive);
+  color: var(--color-content-positive);
+}
+
+.ui-field[data-tone='success'] .ui-field__input::placeholder,
+.ui-field[data-tone='success'] .ui-field__textarea::placeholder {
+  color: var(--color-content-positive);
+  opacity: 0.7;
+}
+
+.ui-field__helper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+  margin: 0;
+  color: var(--color-content-secondary);
+}
+
+.ui-field[data-tone='error'] .ui-field__helper {
+  color: var(--color-content-negative);
+}
+
+.ui-field[data-tone='success'] .ui-field__helper {
+  color: var(--color-content-positive);
+}
+
+.ui-field__description-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.ui-field__description-icon:not(:has(*)) {
+  display: none;
+}
+
+.ui-field__description-text {
+  flex: 1;
+  min-width: 0;
+}

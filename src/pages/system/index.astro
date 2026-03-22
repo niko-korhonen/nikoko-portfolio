@@ -12,6 +12,7 @@ import Badge from '../../system/components/Badge.astro';
 import Button from '../../system/components/Button.astro';
 import ButtonIcon from '../../system/components/ButtonIcon.astro';
 import Radio from '../../system/components/Radio.astro';
+import TextField from '../../system/components/TextField.astro';
 import SegmentControl from '../../system/components/SegmentControl.astro';
 import Toggle from '../../system/components/Toggle.astro';
 import Tooltip from '../../system/components/Tooltip.astro';
@@ -732,6 +733,134 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
       </div>
 
       <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Text field</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Slots: <code class="code-inline">slot-start</code>, <code class="code-inline">icon-start</code>,{' '}
+          <code class="code-inline">icon-end</code>, <code class="code-inline">slot-end</code> · helper below the control ·{' '}
+          <code class="code-inline">data-label=&quot;yes|no&quot;</code> sets radius (low vs pill).
+        </p>
+        <div class="tf-matrix-wrap">
+          <div class="tf-matrix">
+            <div class="tf-matrix__row tf-matrix__row--head">
+              <span class="tf-matrix__corner" aria-hidden="true" />
+              <span class="text-label-xs-plain tf-matrix__head">Filled, Label</span>
+              <span class="text-label-xs-plain tf-matrix__head">Filled, no label</span>
+              <span class="text-label-xs-plain tf-matrix__head">Outlined, Label</span>
+              <span class="text-label-xs-plain tf-matrix__head">Outlined, no label</span>
+            </div>
+            <div class="tf-matrix__row">
+              <span class="text-body-xs-plain tf-matrix__state">Default</span>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
+              </div>
+            </div>
+            <div class="tf-matrix__row">
+              <span class="text-body-xs-plain tf-matrix__state">Error</span>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" label="Label" placeholder="Input" tone="error" description="Error message." />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField
+                  variant="filled"
+                  ariaLabel="Demo input"
+                  placeholder="Input"
+                  tone="error"
+                  description="Error message."
+                />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="outlined" label="Label" placeholder="Input" tone="error" description="Error message." />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField
+                  variant="outlined"
+                  ariaLabel="Demo input"
+                  placeholder="Input"
+                  tone="error"
+                  description="Error message."
+                />
+              </div>
+            </div>
+            <div class="tf-matrix__row">
+              <span class="text-body-xs-plain tf-matrix__state">Success</span>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" label="Label" placeholder="Input" tone="success" description="Success message." />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField
+                  variant="filled"
+                  ariaLabel="Demo input"
+                  placeholder="Input"
+                  tone="success"
+                  description="Success message."
+                />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField
+                  variant="outlined"
+                  label="Label"
+                  placeholder="Input"
+                  tone="success"
+                  description="Success message."
+                />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField
+                  variant="outlined"
+                  ariaLabel="Demo input"
+                  placeholder="Input"
+                  tone="success"
+                  description="Success message."
+                />
+              </div>
+            </div>
+            <div class="tf-matrix__row">
+              <span class="text-body-xs-plain tf-matrix__state">Disabled</span>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" disabled />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" disabled />
+              </div>
+              <div class="tf-matrix__cell">
+                <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-body-s-plain subsection__hint" style="margin-top: var(--space-16)">
+          Slots + icons (pink = custom slot placeholders) · chat-style trailing{' '}
+          <code class="code-inline">ButtonIcon</code> in <code class="code-inline">slot-end</code>.
+        </p>
+        <Stack gap="space-12" align="stretch">
+          <TextField variant="filled" label="Label" placeholder="Input" description="Helper text">
+            <span slot="slot-start" class="tf-demo-slot" aria-hidden="true" />
+            <Icon slot="icon-start" name="search" style="outline" size="m" />
+            <Icon slot="icon-end" name="copy" style="outline" size="m" />
+            <span slot="slot-end" class="tf-demo-slot" aria-hidden="true" />
+          </TextField>
+          <TextField variant="outlined" ariaLabel="Message" placeholder="Message…">
+            <Icon slot="icon-start" name="search" style="outline" size="m" />
+            <ButtonIcon slot="slot-end" variant="primary" size="m" label="Send message" type="button">
+              <Icon name="arrowup" style="outline" size="m" />
+            </ButtonIcon>
+          </TextField>
+        </Stack>
+      </div>
+
+      <div class="subsection">
         <h3 class="text-label-l-emphasized subsection__title">Tooltip</h3>
         <p class="text-body-s-plain subsection__hint">
           Hover or focus the anchor · pair <code class="code-inline">id</code> with
@@ -1367,5 +1496,60 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
     display: flex;
     justify-content: center;
     min-width: 0;
+  }
+
+  /* Text field matrix */
+  .tf-matrix-wrap {
+    overflow-x: auto;
+    padding-bottom: var(--space-4);
+  }
+
+  .tf-matrix {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    min-width: min(100%, 72rem);
+  }
+
+  .tf-matrix__row {
+    display: grid;
+    grid-template-columns: minmax(4.5rem, auto) repeat(4, minmax(8rem, 1fr));
+    gap: var(--space-6) var(--space-6);
+    align-items: center;
+  }
+
+  .tf-matrix__row--head {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-outline-tertiary);
+  }
+
+  .tf-matrix__corner {
+    display: block;
+  }
+
+  .tf-matrix__head {
+    text-align: center;
+    color: var(--color-content-secondary);
+  }
+
+  .tf-matrix__state {
+    color: var(--color-content-tertiary);
+  }
+
+  .tf-matrix__cell {
+    display: flex;
+    justify-content: stretch;
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0;
+  }
+
+  .tf-demo-slot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff69b4;
+    flex-shrink: 0;
   }
 </style>

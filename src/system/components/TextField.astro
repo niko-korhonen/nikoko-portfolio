@@ -1,0 +1,173 @@
+---
+import { randomUUID } from 'node:crypto';
+
+export type TextFieldVariant = 'filled' | 'outlined';
+export type TextFieldTone = 'default' | 'error' | 'success';
+
+interface Props {
+  variant?: TextFieldVariant;
+  tone?: TextFieldTone;
+  /** Visible label (inside the control when set). Use with <slot name="label" /> as alternative. */
+  label?: string;
+  /** Required when there is no visible label (accessibility). */
+  ariaLabel?: string;
+  id?: string;
+  name?: string;
+  placeholder?: string;
+  value?: string;
+  disabled?: boolean;
+  multiline?: boolean;
+  rows?: number;
+  type?: 'text' | 'search' | 'email' | 'password' | 'url' | 'tel';
+  class?: string;
+  /** Helper text below the field. Prefer over slot when plain string is enough. */
+  description?: string;
+}
+
+const {
+  variant = 'filled',
+  tone = 'default',
+  label = '',
+  ariaLabel,
+  id: idProp,
+  name,
+  placeholder,
+  value,
+  disabled = false,
+  multiline = false,
+  rows = 3,
+  type = 'text',
+  class: className = '',
+  description = '',
+} = Astro.props;
+
+const hasLabelSlot = Astro.slots.has('label');
+const hasDescriptionSlot = Astro.slots.has('description');
+const hasDescriptionIconSlot = Astro.slots.has('description-icon');
+const hasLabel = Boolean(label?.trim()) || hasLabelSlot;
+const hasHelper =
+  Boolean(description?.trim()) || hasDescriptionSlot || hasDescriptionIconSlot;
+
+if (!hasLabel && !ariaLabel && import.meta.env.DEV) {
+  console.warn('[TextField] Pass ariaLabel when no visible label is provided.');
+}
+
+const id = idProp ?? `tf-${randomUUID()}`;
+const helperId = `${id}-helper`;
+
+/** Single-line labeled fields use a floating label; :placeholder-shown needs a placeholder token. */
+const floatingPlaceholder =
+  hasLabel && !multiline ? (placeholder !== undefined && placeholder !== '' ? placeholder : ' ') : placeholder;
+
+const rootClass = ['ui-field', className].filter(Boolean).join(' ');
+const floating = hasLabel && !multiline;
+---
+
+<div
+  class={rootClass}
+  data-variant={variant}
+  data-label={hasLabel ? 'yes' : 'no'}
+  data-tone={tone}
+  data-disabled={disabled ? '' : undefined}
+  data-multiline={multiline ? '' : undefined}
+  data-floating={floating ? 'yes' : undefined}
+>
+  <div class="ui-field__control">
+    <div class="ui-field__slot-start">
+      <slot name="slot-start" />
+    </div>
+    <label
+      class:list={['ui-field__focus-area', multiline && hasLabel && 'ui-field__focus-area--multiline-grid']}
+      for={id}
+    >
+      <span class="ui-field__icon-start">
+        <slot name="icon-start" />
+      </span>
+      {
+        floating ? (
+          <span class="ui-field__body ui-field__body--float">
+            <span class="ui-field__float-stack">
+              <input
+                class="ui-field__input text-body-m-plain"
+                type={type}
+                id={id}
+                name={name}
+                placeholder={floatingPlaceholder}
+                value={value}
+                disabled={disabled}
+                aria-invalid={tone === 'error' ? true : undefined}
+                aria-describedby={hasHelper ? helperId : undefined}
+              />
+              <span class="ui-field__label">
+                {label ? label : <slot name="label" />}
+              </span>
+            </span>
+          </span>
+        ) : hasLabel && multiline ? (
+          <>
+            <span class="ui-field__label ui-field__label--stacked text-label-xs-plain">
+              {label ? label : <slot name="label" />}
+            </span>
+            <textarea
+              class="ui-field__textarea ui-field__input text-body-m-plain"
+              id={id}
+              name={name}
+              rows={rows}
+              placeholder={placeholder}
+              disabled={disabled}
+              aria-invalid={tone === 'error' ? true : undefined}
+              aria-describedby={hasHelper ? helperId : undefined}
+            >{value ?? ''}</textarea>
+          </>
+        ) : (
+          <span class="ui-field__body">
+            {multiline ? (
+              <textarea
+                class="ui-field__textarea ui-field__input text-body-m-plain"
+                id={id}
+                name={name}
+                rows={rows}
+                placeholder={placeholder}
+                disabled={disabled}
+                aria-invalid={tone === 'error' ? true : undefined}
+                aria-describedby={hasHelper ? helperId : undefined}
+                aria-label={ariaLabel}
+              >{value ?? ''}</textarea>
+            ) : (
+              <input
+                class="ui-field__input text-body-m-plain"
+                type={type}
+                id={id}
+                name={name}
+                placeholder={placeholder}
+                value={value}
+                disabled={disabled}
+                aria-invalid={tone === 'error' ? true : undefined}
+                aria-describedby={hasHelper ? helperId : undefined}
+                aria-label={ariaLabel}
+              />
+            )}
+          </span>
+        )
+      }
+      <span class="ui-field__icon-end">
+        <slot name="icon-end" />
+      </span>
+    </label>
+    <div class="ui-field__slot-end">
+      <slot name="slot-end" />
+    </div>
+  </div>
+  {
+    hasHelper && (
+      <div class="ui-field__helper text-body-xs-plain" id={helperId}>
+        <span class="ui-field__description-icon">
+          <slot name="description-icon" />
+        </span>
+        <span class="ui-field__description-text">
+          {description ? description : <slot name="description" />}
+        </span>
+      </div>
+    )
+  }
+</div>
