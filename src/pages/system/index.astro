@@ -12,6 +12,7 @@ import Badge from '../../system/components/Badge.astro';
 import Button from '../../system/components/Button.astro';
 import ButtonIcon from '../../system/components/ButtonIcon.astro';
 import Radio from '../../system/components/Radio.astro';
+import SegmentControl from '../../system/components/SegmentControl.astro';
 import Toggle from '../../system/components/Toggle.astro';
 import Tooltip from '../../system/components/Tooltip.astro';
 import ItemAction from '../../system/components/ItemAction.astro';
@@ -135,6 +136,14 @@ const iconSizes = [
   { key: 'xs', label: 'XS' },
 ] as const;
 
+/** Icon grid toolbar — matches former dropdown labels */
+const iconGridSegmentItems = [
+  { value: 'l', label: 'Large', content: 'label' as const },
+  { value: 'm', label: 'Medium', content: 'label' as const },
+  { value: 's', label: 'Small', content: 'label' as const },
+  { value: 'xs', label: 'Extra Small', content: 'label' as const },
+] as const;
+
 type TypoCat = {
   name: string;
   label: string;
@@ -231,6 +240,26 @@ const btnMatrixRows = [
 const btnIconMatrixRows = [
   { id: 'default', label: 'Default' },
   { id: 'disabled', label: 'Disabled' },
+] as const;
+
+const segmentShowcaseItems = [
+  {
+    value: 'only-icon',
+    icon: 'placeholder',
+    content: 'icon' as const,
+    ariaLabel: 'Icon only',
+  },
+  {
+    value: 'icon-label',
+    icon: 'placeholder',
+    label: 'Label',
+    content: 'both' as const,
+  },
+  {
+    value: 'only-label',
+    label: 'Text',
+    content: 'label' as const,
+  },
 ] as const;
 
 function variantLabel(v: string) {
@@ -390,31 +419,21 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
         }
       </ul>
 
-      <div class="subsection icon-sizes-toolbar">
-        <MenuDropdown>
-          <ButtonDropdown slot="trigger" variant="secondary" size="m">
-            Grid icon size
-          </ButtonDropdown>
-          <MenuItemAction type="button" class="js-icon-size-option icon-size--l">
-            Large
-          </MenuItemAction>
-          <MenuItemAction type="button" class="js-icon-size-option icon-size--m">
-            Medium
-          </MenuItemAction>
-          <MenuItemAction type="button" class="js-icon-size-option icon-size--s">
-            Small
-          </MenuItemAction>
-          <MenuItemAction type="button" class="js-icon-size-option icon-size--xs">
-            Extra Small
-          </MenuItemAction>
-        </MenuDropdown>
-      </div>
-
       <h3 class="text-label-l-emphasized icon-library-heading">All icons</h3>
       <p class="text-body-s-plain section__note icon-library-note">
-        Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the menu
-        above to resize the grid.
+        Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the control
+        below to resize the grid.
       </p>
+      <div class="subsection icon-sizes-toolbar">
+        <SegmentControl
+          class="js-icon-size-segment"
+          semantic="radiogroup"
+          size="m"
+          ariaLabel="Grid icon size"
+          defaultValue="l"
+          items={[...iconGridSegmentItems]}
+        />
+      </div>
       <ul class="icon-grid-all" id="icon-grid-all" aria-label="All icons">
         {
           allIconEntries.map(({ name, style }) => (
@@ -641,6 +660,56 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
           <Toggle name="demo-toggle-b" checked />
           <Toggle name="demo-toggle-c" disabled />
         </Cluster>
+      </div>
+
+      <div class="subsection">
+        <h3 class="text-label-l-emphasized subsection__title">Segment control</h3>
+        <p class="text-body-s-plain subsection__hint">
+          Button sizing tokens (L / M / S) · selected = primary fill with sliding indicator · unselected = ghost-like
+          overlay · <code class="code-inline">semantic=&quot;radiogroup&quot;</code> for a single value (forms);{' '}
+          <code class="code-inline">semantic=&quot;tablist&quot;</code> when pairing with tab panels.
+        </p>
+        <Stack gap="space-16">
+          <div>
+            <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+              Large
+            </p>
+            <SegmentControl
+              semantic="radiogroup"
+              size="l"
+              name="demo-segment-l"
+              ariaLabel="Segment demo (large)"
+              defaultValue="icon-label"
+              items={[...segmentShowcaseItems]}
+            />
+          </div>
+          <div>
+            <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+              Medium
+            </p>
+            <SegmentControl
+              semantic="radiogroup"
+              size="m"
+              name="demo-segment-m"
+              ariaLabel="Segment demo (medium)"
+              defaultValue="icon-label"
+              items={[...segmentShowcaseItems]}
+            />
+          </div>
+          <div>
+            <p class="text-label-xs-plain subsection__hint" style="margin-bottom: var(--space-8)">
+              Small
+            </p>
+            <SegmentControl
+              semantic="radiogroup"
+              size="s"
+              name="demo-segment-s"
+              ariaLabel="Segment demo (small)"
+              defaultValue="icon-label"
+              items={[...segmentShowcaseItems]}
+            />
+          </div>
+        </Stack>
       </div>
 
       <div class="subsection">
@@ -899,20 +968,22 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
       const grid = document.getElementById('icon-grid-all');
       if (!grid) return;
 
-      function applyIconSize(btn) {
-        let size = 'l';
-        if (btn.classList.contains('icon-size--xs')) size = 'xs';
-        else if (btn.classList.contains('icon-size--l')) size = 'l';
-        else if (btn.classList.contains('icon-size--m')) size = 'm';
-        else if (btn.classList.contains('icon-size--s')) size = 's';
+      function applyIconSize(size) {
         grid.querySelectorAll('.ui-icon').forEach((el) => {
           el.setAttribute('data-size', size);
         });
       }
 
-      document.querySelectorAll('.js-icon-size-option').forEach((btn) => {
-        btn.addEventListener('click', () => applyIconSize(btn));
-      });
+      const segmentRoot = document.querySelector('.js-icon-size-segment');
+      if (segmentRoot) {
+        segmentRoot.addEventListener('segment-change', (e) => {
+          const v = e && e.detail && e.detail.value;
+          applyIconSize(typeof v === 'string' ? v : 'l');
+        });
+        const selected = segmentRoot.querySelector('.ui-segment__cell[data-selected="true"]');
+        const v = selected && selected.getAttribute('data-value');
+        if (typeof v === 'string' && v) applyIconSize(v);
+      }
     })();
   </script>
 </BaseLayout>
@@ -1196,7 +1267,8 @@ function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
   }
 
   .icon-sizes-toolbar {
-    margin-top: var(--space-16);
+    margin-top: 0;
+    margin-bottom: var(--space-16);
   }
 
   .icon-library-heading {

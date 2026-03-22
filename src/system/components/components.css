@@ -236,6 +236,132 @@ a.ui-btn[data-variant="accent"]:visited {
   color: var(--color-content-static-white);
 }
 
+/* ——— Segment control ——— */
+
+.ui-segment {
+  display: inline-flex;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.ui-segment__track {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--radius-highest);
+  overflow: hidden;
+  isolation: isolate;
+  border: none;
+  background: var(--color-container-floating);
+  box-sizing: border-box;
+}
+
+.ui-segment__indicator {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-highest);
+  background: var(--color-container-primary);
+  pointer-events: none;
+  transition:
+    transform 0.22s ease,
+    width 0.22s ease,
+    height 0.22s ease;
+  will-change: transform, width;
+}
+
+.ui-segment__cell {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  min-width: 0;
+  border: none;
+  border-radius: var(--radius-highest);
+  background: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: var(--color-content-primary);
+  text-align: center;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ui-segment__cell:disabled {
+  cursor: not-allowed;
+  opacity: var(--opacity-component-disabled);
+}
+
+.ui-segment__cell:not(:disabled):active {
+  transition: box-shadow 0.05s ease;
+}
+
+/* Sizes: match Button L / M / S (label + icon tokens) */
+
+.ui-segment__cell[data-size="l"] {
+  --ui-btn-icon-size: var(--icon-m);
+  gap: var(--space-8);
+  padding: var(--space-16) var(--space-24);
+}
+
+.ui-segment__cell[data-size="m"] {
+  --ui-btn-icon-size: var(--icon-s);
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-16);
+}
+
+.ui-segment__cell[data-size="s"] {
+  --ui-btn-icon-size: var(--icon-s);
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-12);
+}
+
+/* Ghost-like idle (unselected) — hover / pressed mirror .ui-btn[data-variant="ghost"] */
+
+.ui-segment__cell[data-selected="false"]:not(:disabled):hover {
+  box-shadow: inset 0 0 0 9999px var(--color-component-hover);
+}
+
+.ui-segment__cell[data-selected="false"]:not(:disabled):active {
+  box-shadow: inset 0 0 0 9999px var(--color-component-pressed);
+}
+
+/* Selected: primary foreground; hover / pressed on top of indicator (mirror primary button) */
+
+.ui-segment__cell[data-selected="true"] {
+  color: var(--color-content-primary-inverse);
+}
+
+.ui-segment__cell[data-selected="true"] .ui-btn__icon {
+  color: var(--color-content-primary-inverse);
+}
+
+.ui-segment__cell[data-selected="true"]:not(:disabled):hover {
+  box-shadow: inset 0 0 0 9999px var(--color-component-hover-inverse);
+}
+
+.ui-segment__cell[data-selected="true"]:not(:disabled):active {
+  box-shadow: inset 0 0 0 9999px var(--color-component-pressed-inverse);
+}
+
+.ui-segment__cell.ui-focus-ring:focus-visible {
+  outline: 2px solid var(--color-component-focused);
+  outline-offset: 2px;
+  z-index: 2;
+}
+
 /* ——— ButtonIcon ——— */
 
 .ui-btn-icon {
