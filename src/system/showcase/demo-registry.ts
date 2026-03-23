@@ -15,6 +15,7 @@ import MenuDropdownSection from './sections/MenuDropdownSection.astro';
 import ModalDialogSection from './sections/ModalDialogSection.astro';
 import RadioSection from './sections/RadioSection.astro';
 import RadiusSection from './sections/RadiusSection.astro';
+import ScorePillCounterSection from './sections/ScorePillCounterSection.astro';
 import SegmentControlSection from './sections/SegmentControlSection.astro';
 import ShadowsSection from './sections/ShadowsSection.astro';
 import SpacingSection from './sections/SpacingSection.astro';
@@ -38,6 +39,7 @@ export const demoRegistry = {
   badge: BadgeSection,
   toggle: ToggleSection,
   'segment-control': SegmentControlSection,
+  'score-pill-counter': ScorePillCounterSection,
   radio: RadioSection,
   'text-field': TextFieldSection,
   tooltip: TooltipSection,

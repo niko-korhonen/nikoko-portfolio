@@ -10,6 +10,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@amcharts/amcharts5": "^5.16.2",
+    "@amcharts/amcharts5-geodata": "^5.1.5",
     "astro": "^5.17.1",
     "matter-js": "^0.20.0"
   },

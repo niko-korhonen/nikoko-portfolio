@@ -1,0 +1,48 @@
+.world-game {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: var(--color-surface-base);
+}
+
+.world-game__map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.world-game__timer {
+  position: fixed;
+  z-index: 10;
+  top: var(--space-8);
+  left: var(--space-8);
+}
+
+.world-game__timer :global(.ui-btn),
+.world-game__score :global(.ui-score-pill) {
+  pointer-events: auto;
+}
+
+.world-game__score {
+  position: fixed;
+  z-index: 10;
+  top: var(--space-8);
+  right: var(--space-8);
+}
+
+.world-game__guess {
+  position: fixed;
+  z-index: 10;
+  left: 50%;
+  bottom: var(--space-8);
+  transform: translateX(-50%);
+  width: min(300px, calc(100vw - var(--space-16)));
+  pointer-events: auto;
+}
+
+.world-game__guess :global(.ui-field) {
+  width: 100%;
+}

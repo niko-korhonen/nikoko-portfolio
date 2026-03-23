@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Button from '../../../system/components/Button.astro';
+import ButtonIcon from '../../../system/components/ButtonIcon.astro';
+import ModalDialog from '../../../system/components/ModalDialog.astro';
+import ScorePillCounter from '../../../system/components/ScorePillCounter.astro';
+import TextField from '../../../system/components/TextField.astro';
+import Icon from '../../../system/icons/Icon.astro';
+---
+
+<BaseLayout title="World typer — Niko UI">
+  <div class="world-game">
+    <div id="world-game-map" class="world-game__map" aria-label="World map"></div>
+
+    <div class="world-game__timer">
+      <Button id="world-game-timer-btn" variant="secondary" size="m" type="button" disabled>15:00</Button>
+    </div>
+
+    <div class="world-game__score">
+      <ScorePillCounter
+        id="world-game-score"
+        variant="secondary"
+        size="m"
+        value={0}
+        trailingLabel="of …"
+      >
+        <Icon slot="icon-start" name="trophy" style="outline" size="m" />
+      </ScorePillCounter>
+    </div>
+
+    <div id="world-game-guess-wrap" class="world-game__guess">
+      <TextField
+        id="world-game-guess"
+        variant="filled"
+        size="l"
+        tone="default"
+        label="Label"
+        placeholder="Input"
+        description=""
+        floatingLabel={false}
+        disabled={true}
+        ariaLabel="Country guess"
+      />
+    </div>
+
+    <ModalDialog
+      id="world-game-start-modal"
+      layout="centered"
+      dismissible={false}
+      toolbar={true}
+      toolbarAlign="end"
+      showHero={true}
+    >
+      <span slot="toolbar" aria-hidden="true"></span>
+      <Icon slot="hero" name="globe" style="fill" size="l" />
+      <span slot="title">World typer</span>
+      <span slot="description"
+        >Type as many world countries as you can remember in 15 minutes.</span
+      >
+      <Button id="world-game-start-btn" slot="center" variant="primary" size="l" type="button">Start</Button>
+    </ModalDialog>
+
+    <ModalDialog
+      id="world-game-pause-modal"
+      layout="footer"
+      dismissible={true}
+      toolbar={true}
+      toolbarAlign="end"
+      showHero={true}
+    >
+      <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+        <Icon name="cross" style="outline" size="s" />
+      </ButtonIcon>
+      <Icon slot="hero" name="pause" style="fill" size="l" />
+      <span slot="title">Game paused</span>
+      <span slot="description">Practice makes perfect, don’t give up!</span>
+      <Button slot="footer" variant="primary" size="l" type="button" data-world-resume>Resume</Button>
+      <Button
+        slot="footer"
+        variant="accent"
+        size="l"
+        type="button"
+        accentContainer="container-accent-negative"
+        data-world-give-up
+      >
+        Give up
+      </Button>
+    </ModalDialog>
+
+    <ModalDialog
+      id="world-game-over-modal"
+      layout="centered"
+      dismissible={true}
+      toolbar={true}
+      toolbarAlign="end"
+      showHero={true}
+    >
+      <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
+        <Icon name="cross" style="outline" size="s" />
+      </ButtonIcon>
+      <Icon slot="hero" name="trophy" style="fill" size="l" />
+      <span slot="title">Game over</span>
+      <span slot="description"
+        >Well done! Close this box to review the map and improve.</span
+      >
+    </ModalDialog>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initWorldGame } from '../../../features/world-typer/world-game-client.ts';
+
+  const mapHost = document.getElementById('world-game-map');
+  const timerBtn = document.getElementById('world-game-timer-btn');
+  const scorePill = document.getElementById('world-game-score');
+  const guessInput = document.getElementById('world-game-guess') as HTMLInputElement | null;
+  const guessWrap = document.getElementById('world-game-guess-wrap');
+  const startModal = document.getElementById('world-game-start-modal') as HTMLDialogElement | null;
+  const pauseModal = document.getElementById('world-game-pause-modal') as HTMLDialogElement | null;
+  const overModal = document.getElementById('world-game-over-modal') as HTMLDialogElement | null;
+
+  if (
+    mapHost &&
+    timerBtn instanceof HTMLButtonElement &&
+    scorePill &&
+    guessInput &&
+    guessWrap &&
+    startModal &&
+    pauseModal &&
+    overModal
+  ) {
+    initWorldGame({
+      mapHost,
+      timerBtn,
+      scorePill,
+      guessInput,
+      guessWrap,
+      startModal,
+      pauseModal,
+      overModal,
+    });
+  }
+</script>
+
+<style is:global>
+  @import '../../../features/world-typer/world-game.css';
+</style>

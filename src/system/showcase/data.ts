@@ -193,23 +193,9 @@ export const spacingTokens = [
   'space-74',
 ] as const;
 
-/** Tokens under `--color-container-accent-*` for accent variant showcase controls */
-export const accentContainerTokens = [
-  'container-accent-blue',
-  'container-accent-purple',
-  'container-accent-positive',
-  'container-accent-warning',
-  'container-accent-negative',
-  'container-accent-subtle-blue',
-  'container-accent-subtle-purple',
-  'container-accent-subtle-positive',
-  'container-accent-subtle-warning',
-  'container-accent-subtle-negative',
-] as const;
+import { accentContainerTokens, accentTokenCssVar } from '../accent-tokens';
 
-export function accentTokenCssVar(token: (typeof accentContainerTokens)[number]): string {
-  return `var(--color-${token})`;
-}
+export { accentContainerTokens, accentTokenCssVar } from '../accent-tokens';
 
 export function accentTokenMenuLabel(token: (typeof accentContainerTokens)[number]): string {
   return token

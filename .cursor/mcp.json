@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+      "amcharts5": {
+        "command": "npx",
+        "args": ["-y", "@amcharts/amcharts5-mcp"]
+      }
+    }
+  }

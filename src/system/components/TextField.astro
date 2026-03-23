@@ -24,6 +24,11 @@ interface Props {
   class?: string;
   /** Helper text below the field. Prefer over slot when plain string is enough. */
   description?: string;
+  /**
+   * Single-line fields with a visible label default to a floating label.
+   * Set to false for a stacked label above the input.
+   */
+  floatingLabel?: boolean;
 }
 
 const {
@@ -42,6 +47,7 @@ const {
   type = 'text',
   class: className = '',
   description = '',
+  floatingLabel: floatingLabelProp,
 } = Astro.props;
 
 const hasLabelSlot = Astro.slots.has('label');
@@ -63,7 +69,10 @@ const floatingPlaceholder =
   hasLabel && !multiline ? (placeholder !== undefined && placeholder !== '' ? placeholder : ' ') : placeholder;
 
 const rootClass = ['ui-field', className].filter(Boolean).join(' ');
-const floating = hasLabel && !multiline;
+const useFloatingLabel =
+  floatingLabelProp === undefined ? true : floatingLabelProp;
+const floating = hasLabel && !multiline && useFloatingLabel;
+const stackedSingleLine = hasLabel && !multiline && !useFloatingLabel;
 const inputTextClass = size === 'm' ? 'text-body-xs-plain' : 'text-body-s-plain';
 const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-plain';
 ---
@@ -75,7 +84,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
   data-tone={tone}
   data-disabled={disabled ? '' : undefined}
   data-multiline={multiline ? '' : undefined}
-  data-floating={floating ? 'yes' : undefined}
+  data-floating={floating ? 'yes' : stackedSingleLine ? 'no' : undefined}
   data-size={size}
 >
   <div class="ui-field__control">
@@ -83,7 +92,11 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
       <slot name="slot-start" />
     </div>
     <label
-      class:list={['ui-field__focus-area', multiline && hasLabel && 'ui-field__focus-area--multiline-grid']}
+      class:list={[
+        'ui-field__focus-area',
+        multiline && hasLabel && 'ui-field__focus-area--multiline-grid',
+        stackedSingleLine && 'ui-field__focus-area--stacked-single',
+      ]}
       for={id}
     >
       <span class="ui-field__icon-start">
@@ -109,6 +122,25 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
               </span>
             </span>
           </span>
+        ) : stackedSingleLine ? (
+          <>
+            <span class:list={['ui-field__label', 'ui-field__label--stacked', stackedLabelClass]}>
+              {label ? label : <slot name="label" />}
+            </span>
+            <span class="ui-field__body ui-field__body--stacked-single">
+              <input
+                class:list={['ui-field__input', inputTextClass]}
+                type={type}
+                id={id}
+                name={name}
+                placeholder={placeholder}
+                value={value}
+                disabled={disabled}
+                aria-invalid={tone === 'error' ? true : undefined}
+                aria-describedby={hasHelper ? helperId : undefined}
+              />
+            </span>
+          </>
         ) : hasLabel && multiline ? (
           <>
             <span class:list={['ui-field__label', 'ui-field__label--stacked', stackedLabelClass]}>

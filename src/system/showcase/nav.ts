@@ -45,6 +45,7 @@ const COMPONENTS_NAV_ITEMS: NavItem[] = [
   { label: 'Badge', slug: 'badge', href: '/system/badge' },
   { label: 'Toggle', slug: 'toggle', href: '/system/toggle' },
   { label: 'SegmentControl', slug: 'segment-control', href: '/system/segment-control' },
+  { label: 'ScorePillCounter', slug: 'score-pill-counter', href: '/system/score-pill-counter' },
   { label: 'Radio', slug: 'radio', href: '/system/radio' },
   { label: 'TextField', slug: 'text-field', href: '/system/text-field' },
   { label: 'Tooltip', slug: 'tooltip', href: '/system/tooltip' },
