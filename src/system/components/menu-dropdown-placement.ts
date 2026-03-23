@@ -131,6 +131,9 @@ function bindMenuDropdown(root: HTMLElement): void {
     root.querySelector<HTMLElement>('.ui-menu-dropdown__trigger-wrap > :first-child');
   if (!panel || !trigger) return;
 
+  /** Showcase table: lift the row while open so fixed panels stack above later rows (Safari hit-testing). */
+  const liftRow = root.closest('tr');
+
   /** Author intent when the menu was opened (restore on close after flip). */
   let authorPosition: PopoverPosition = 'bottom';
   let authorAlign: PopoverAlign = 'start';
@@ -252,6 +255,8 @@ function bindMenuDropdown(root: HTMLElement): void {
         closeDropdownByRoot.get(activeMenuRoot)?.();
       }
 
+      liftRow?.classList.add('ds-showcase-menu-row-open');
+
       authorPosition = (panel.getAttribute('data-popover-position') || 'bottom') as PopoverPosition;
       authorAlign = (panel.getAttribute('data-popover-align') || 'start') as PopoverAlign;
 
@@ -263,6 +268,8 @@ function bindMenuDropdown(root: HTMLElement): void {
         requestAnimationFrame(layout);
       });
     } else {
+      liftRow?.classList.remove('ds-showcase-menu-row-open');
+
       unbindWhileOpenListeners();
       panel.setAttribute('hidden', '');
       trigger.setAttribute('aria-expanded', 'false');

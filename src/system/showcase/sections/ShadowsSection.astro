@@ -55,10 +55,11 @@ const shadows = [
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
-    const swatch = document.querySelector('[data-ds-shadow-swatch]');
-    const codeEl = document.querySelector('[data-ds-shadow-code]');
-    const lbl = document.querySelector('[data-ds-shadow-label]');
+    const root = document.querySelector('[data-ds-demo="shadows"]');
+    const page = getShowcasePage(root);
+    const swatch = root?.querySelector('[data-ds-shadow-swatch]');
+    const codeEl = root?.querySelector('[data-ds-shadow-code]');
+    const lbl = root?.querySelector('[data-ds-shadow-label]');
     const dd = page?.querySelector('[data-ds-dd="shadow-dd"]');
     if (!page || !swatch || !codeEl) return;
 

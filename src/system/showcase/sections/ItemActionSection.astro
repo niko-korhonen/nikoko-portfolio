@@ -74,8 +74,8 @@ import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astr
   import { bindFieldClear, getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="item-action"]');
+    const page = getShowcasePage(root);
     const btn = root?.querySelector<HTMLElement>('.ds-ia-live');
     const labelEl = btn?.querySelector('.ui-item__label');
     const labelCtrl = document.getElementById('ds-ia-label') as HTMLInputElement | null;

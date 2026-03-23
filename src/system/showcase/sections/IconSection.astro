@@ -138,9 +138,10 @@ const defaultCatalogEntry = iconBaseCatalog[0] ?? {
   }
 
   function init() {
-    const page = getShowcasePage();
-    const slot = document.querySelector('[data-ds-icon-slot]');
-    const meta = document.querySelector('[data-ds-icon-meta]');
+    const root = document.querySelector('[data-ds-demo="icon-preview"]');
+    const page = getShowcasePage(root);
+    const slot = root?.querySelector('[data-ds-icon-slot]');
+    const meta = root?.querySelector('[data-ds-icon-meta]');
     const nameLabel = page?.querySelector('[data-ds-dd="icon-name-label"]');
     const sizeLabel = page?.querySelector('[data-ds-dd="icon-size-label"]');
     const fillToggle = page?.querySelector<HTMLInputElement>('[data-ds-toggle="icon-fill"] input[role="switch"]');

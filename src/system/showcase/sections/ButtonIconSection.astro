@@ -163,22 +163,11 @@ const ttAligns = ['start', 'center', 'end'] as const;
 
   type AccentTok = (typeof accentContainerTokens)[number];
 
-  /** Preview root must live under this node for control queries (tag-agnostic: class only). */
-  function resolveShowcaseScope(previewRoot: HTMLElement): HTMLElement | null {
-    const fromClosest = previewRoot.closest('.ds-showcase-page');
-    if (fromClosest) return fromClosest;
-
-    const page = getShowcasePage();
-    if (page?.contains(previewRoot)) return page;
-
-    return null;
-  }
-
   function init() {
     const root = document.querySelector<HTMLElement>('[data-ds-demo="button-icon"]');
     if (!root) return;
 
-    const scope = resolveShowcaseScope(root);
+    const scope = getShowcasePage(root);
     if (!scope) {
       if (import.meta.env.DEV) {
         console.error(

@@ -100,8 +100,8 @@ const aligns = ['start', 'center', 'end'] as const;
   };
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="menu-dropdown"]');
+    const page = getShowcasePage(root);
     const panel = root?.querySelector<HTMLElement>('[data-menu-dropdown-panel]');
     const triggerLabelSpan = root?.querySelector('[data-ds-md-trigger-label]');
     const labelInput = document.getElementById('ds-md-label') as HTMLInputElement | null;

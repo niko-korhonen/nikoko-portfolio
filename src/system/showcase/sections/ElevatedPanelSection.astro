@@ -37,8 +37,9 @@ import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
   import { bindFieldClear, getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
-    const body = page.querySelector('[data-ds-ep-body]');
+    const root = document.querySelector('[data-ds-demo="elevated-panel"]');
+    const page = getShowcasePage(root);
+    const body = page?.querySelector('[data-ds-ep-body]');
     const textCtrl = document.getElementById('ds-ep-text') as HTMLInputElement | null;
     if (!page || !body || !textCtrl) return;
     bindFieldClear(page);

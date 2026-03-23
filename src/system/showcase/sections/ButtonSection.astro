@@ -113,8 +113,8 @@ const variantLabels = Object.fromEntries(btnMatrixVariants.map((v) => [v, v.char
   }
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="button"]');
+    const page = getShowcasePage(root);
     const btn = document.getElementById('ds-btn-preview');
     const labelInput = document.getElementById('ds-btn-label-tf') as HTMLInputElement | null;
     if (!page || !root || !btn || !labelInput) return;

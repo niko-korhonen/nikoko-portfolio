@@ -50,7 +50,8 @@ import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="item-static"]');
+    const page = getShowcasePage(root);
     if (!page) return;
 
     page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {

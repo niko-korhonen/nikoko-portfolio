@@ -120,8 +120,8 @@ const patterns = [
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="layout"]');
+    const page = getShowcasePage(root);
     const label = page?.querySelector('[data-ds-dd="layout-pattern-label"]');
     if (!page || !root) return;
 

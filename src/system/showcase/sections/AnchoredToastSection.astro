@@ -85,8 +85,8 @@ const aligns = ['start', 'center', 'end'] as const;
   import { bindFieldClear, getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="anchored-toast"]');
+    const page = getShowcasePage(root);
     const toastRoot = root?.querySelector<HTMLElement>('[data-anchored-toast]');
     const trigger = root?.querySelector<HTMLElement>('[data-anchored-toast-trigger]');
     const stack = root?.querySelector<HTMLElement>('[data-anchored-toast-stack]');

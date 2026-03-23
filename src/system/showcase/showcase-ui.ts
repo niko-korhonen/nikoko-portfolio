@@ -34,8 +34,16 @@ export function bindFieldClear(scope: ParentNode = document): void {
   });
 }
 
-/** Scope for preview + controls table (picker buttons live outside preview root). */
-export function getShowcasePage(): HTMLElement | null {
-  /** Class-only: works whether the wrapper is `<section>` or another element. */
-  return document.querySelector('.ds-showcase-page');
+/**
+ * Scope for preview + controls table (picker buttons live outside preview root).
+ * Pass a node inside the page (e.g. `[data-ds-demo]`) so scope resolves via `closest`
+ * — more reliable than `document.querySelector` alone when the DOM is unusual.
+ */
+export function getShowcasePage(demoRoot?: Element | null): HTMLElement | null {
+  if (demoRoot) {
+    const fromClosest = demoRoot.closest('.ds-showcase-page');
+    if (fromClosest instanceof HTMLElement) return fromClosest;
+  }
+  const fromDoc = document.querySelector('.ds-showcase-page');
+  return fromDoc instanceof HTMLElement ? fromDoc : null;
 }

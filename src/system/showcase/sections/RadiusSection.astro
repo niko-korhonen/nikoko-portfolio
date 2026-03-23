@@ -54,9 +54,10 @@ import { radiusTokens } from '../data';
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
-    const box = document.querySelector('[data-ds-radius-box]');
-    const codeEl = document.querySelector('[data-ds-radius-code]');
+    const root = document.querySelector('[data-ds-demo="radius"]');
+    const page = getShowcasePage(root);
+    const box = root?.querySelector('[data-ds-radius-box]');
+    const codeEl = root?.querySelector('[data-ds-radius-code]');
     const label = page?.querySelector('[data-ds-dd="radius-label"]');
     if (!page || !box || !codeEl) return;
 

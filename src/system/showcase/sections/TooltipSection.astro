@@ -82,8 +82,8 @@ const aligns = ['start', 'center', 'end'] as const;
   import { bindFieldClear, getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="tooltip"]');
+    const page = getShowcasePage(root);
     const surface = root?.querySelector<HTMLElement>('[role="tooltip"]');
     const triggerText = root?.querySelector('[data-ds-tt-trigger-text]');
     const contentEl = root?.querySelector('[data-ds-tt-content]');

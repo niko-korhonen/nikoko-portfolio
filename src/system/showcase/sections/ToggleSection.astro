@@ -56,8 +56,8 @@ const states = [
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="toggle"]');
+    const page = getShowcasePage(root);
     const input = root?.querySelector<HTMLInputElement>('.ui-toggle__input');
     const stateLabel = page?.querySelector('[data-ds-dd="state-label"]');
     const disabledCb = page?.querySelector<HTMLInputElement>(

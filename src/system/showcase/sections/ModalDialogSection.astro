@@ -159,7 +159,8 @@ const toolbarAlignLabels: Record<string, string> = {
   type LayoutMode = 'centered' | 'footer';
 
   function init() {
-    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="modal"]');
+    const page = getShowcasePage(root);
     const centered = document.getElementById('demo-modal-centered') as HTMLDialogElement | null;
     const footer = document.getElementById('demo-modal-footer') as HTMLDialogElement | null;
     const openBtn = document.getElementById('ds-modal-open');

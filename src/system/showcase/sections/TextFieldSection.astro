@@ -148,8 +148,8 @@ const iconHtmlMap: Record<string, string> = { none: '', ...loadAllIconVariantInl
   import { bindFieldClear, getShowcasePage, takeInjectedIconHtmlMap } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="text-field"]');
+    const page = getShowcasePage(root);
     const floatWrap = root?.querySelector('[data-ds-tf-layer="floating"]');
     const bareWrap = root?.querySelector('[data-ds-tf-layer="bare"]');
     const floatCb = page?.querySelector<HTMLInputElement>(

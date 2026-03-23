@@ -63,8 +63,8 @@ const sizes = ['l', 'm', 's'] as const;
   import { bindFieldClear, getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="radio"]');
+    const page = getShowcasePage(root);
     const radios = root?.querySelectorAll<HTMLElement>('.ui-radio');
     const inputs = root?.querySelectorAll<HTMLInputElement>('.ui-radio__input');
     const labelEls = root?.querySelectorAll('.ui-radio__label');

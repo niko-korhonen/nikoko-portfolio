@@ -91,8 +91,8 @@ const semantics = [
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="segment"]');
+    const page = getShowcasePage(root);
     const sizeLabel = page?.querySelector('[data-ds-dd="size-label"]');
     const semanticLabel = page?.querySelector('[data-ds-dd="semantic-label"]');
     if (!page || !root) return;

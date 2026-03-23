@@ -506,12 +506,12 @@ html[data-nav-drawer-open='false'] .system-shell__main {
 }
 
 /*
- * Table rows paint in DOM order; later rows sit above earlier ones. An absolutely
- * positioned menu panel from row 1 extends into row 2+ space but was stacking *under*
- * those rows (each .ui-menu-dropdown had z-index: 1, so siblings lost to later <tr>s).
- * Lift the whole row while its menu is open so the panel is opaque to hits and paint.
+ * Table rows paint in DOM order; later rows sit above earlier ones. Fixed menu panels
+ * extend into following rows’ space. Lift the active row while its menu is open so the
+ * panel wins hit-testing (see menu-dropdown-placement.ts — class toggled on open/close).
+ * :has() was avoided for Safari stacking/hit-test consistency.
  */
-.ds-showcase-table tbody tr:has([data-menu-dropdown-panel]:not([hidden])) {
+.ds-showcase-table tbody tr.ds-showcase-menu-row-open {
   position: relative;
   z-index: 50;
 }

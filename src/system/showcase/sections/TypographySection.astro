@@ -59,9 +59,10 @@ const defaultClass = typeOptions[0]?.className ?? 'text-display-l-plain';
   import { getShowcasePage } from '../showcase-ui';
 
   function init() {
-    const page = getShowcasePage();
-    const preview = document.querySelector('[data-ds-type-preview]');
-    const codeEl = document.querySelector('[data-ds-type-code]');
+    const root = document.querySelector('[data-ds-demo="typography"]');
+    const page = getShowcasePage(root);
+    const preview = root?.querySelector('[data-ds-type-preview]');
+    const codeEl = root?.querySelector('[data-ds-type-code]');
     const label = page?.querySelector('[data-ds-dd="type-label"]');
     if (!page || !preview || !codeEl) return;
 

@@ -87,8 +87,8 @@ const variantLabels = Object.fromEntries(btnDropdownVariants.map((v) => [v, v.ch
   }
 
   function init() {
-    const page = getShowcasePage();
     const root = document.querySelector('[data-ds-demo="button-dropdown"]');
+    const page = getShowcasePage(root);
     const trigger = root?.querySelector<HTMLElement>('[data-menu-dropdown-trigger]');
     const labelInput = document.getElementById('ds-bdd-label') as HTMLInputElement | null;
     const variantLabel = page?.querySelector('[data-ds-dd="variant-label"]');
