@@ -1,15 +1,6 @@
 ---
-import ButtonDropdown from '../../components/ButtonDropdown.astro';
-import MenuDropdown from '../../components/MenuDropdown.astro';
-import MenuItemAction from '../../components/MenuItemAction.astro';
 import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
-import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
-import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
-import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
-import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
 import { colorGroups } from '../data';
-
-const flatTokens = colorGroups.flatMap((g) => g.tokens.map((token) => ({ group: g.title, token })));
 ---
 
 <ComponentShowcasePage
@@ -17,36 +8,8 @@ const flatTokens = colorGroups.flatMap((g) => g.tokens.map((token) => ({ group: 
   headingId="colors-heading"
   description="Semantic color tokens for content, surfaces, outlines, components, and overlays. Prefer these variables over raw values so themes and contrast stay consistent."
 >
-  <ShowcasePreviewCard>
-    <div data-ds-demo="colors" class="ds-color-preview-wrap">
-      <div class="ds-color-preview-inner" data-ds-color-swatch>
-        <div class="swatch__fill" style="background: var(--color-content-primary)"></div>
-      </div>
-      <code class="text-code-xs-plain ds-color-preview-code" data-ds-color-code>--color-content-primary</code>
-    </div>
-  </ShowcasePreviewCard>
-
-  <ShowcaseControlsTable>
-    <ShowcaseControlRow label="Token">
-      <MenuDropdown>
-        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
-          <span data-ds-dd="token-label">content-primary</span>
-        </ButtonDropdown>
-        {
-          flatTokens.map(({ group, token }) => (
-            <MenuItemAction type="button" data-ds-pick="token" data-value={token} title={group}>
-              {token}
-            </MenuItemAction>
-          ))
-        }
-      </MenuDropdown>
-    </ShowcaseControlRow>
-  </ShowcaseControlsTable>
-
-  <ShowcaseCopyPrompt componentLabel="Colors" />
-
-  <details class="ds-showcase-palette">
-    <summary class="text-label-s-plain">Full palette reference</summary>
+  <section class="ds-showcase-palette">
+    <h2 class="text-label-s-plain ds-showcase-palette-title">Full palette reference</h2>
     {
       colorGroups.map((group) => (
         <div class="subsection" style="margin-top: var(--space-16)">
@@ -93,111 +56,5 @@ const flatTokens = colorGroups.flatMap((g) => g.tokens.map((token) => ({ group: 
         </span>
       </p>
     </div>
-  </details>
+  </section>
 </ComponentShowcasePage>
-
-<style>
-  .ds-color-preview-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-12);
-    width: 100%;
-  }
-
-  .ds-color-preview-inner {
-    width: 100%;
-    max-width: 12rem;
-    min-height: 5rem;
-    border-radius: var(--radius-low);
-    border: 1px solid var(--color-outline-tertiary);
-    overflow: hidden;
-    display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-  }
-
-  .ds-color-preview-inner .swatch__fill,
-  .ds-color-preview-inner .swatch__outline,
-  .ds-color-preview-inner .swatch__alpha-bg {
-    flex: 1;
-    min-height: 5rem;
-  }
-
-  .ds-color-preview-inner .swatch__alpha-bg {
-    padding: var(--radius-lowest);
-    background: repeating-conic-gradient(
-        var(--color-surface-elevation) 0% 25%,
-        var(--color-surface-floating) 0% 50%
-      )
-      50% / var(--radius-low) var(--radius-low);
-  }
-
-  .ds-color-preview-code {
-    word-break: break-all;
-    text-align: center;
-  }
-</style>
-
-<script>
-  import { buildCopyPrompt } from '../copy-prompt';
-  import { getShowcasePage } from '../showcase-ui';
-
-  function init() {
-    const page = getShowcasePage();
-    const root = document.querySelector('[data-ds-demo="colors"]');
-    const inner = root?.querySelector('[data-ds-color-swatch]');
-    const codeEl = root?.querySelector('[data-ds-color-code]');
-    const label = page?.querySelector('[data-ds-dd="token-label"]');
-    if (!page || !inner || !codeEl) return;
-
-    let token = 'content-primary';
-
-    function render() {
-      const t = `--color-${token}`;
-      codeEl.textContent = t;
-      if (label) label.textContent = token;
-
-      let html = '';
-      if (token.startsWith('outline-')) {
-        html = `<div class="swatch__outline" style="border-color: var(${t}); background: var(--color-surface-base); height:100%; min-height:5rem; border-width:3px; border-style:solid; border-radius: inherit;"></div>`;
-      } else if (token.startsWith('overlay-')) {
-        html = `<div class="swatch__alpha-bg" style="height:100%; min-height:5rem; padding:var(--radius-lowest); background:repeating-conic-gradient(var(--color-surface-elevation) 0% 25%, var(--color-surface-floating) 0% 50%) 50% / var(--radius-low) var(--radius-low); border-radius: inherit;"><div class="swatch__fill" style="background:var(${t}); height:100%; border-radius: var(--radius-lowest); border:none;"></div></div>`;
-      } else if (
-        token.startsWith('component-') &&
-        (token.includes('active') || token.includes('hover') || token.includes('pressed'))
-      ) {
-        html = `<div class="swatch__alpha-bg" style="height:100%; min-height:5rem; padding:var(--radius-lowest); background:repeating-conic-gradient(var(--color-surface-elevation) 0% 25%, var(--color-surface-floating) 0% 50%) 50% / var(--radius-low) var(--radius-low); border-radius: inherit;"><div class="swatch__fill" style="background:var(${t}); height:100%; border-radius: var(--radius-lowest); border:none;"></div></div>`;
-      } else {
-        html = `<div class="swatch__fill" style="background:var(${t}); height:100%; min-height:5rem; border-radius: inherit;"></div>`;
-      }
-      inner.innerHTML = html;
-    }
-
-    page.querySelectorAll('[data-ds-pick="token"]').forEach((el) => {
-      el.addEventListener('click', () => {
-        const v = (el as HTMLElement).dataset.value;
-        if (v) {
-          token = v;
-          render();
-        }
-      });
-    });
-    render();
-
-    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
-      const text = buildCopyPrompt({
-        component: 'Colors',
-        props: { token: `--color-${token}` },
-      });
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        /* ignore */
-      }
-    });
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-</script>

@@ -129,7 +129,7 @@
   --text-headline-s-weight-plain: 500;
   --text-headline-s-weight-emphasized: 700;
   --text-label-l-size: 18px;
-  --text-label-l-line-height: 24px;
+  --text-label-l-line-height: 30px;
   --text-label-l-letter-spacing: 0;
   --text-label-l-weight-plain: 500;
   --text-label-l-weight-emphasized: 600;
@@ -154,7 +154,7 @@
   --text-label-xxs-weight-plain: 500;
   --text-label-xxs-weight-emphasized: 600;
   --text-body-l-size: 18px;
-  --text-body-l-line-height: 24px;
+  --text-body-l-line-height: 30px;
   --text-body-l-letter-spacing: 0;
   --text-body-l-weight-plain: 400;
   --text-body-l-weight-emphasized: 500;

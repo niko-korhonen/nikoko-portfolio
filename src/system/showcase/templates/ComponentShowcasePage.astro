@@ -20,7 +20,7 @@ const { title, codeName, description, headingId, class: className = '' } = Astro
 ---
 
 <section class:list={['ds-showcase-page', 'section', className]} aria-labelledby={headingId}>
-  <h2 class="text-headline-s-plain section__title" id={headingId}>
+  <h2 class="text-display-s-plain section__title" id={headingId}>
     {title}
   </h2>
   {codeName ? <p class="text-code-xs-plain ds-showcase-page__code">{codeName}</p> : null}

@@ -705,7 +705,7 @@ a.ui-btn[data-variant="accent"]:visited {
   z-index: 280;
   width: max-content;
   max-width: min(calc(var(--space-50) * 5), calc(100vw - var(--space-32)));
-  padding: var(--space-8) var(--space-10);
+  padding: var(--space-4) var(--space-6);
   border-radius: var(--radius-low);
   border: 1px solid var(--color-outline-tertiary);
   background: var(--color-surface-floating);
@@ -2109,7 +2109,7 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-nav-drawer__brand {
-  margin: var(--space-40) 0 var(--space-24);
+  margin: var(--space-40) 0 var(--space-40);
   padding-inline: var(--space-16);
 }
 
