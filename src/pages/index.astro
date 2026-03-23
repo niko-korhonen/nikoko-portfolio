@@ -32,6 +32,9 @@ import Icon from '../system/icons/Icon.astro';
             Dark
           </MenuItemAction>
         </MenuDropdown>
+        <ButtonIcon variant="ghost" size="m" label="World typer game" href="/g/world">
+          <Icon name="globe" style="fill" size="m" />
+        </ButtonIcon>
         <ButtonIcon variant="ghost" size="m" label="Open design system showcase" href="/system">
           <Icon name="code" style="outline" size="m" />
         </ButtonIcon>
@@ -177,7 +180,7 @@ import Icon from '../system/icons/Icon.astro';
   .home-chrome__theme-next-icon {
     display: flex;
     align-items: center;
-    column-gap: 0;
+    column-gap: var(--space-2);
     row-gap: 0;
     padding-block: 0;
     pointer-events: auto;

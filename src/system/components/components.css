@@ -1631,6 +1631,22 @@ a.ui-btn[data-variant="accent"]:visited {
   resize: none;
 }
 
+/*
+ * Mobile browsers (e.g. iOS Safari) zoom the viewport when an input’s computed font-size is below 16px.
+ * Keep the design-system scale via max() so desktop typography is unchanged.
+ */
+@media (pointer: coarse), (max-width: 767px) {
+  .ui-field__input.text-body-s-plain,
+  .ui-field__textarea.text-body-s-plain {
+    font-size: max(16px, var(--text-body-s-size));
+  }
+
+  .ui-field__input.text-body-xs-plain,
+  .ui-field__textarea.text-body-xs-plain {
+    font-size: max(16px, var(--text-body-xs-size));
+  }
+}
+
 /* After .ui-field__input { padding: 0 } — top pad matches no-label vertical budget with body--float */
 .ui-field[data-floating='yes'] .ui-field__float-stack .ui-field__input {
   position: relative;

@@ -1,3 +1,4 @@
+import { enqueueAnchoredToast, initAnchoredToasts } from '../../system/components/anchored-toast.ts';
 import { setScorePillValue } from '../../system/components/score-pill-counter.ts';
 import type { GamePhase } from './game-state.ts';
 import { formatTimer, GameTimer } from './game-state.ts';
@@ -10,12 +11,14 @@ export type WorldGameDom = {
   scorePill: HTMLElement;
   guessInput: HTMLInputElement;
   guessWrap: HTMLElement;
+  guessToastRoot: HTMLElement;
   startModal: HTMLDialogElement;
   pauseModal: HTMLDialogElement;
   overModal: HTMLDialogElement;
 };
 
 export function initWorldGame(dom: WorldGameDom): () => void {
+  initAnchoredToasts();
   const timer = new GameTimer();
   let phase: GamePhase = 'preStart';
   const guessedIds = new Set<string>();
@@ -28,6 +31,7 @@ export function initWorldGame(dom: WorldGameDom): () => void {
 
   function setPhase(next: GamePhase): void {
     phase = next;
+    mapApi?.syncPhase(next);
     if (next === 'playing') {
       dom.timerBtn.disabled = false;
       dom.guessInput.disabled = false;
@@ -54,12 +58,29 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     setScorePillValue(dom.scorePill, guessedIds.size, { animate: true });
   }
 
+  const gameOverDescriptionEl = document.getElementById('world-game-over-description');
+
+  function updateGameOverDescription(): void {
+    if (!gameOverDescriptionEl) return;
+    const n = guessedIds.size;
+    const lead =
+      n === 1
+        ? 'Well done, you made 1 correct guess!'
+        : `Well done, you made ${n} correct guesses.`;
+    gameOverDescriptionEl.textContent = `${lead} Review the map or jump straight into another round.`;
+  }
+
+  function showGameOverModal(): void {
+    updateGameOverDescription();
+    dom.overModal.showModal();
+  }
+
   function onTimerTick(remainingMs: number): void {
     setTimerLabel(formatTimer(remainingMs));
     if (remainingMs <= 0 && phase === 'playing') {
       timer.dispose();
       setPhase('ended');
-      dom.overModal.showModal();
+      showGameOverModal();
     }
   }
 
@@ -70,6 +91,7 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     setPhase('playing');
     setTimerLabel(formatTimer(15 * 60 * 1000));
     timer.start(onTimerTick);
+    dom.guessInput.focus();
   }
 
   function pauseGame(): void {
@@ -83,19 +105,20 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     if (phase !== 'paused') return;
     setPhase('playing');
     timer.resume(onTimerTick);
+    dom.guessInput.focus();
   }
 
   function giveUp(): void {
     timer.dispose();
     setPhase('ended');
     dom.pauseModal.close();
-    dom.overModal.showModal();
+    showGameOverModal();
   }
 
   function enterReview(): void {
-    setPhase('review');
-    setTimerLabel('Play again');
     mapApi?.applyReview(guessedIds);
+    setTimerLabel('Play again');
+    setPhase('review');
   }
 
   function resetForRestart(): void {
@@ -115,10 +138,14 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     if (!key) return;
     const id = mapApi.matchNormalized(key);
     if (!id) return;
-    if (guessedIds.has(id)) return;
+    if (guessedIds.has(id)) {
+      enqueueAnchoredToast(dom.guessToastRoot, 'neutral', 'Already guessed');
+      return;
+    }
     guessedIds.add(id);
     mapApi.markGuessed(id);
     updateScorePill();
+    enqueueAnchoredToast(dom.guessToastRoot, 'success', 'Correct');
   }
 
   const onTimerClick = () => {
@@ -140,6 +167,16 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     }
   });
 
+  /** When the current text is a full normalized country name, submit without Enter (new or duplicate). */
+  dom.guessInput.addEventListener('input', () => {
+    if (phase !== 'playing' || !mapApi) return;
+    const key = normalizeGuessName(dom.guessInput.value);
+    if (!key) return;
+    const id = mapApi.matchNormalized(key);
+    if (!id) return;
+    onGuessSubmit();
+  });
+
   const startBtn = document.getElementById('world-game-start-btn');
   startBtn?.addEventListener('click', () => {
     dom.startModal.close();
@@ -152,18 +189,30 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     }
   });
 
-  dom.pauseModal.querySelector('[data-world-resume]')?.addEventListener('click', () => {
+  document.getElementById('world-game-resume-btn')?.addEventListener('click', () => {
     dom.pauseModal.close();
   });
 
-  dom.pauseModal.querySelector('[data-world-give-up]')?.addEventListener('click', () => {
+  document.getElementById('world-game-give-up-btn')?.addEventListener('click', () => {
     giveUp();
   });
 
+  /** When true, closing the game-over modal starts a new round instead of map review. */
+  let skipOverModalReview = false;
+
   dom.overModal.addEventListener('close', () => {
-    if (phase === 'ended') {
-      enterReview();
+    if (phase !== 'ended') return;
+    if (skipOverModalReview) {
+      skipOverModalReview = false;
+      startGame();
+      return;
     }
+    enterReview();
+  });
+
+  document.getElementById('world-game-over-play-again-btn')?.addEventListener('click', () => {
+    skipOverModalReview = true;
+    dom.overModal.close();
   });
 
   let disposed = false;
@@ -178,8 +227,18 @@ export function initWorldGame(dom: WorldGameDom): () => void {
       trailing.textContent = `of ${api.totalGuessable}`;
     }
     setScorePillValue(dom.scorePill, 0, { animate: false });
+    api.syncPhase(phase);
+  });
+
+  // Start modal must open without waiting for map `onReady`. If `showModal()` only runs in the map
+  // callback, a missed `datavalidated` / never-ready map leaves the dialog closed forever (native
+  // `<dialog>` stays `display: none` until `[open]` from `showModal()` — see ModalDialog + components.css).
+  requestAnimationFrame(() => {
+    if (disposed || dom.startModal.open) return;
     dom.startModal.showModal();
   });
+
+  setPhase('preStart');
 
   return () => {
     disposed = true;

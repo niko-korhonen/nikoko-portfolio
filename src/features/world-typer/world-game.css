@@ -1,3 +1,12 @@
+/**
+ * Full-viewport surface (matches theme when switching light/dark/system).
+ * html/body: extra guard so no default canvas peeks at edges before paint.
+ */
+html:has(.world-game),
+body:has(.world-game) {
+  background: var(--color-surface-base);
+}
+
 .world-game {
   position: relative;
   box-sizing: border-box;
@@ -6,12 +15,14 @@
   max-height: 100dvh;
   overflow: hidden;
   background: var(--color-surface-base);
+  /* Globe country/grid stroke colors: fixed rgba in world-map-adapter.ts (not design tokens). */
 }
 
 .world-game__map {
   position: absolute;
   inset: 0;
   z-index: 0;
+  background: var(--color-surface-base);
 }
 
 .world-game__timer {
@@ -22,15 +33,20 @@
 }
 
 .world-game__timer :global(.ui-btn),
-.world-game__score :global(.ui-score-pill) {
+.world-game__top-right :global(.ui-score-pill),
+.world-game__top-right :global(.ui-menu-dropdown) {
   pointer-events: auto;
 }
 
-.world-game__score {
+.world-game__top-right {
   position: fixed;
   z-index: 10;
   top: var(--space-8);
   right: var(--space-8);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 .world-game__guess {
@@ -41,6 +57,65 @@
   transform: translateX(-50%);
   width: min(300px, calc(100vw - var(--space-16)));
   pointer-events: auto;
+}
+
+/**
+ * Overlap toast anchor + TextField in one grid cell so the AnchoredToast root keeps
+ * a real width (inline-flex was shrinking) and stays position: relative — the stack
+ * uses % placement against this box.
+ */
+.world-game__guess-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: 100%;
+  min-height: 0;
+  align-items: stretch;
+  justify-items: stretch;
+  position: relative;
+}
+
+.world-game__guess-stack > * {
+  grid-area: 1 / 1;
+}
+
+.world-game__guess-stack .world-game__guess-toast:global(.ui-anchored-toast) {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  vertical-align: unset;
+}
+
+.world-game__guess-stack .world-game__guess-toast :global(.ui-anchored-toast__trigger-wrap) {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  width: 100%;
+}
+
+.world-game__guess-stack .world-game__guess-toast :global(.ui-anchored-toast__trigger-proxy) {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  max-width: none;
+}
+
+.world-game__guess-toast-anchor {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 48px;
+}
+
+.world-game__guess-stack > :global(.ui-field) {
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .world-game__guess :global(.ui-field) {

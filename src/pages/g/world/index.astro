@@ -1,7 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AnchoredToast from '../../../system/components/AnchoredToast.astro';
 import Button from '../../../system/components/Button.astro';
+import ButtonDropdown from '../../../system/components/ButtonDropdown.astro';
 import ButtonIcon from '../../../system/components/ButtonIcon.astro';
+import MenuDropdown from '../../../system/components/MenuDropdown.astro';
+import MenuItemAction from '../../../system/components/MenuItemAction.astro';
 import ModalDialog from '../../../system/components/ModalDialog.astro';
 import ScorePillCounter from '../../../system/components/ScorePillCounter.astro';
 import TextField from '../../../system/components/TextField.astro';
@@ -16,31 +20,58 @@ import Icon from '../../../system/icons/Icon.astro';
       <Button id="world-game-timer-btn" variant="secondary" size="m" type="button" disabled>15:00</Button>
     </div>
 
-    <div class="world-game__score">
-      <ScorePillCounter
-        id="world-game-score"
-        variant="secondary"
-        size="m"
-        value={0}
-        trailingLabel="of …"
-      >
-        <Icon slot="icon-start" name="trophy" style="outline" size="m" />
-      </ScorePillCounter>
+    <div class="world-game__top-right">
+      <div class="world-game-theme-menu">
+        <MenuDropdown>
+          <ButtonDropdown slot="trigger" variant="ghost" size="m" type="button">Theme</ButtonDropdown>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="system">
+            <Icon slot="slot-start" name="lock" style="outline" size="s" />
+            System
+          </MenuItemAction>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="light">
+            <Icon slot="slot-start" name="sun" style="outline" size="s" />
+            Light
+          </MenuItemAction>
+          <MenuItemAction type="button" role="menuitem" data-theme-value="dark">
+            <Icon slot="slot-start" name="moon" style="outline" size="s" />
+            Dark
+          </MenuItemAction>
+        </MenuDropdown>
+      </div>
+      <div class="world-game__score">
+        <ScorePillCounter
+          id="world-game-score"
+          variant="secondary"
+          size="m"
+          value={0}
+          trailingLabel="of …"
+        >
+          <Icon slot="icon-start" name="trophy" style="outline" size="m" />
+        </ScorePillCounter>
+      </div>
     </div>
 
     <div id="world-game-guess-wrap" class="world-game__guess">
-      <TextField
-        id="world-game-guess"
-        variant="filled"
-        size="l"
-        tone="default"
-        label="Label"
-        placeholder="Input"
-        description=""
-        floatingLabel={false}
-        disabled={true}
-        ariaLabel="Country guess"
-      />
+      <div class="world-game__guess-stack">
+        <AnchoredToast
+          class="world-game__guess-toast"
+          variant="success"
+          message="Correct"
+          position="top"
+          align="center"
+        >
+          <span slot="trigger" class="world-game__guess-toast-anchor" aria-hidden="true"></span>
+        </AnchoredToast>
+        <TextField
+          id="world-game-guess"
+          variant="filled"
+          size="l"
+          tone="default"
+          placeholder="Guess"
+          disabled={false}
+          ariaLabel="Country guess"
+        />
+      </div>
     </div>
 
     <ModalDialog
@@ -51,7 +82,9 @@ import Icon from '../../../system/icons/Icon.astro';
       toolbarAlign="end"
       showHero={true}
     >
-      <span slot="toolbar" aria-hidden="true"></span>
+      <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Back to home" href="/">
+        <Icon name="cross" style="outline" size="s" />
+      </ButtonIcon>
       <Icon slot="hero" name="globe" style="fill" size="l" />
       <span slot="title">World typer</span>
       <span slot="description"
@@ -74,14 +107,14 @@ import Icon from '../../../system/icons/Icon.astro';
       <Icon slot="hero" name="pause" style="fill" size="l" />
       <span slot="title">Game paused</span>
       <span slot="description">Practice makes perfect, don’t give up!</span>
-      <Button slot="footer" variant="primary" size="l" type="button" data-world-resume>Resume</Button>
+      <Button id="world-game-resume-btn" slot="footer" variant="primary" size="l" type="button">Resume</Button>
       <Button
+        id="world-game-give-up-btn"
         slot="footer"
         variant="accent"
         size="l"
         type="button"
         accentContainer="container-accent-negative"
-        data-world-give-up
       >
         Give up
       </Button>
@@ -89,7 +122,7 @@ import Icon from '../../../system/icons/Icon.astro';
 
     <ModalDialog
       id="world-game-over-modal"
-      layout="centered"
+      layout="footer"
       dismissible={true}
       toolbar={true}
       toolbarAlign="end"
@@ -100,8 +133,10 @@ import Icon from '../../../system/icons/Icon.astro';
       </ButtonIcon>
       <Icon slot="hero" name="trophy" style="fill" size="l" />
       <span slot="title">Game over</span>
-      <span slot="description"
-        >Well done! Close this box to review the map and improve.</span
+      <span slot="description" id="world-game-over-description"></span>
+      <Button slot="footer" variant="primary" size="l" type="button" dialogClose>Review map</Button>
+      <Button id="world-game-over-play-again-btn" slot="footer" variant="secondary" size="l" type="button"
+        >Play again</Button
       >
     </ModalDialog>
   </div>
@@ -110,11 +145,48 @@ import Icon from '../../../system/icons/Icon.astro';
 <script>
   import { initWorldGame } from '../../../features/world-typer/world-game-client.ts';
 
+  const storageKey = 'niko-ui-theme';
+
+  function applyTheme(value: 'system' | 'light' | 'dark') {
+    const root = document.documentElement;
+    if (value === 'system') {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    } else {
+      root.setAttribute('data-theme', value);
+      root.style.colorScheme = value;
+    }
+    try {
+      localStorage.setItem(storageKey, value);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  document.querySelectorAll('.world-game-theme-menu [data-theme-value]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const v = el.getAttribute('data-theme-value');
+      if (v === 'light' || v === 'dark' || v === 'system') {
+        applyTheme(v);
+      }
+    });
+  });
+
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved === 'light' || saved === 'dark' || saved === 'system') {
+      applyTheme(saved);
+    }
+  } catch {
+    /* ignore */
+  }
+
   const mapHost = document.getElementById('world-game-map');
   const timerBtn = document.getElementById('world-game-timer-btn');
   const scorePill = document.getElementById('world-game-score');
   const guessInput = document.getElementById('world-game-guess') as HTMLInputElement | null;
   const guessWrap = document.getElementById('world-game-guess-wrap');
+  const guessToastRoot = document.querySelector('#world-game-guess-wrap [data-anchored-toast]') as HTMLElement | null;
   const startModal = document.getElementById('world-game-start-modal') as HTMLDialogElement | null;
   const pauseModal = document.getElementById('world-game-pause-modal') as HTMLDialogElement | null;
   const overModal = document.getElementById('world-game-over-modal') as HTMLDialogElement | null;
@@ -125,6 +197,7 @@ import Icon from '../../../system/icons/Icon.astro';
     scorePill &&
     guessInput &&
     guessWrap &&
+    guessToastRoot &&
     startModal &&
     pauseModal &&
     overModal
@@ -135,6 +208,7 @@ import Icon from '../../../system/icons/Icon.astro';
       scorePill,
       guessInput,
       guessWrap,
+      guessToastRoot,
       startModal,
       pauseModal,
       overModal,
