@@ -1,0 +1,15 @@
+---
+import Button from '../../components/Button.astro';
+
+interface Props {
+  componentLabel: string;
+}
+
+const { componentLabel } = Astro.props;
+---
+
+<div class="ds-showcase-copy">
+  <Button class="js-ds-showcase-copy" type="button" variant="secondary" size="s" aria-label={`Copy prompt for ${componentLabel}`}>
+    Copy prompt
+  </Button>
+</div>

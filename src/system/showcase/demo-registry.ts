@@ -6,8 +6,12 @@ import ButtonSection from './sections/ButtonSection.astro';
 import ColorsSection from './sections/ColorsSection.astro';
 import ElevatedPanelSection from './sections/ElevatedPanelSection.astro';
 import IconSection from './sections/IconSection.astro';
-import ItemSection from './sections/ItemSection.astro';
+import ItemActionSection from './sections/ItemActionSection.astro';
+import ItemDividerSection from './sections/ItemDividerSection.astro';
+import ItemHeaderSection from './sections/ItemHeaderSection.astro';
+import ItemStaticSection from './sections/ItemStaticSection.astro';
 import LayoutSection from './sections/LayoutSection.astro';
+import MenuDropdownSection from './sections/MenuDropdownSection.astro';
 import ModalDialogSection from './sections/ModalDialogSection.astro';
 import RadioSection from './sections/RadioSection.astro';
 import RadiusSection from './sections/RadiusSection.astro';
@@ -30,6 +34,7 @@ export const demoRegistry = {
   button: ButtonSection,
   'button-icon': ButtonIconSection,
   'button-dropdown': ButtonDropdownSection,
+  'menu-dropdown': MenuDropdownSection,
   badge: BadgeSection,
   toggle: ToggleSection,
   'segment-control': SegmentControlSection,
@@ -38,7 +43,10 @@ export const demoRegistry = {
   tooltip: TooltipSection,
   'anchored-toast': AnchoredToastSection,
   'modal-dialog': ModalDialogSection,
-  item: ItemSection,
+  'item-action': ItemActionSection,
+  'item-static': ItemStaticSection,
+  'item-divider': ItemDividerSection,
+  'item-header': ItemHeaderSection,
   'elevated-panel': ElevatedPanelSection,
 } as const;
 

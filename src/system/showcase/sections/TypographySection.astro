@@ -1,27 +1,104 @@
 ---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
 import { typoCategories } from '../data';
+
+const typeOptions = typoCategories.flatMap((cat) =>
+  cat.sizes.flatMap((row) => [
+    { className: `text-${row.classSuffix}-plain`, label: `${cat.label} ${row.sample} · plain` },
+    { className: `text-${row.classSuffix}-emphasized`, label: `${cat.label} ${row.sample} · emphasized` },
+  ]),
+);
+const defaultClass = typeOptions[0]?.className ?? 'text-display-l-plain';
 ---
 
-<section class="section" aria-labelledby="type-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="type-heading">Typography</h2>
-  {
-    typoCategories.map((cat) => (
-      <div class="subsection">
-        <h3 class="text-label-l-emphasized subsection__title">{cat.label}</h3>
-        <ul class="type-list">
-          {cat.sizes.map((row) => (
-            <li class="type-row">
-              <div class="type-pair">
-                <p class={`text-${row.classSuffix}-plain`}>{row.sample} · plain</p>
-                <p class={`text-${row.classSuffix}-emphasized`}>{row.sample} · emphasized</p>
-              </div>
-              <code class="text-code-xs-plain type-meta">
-                {`.text-${row.classSuffix}-plain`} / {`.text-${row.classSuffix}-emphasized`}
-              </code>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))
+<ComponentShowcasePage
+  title="Typography"
+  headingId="type-heading"
+  description="Semantic text styles: display, headline, label, body, and code. Use plain vs emphasized pairs for hierarchy; sizes follow a fixed scale. Prefer these classes over ad-hoc font sizes."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="typography" style="width:100%;max-width:22rem;text-align:center;">
+      <p class={defaultClass} data-ds-type-preview>
+        The quick brown fox jumps over the lazy dog.
+      </p>
+      <code class="text-code-xs-plain" style="margin-top:var(--space-12);display:block;" data-ds-type-code>
+        {`.${defaultClass}`}
+      </code>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Style">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="type-label">{typeOptions[0]?.label ?? 'Style'}</span>
+        </ButtonDropdown>
+        {
+          typeOptions.map((opt) => (
+            <MenuItemAction type="button" data-ds-pick="type" data-value={opt.className}>
+              {opt.label}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Typography" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const preview = document.querySelector('[data-ds-type-preview]');
+    const codeEl = document.querySelector('[data-ds-type-code]');
+    const label = page?.querySelector('[data-ds-dd="type-label"]');
+    if (!page || !preview || !codeEl) return;
+
+    let cls = 'text-display-l-plain';
+    let selectedLabel = label?.textContent?.trim() ?? 'Style';
+
+    function apply() {
+      preview.className = cls;
+      codeEl.textContent = `.${cls}`;
+      if (label) label.textContent = selectedLabel;
+    }
+
+    page.querySelectorAll('[data-ds-pick="type"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const c = (el as HTMLElement).dataset.value;
+        if (c) {
+          cls = c;
+          selectedLabel = el.textContent?.trim() ?? selectedLabel;
+          apply();
+        }
+      });
+    });
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Typography',
+        props: { className: cls },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
   }
-</section>
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

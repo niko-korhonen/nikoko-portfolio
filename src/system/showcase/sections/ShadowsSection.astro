@@ -1,19 +1,101 @@
 ---
-import Cluster from '../../primitives/Cluster.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+
+const shadows = [
+  { id: 'l', className: 'ui-shadow-l', token: '--shadow-l' },
+  { id: 'm', className: 'ui-shadow-m', token: '--shadow-m' },
+] as const;
 ---
 
-<section class="section" aria-labelledby="shadows-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="shadows-heading">Shadows</h2>
-  <p class="text-body-s-plain section__note">
-    Utilities <code class="code-inline">.ui-shadow-l</code> / <code class="code-inline">.ui-shadow-m</code> map to token shadows.
-    Elevated surfaces (e.g. menus) use <code class="code-inline">--shadow-l</code> via the <code class="code-inline">ElevatedPanel</code> component.
-  </p>
-  <Cluster gap="space-16" align="end">
-    <div class="ds-shadow-swatch ui-shadow-l">
-      <span class="text-label-xs-plain">Shadow L</span>
+<ComponentShowcasePage
+  title="Shadows"
+  headingId="shadows-heading"
+  description="Elevation via shadow tokens. Utility classes map to shadow L and M; elevated surfaces such as menus use the large shadow through ElevatedPanel."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="shadows" style="width:100%;max-width:22rem;">
+      <div class="ds-shadow-swatch ui-shadow-l" data-ds-shadow-swatch>
+        <span class="text-label-xs-plain" data-ds-shadow-label>Shadow L</span>
+      </div>
+      <code class="text-code-xs-plain" style="margin-top:var(--space-12);display:block;text-align:center;" data-ds-shadow-code>
+        --shadow-l
+      </code>
     </div>
-    <div class="ds-shadow-swatch ui-shadow-m">
-      <span class="text-label-xs-plain">Shadow M</span>
-    </div>
-  </Cluster>
-</section>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Shadow">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="shadow-dd">L</span>
+        </ButtonDropdown>
+        {
+          shadows.map((s) => (
+            <MenuItemAction type="button" data-ds-pick="shadow" data-value={s.id}>
+              Shadow {s.id.toUpperCase()}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Shadows" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const swatch = document.querySelector('[data-ds-shadow-swatch]');
+    const codeEl = document.querySelector('[data-ds-shadow-code]');
+    const lbl = document.querySelector('[data-ds-shadow-label]');
+    const dd = page?.querySelector('[data-ds-dd="shadow-dd"]');
+    if (!page || !swatch || !codeEl) return;
+
+    let id: 'l' | 'm' = 'l';
+
+    function apply() {
+      swatch.classList.remove('ui-shadow-l', 'ui-shadow-m');
+      swatch.classList.add(id === 'l' ? 'ui-shadow-l' : 'ui-shadow-m');
+      codeEl.textContent = id === 'l' ? '--shadow-l' : '--shadow-m';
+      if (lbl) lbl.textContent = id === 'l' ? 'Shadow L' : 'Shadow M';
+      if (dd) dd.textContent = id.toUpperCase();
+    }
+
+    document.querySelectorAll('[data-ds-pick="shadow"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'l' | 'm' | undefined;
+        if (v) {
+          id = v;
+          apply();
+        }
+      });
+    });
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Shadows',
+        props: { token: id === 'l' ? '--shadow-l' : '--shadow-m' },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

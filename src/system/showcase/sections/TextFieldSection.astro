@@ -1,137 +1,355 @@
 ---
-import ButtonIcon from '../../components/ButtonIcon.astro';
 import TextField from '../../components/TextField.astro';
-import Icon from '../../icons/Icon.astro';
-import Stack from '../../primitives/Stack.astro';
+import Toggle from '../../components/Toggle.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+import ShowcaseIconMenuItems from '../templates/ShowcaseIconMenuItems.astro';
+import { getAllIconVariantMenuEntries, loadAllIconVariantInlineMap } from '../showcase-icons';
+
+const variants = ['filled', 'outlined'] as const;
+const tones = ['default', 'error', 'success'] as const;
+const sizes = ['l', 'm'] as const;
+const iconVariantMenu = getAllIconVariantMenuEntries();
+const iconHtmlMap: Record<string, string> = { none: '', ...loadAllIconVariantInlineMap() };
 ---
 
-<section class="section" aria-labelledby="text-field-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="text-field-heading">Text field</h2>
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Text field</h3>
-    <p class="text-body-s-plain subsection__hint">
-      Slots: <code class="code-inline">slot-start</code>, <code class="code-inline">icon-start</code>,{' '}
-      <code class="code-inline">icon-end</code>, <code class="code-inline">slot-end</code> · helper below the control ·{' '}
-      <code class="code-inline">data-label=&quot;yes|no&quot;</code> sets radius (low vs pill).
-    </p>
-    <div class="tf-matrix-wrap">
-      <div class="tf-matrix">
-        <div class="tf-matrix__row tf-matrix__row--head">
-          <span class="tf-matrix__corner" aria-hidden="true" />
-          <span class="text-label-xs-plain tf-matrix__head">Filled, Label</span>
-          <span class="text-label-xs-plain tf-matrix__head">Filled, no label</span>
-          <span class="text-label-xs-plain tf-matrix__head">Outlined, Label</span>
-          <span class="text-label-xs-plain tf-matrix__head">Outlined, no label</span>
-        </div>
-        <div class="tf-matrix__row">
-          <span class="text-body-xs-plain tf-matrix__state">Default</span>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" />
-          </div>
-        </div>
-        <div class="tf-matrix__row">
-          <span class="text-body-xs-plain tf-matrix__state">Error</span>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" label="Label" placeholder="Input" tone="error" description="Error message." />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField
-              variant="filled"
-              ariaLabel="Demo input"
-              placeholder="Input"
-              tone="error"
-              description="Error message."
-            />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="outlined" label="Label" placeholder="Input" tone="error" description="Error message." />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField
-              variant="outlined"
-              ariaLabel="Demo input"
-              placeholder="Input"
-              tone="error"
-              description="Error message."
-            />
-          </div>
-        </div>
-        <div class="tf-matrix__row">
-          <span class="text-body-xs-plain tf-matrix__state">Success</span>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" label="Label" placeholder="Input" tone="success" description="Success message." />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField
-              variant="filled"
-              ariaLabel="Demo input"
-              placeholder="Input"
-              tone="success"
-              description="Success message."
-            />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField
-              variant="outlined"
-              label="Label"
-              placeholder="Input"
-              tone="success"
-              description="Success message."
-            />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField
-              variant="outlined"
-              ariaLabel="Demo input"
-              placeholder="Input"
-              tone="success"
-              description="Success message."
-            />
-          </div>
-        </div>
-        <div class="tf-matrix__row">
-          <span class="text-body-xs-plain tf-matrix__state">Disabled</span>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" label="Label" placeholder="Input" description="Helper text" disabled />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="filled" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="outlined" label="Label" placeholder="Input" description="Helper text" disabled />
-          </div>
-          <div class="tf-matrix__cell">
-            <TextField variant="outlined" ariaLabel="Demo input" placeholder="Input" description="Helper text" disabled />
-          </div>
-        </div>
+<ComponentShowcasePage
+  title="TextField"
+  headingId="text-field-heading"
+  description="Single-line and multiline inputs with optional floating label, helper text, and tone for validation. Slots support leading and trailing adornments. data-label controls pill vs rounded geometry when a label is present."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="text-field" style="width:100%;max-width:22rem;">
+      <div data-ds-tf-layer="floating">
+        <TextField
+          id="ds-tf-preview-float"
+          size="l"
+          variant="filled"
+          tone="default"
+          label="Label"
+          placeholder="Input"
+          description="Helper text"
+        />
+      </div>
+      <div data-ds-tf-layer="bare" hidden>
+        <TextField
+          id="ds-tf-preview-bare"
+          size="l"
+          variant="filled"
+          tone="default"
+          ariaLabel="Demo input"
+          placeholder="Input"
+          description="Helper text"
+        />
       </div>
     </div>
-    <p class="text-body-s-plain subsection__hint" style="margin-top: var(--space-16)">
-      Slots + icons (pink = custom slot placeholders) · chat-style trailing{' '}
-      <code class="code-inline">ButtonIcon</code> in <code class="code-inline">slot-end</code>.
-    </p>
-    <Stack gap="space-12" align="stretch">
-      <TextField variant="filled" label="Label" placeholder="Input" description="Helper text">
-        <span slot="slot-start" class="tf-demo-slot" aria-hidden="true" />
-        <Icon slot="icon-start" name="search" style="outline" size="m" />
-        <Icon slot="icon-end" name="copy" style="outline" size="m" />
-        <span slot="slot-end" class="tf-demo-slot" aria-hidden="true" />
-      </TextField>
-      <TextField variant="outlined" ariaLabel="Message" placeholder="Message…">
-        <Icon slot="icon-start" name="search" style="outline" size="m" />
-        <ButtonIcon slot="slot-end" variant="primary" size="m" label="Send message" type="button">
-          <Icon name="arrowup" style="outline" size="m" />
-        </ButtonIcon>
-      </TextField>
-    </Stack>
-  </div>
-</section>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Floating label">
+      <div class="ds-showcase-toggle-wrap" data-ds-tf-floating-wrap>
+        <Toggle name="ds-tf-floating-ctrl" checked />
+      </div>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Variant">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="variant-label">Filled</span>
+        </ButtonDropdown>
+        {
+          variants.map((v) => (
+            <MenuItemAction type="button" data-ds-pick="variant" data-value={v}>
+              {v.charAt(0).toUpperCase() + v.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Tone">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="tone-label">Default</span>
+        </ButtonDropdown>
+        {
+          tones.map((t) => (
+            <MenuItemAction type="button" data-ds-pick="tone" data-value={t}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Size">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="size-label">L</span>
+        </ButtonDropdown>
+        {
+          sizes.map((s) => (
+            <MenuItemAction type="button" data-ds-pick="size" data-value={s}>
+              {s.toUpperCase()}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Label">
+      <ShowcaseTextFieldControl id="ds-tf-ctrl-label" ariaLabel="Label text" placeholder="Label" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Placeholder">
+      <ShowcaseTextFieldControl id="ds-tf-ctrl-ph" ariaLabel="Placeholder" placeholder="Input" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Description">
+      <ShowcaseTextFieldControl id="ds-tf-ctrl-desc" ariaLabel="Helper text" placeholder="Helper text" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Show helper text">
+      <div class="ds-showcase-toggle-wrap" data-ds-tf-helper-wrap>
+        <Toggle name="ds-tf-helper-ctrl" checked />
+      </div>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Icon start">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="icon-start-label">None</span>
+        </ButtonDropdown>
+        <ShowcaseIconMenuItems dataPick="icon-start" entries={iconVariantMenu} />
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Icon end">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="icon-end-label">None</span>
+        </ButtonDropdown>
+        <ShowcaseIconMenuItems dataPick="icon-end" entries={iconVariantMenu} />
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Disabled">
+      <div class="ds-showcase-toggle-wrap" data-ds-toggle="disabled">
+        <Toggle name="ds-tf-disabled-ctrl" />
+      </div>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="TextField" />
+</ComponentShowcasePage>
+
+<script is:inline define:vars={{ iconHtmlMap }}>
+  globalThis['__dsShowcaseTfIconHtmlMap'] = iconHtmlMap;
+</script>
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage, takeInjectedIconHtmlMap } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="text-field"]');
+    const floatWrap = root?.querySelector('[data-ds-tf-layer="floating"]');
+    const bareWrap = root?.querySelector('[data-ds-tf-layer="bare"]');
+    const floatCb = page?.querySelector<HTMLInputElement>(
+      '[data-ds-tf-floating-wrap] input[role="switch"]',
+    );
+    const labelCtrl = document.getElementById('ds-tf-ctrl-label') as HTMLInputElement | null;
+    const phCtrl = document.getElementById('ds-tf-ctrl-ph') as HTMLInputElement | null;
+    const descCtrl = document.getElementById('ds-tf-ctrl-desc') as HTMLInputElement | null;
+    const variantLabel = page?.querySelector('[data-ds-dd="variant-label"]');
+    const toneLabel = page?.querySelector('[data-ds-dd="tone-label"]');
+    const sizeLabel = page?.querySelector('[data-ds-dd="size-label"]');
+    const disabledCb = page?.querySelector<HTMLInputElement>(
+      '[data-ds-toggle="disabled"] input[role="switch"]',
+    );
+    const helperToggle = page?.querySelector<HTMLInputElement>(
+      '[data-ds-tf-helper-wrap] input[role="switch"]',
+    );
+    const iconStartLabel = page?.querySelector('[data-ds-dd="icon-start-label"]');
+    const iconEndLabel = page?.querySelector('[data-ds-dd="icon-end-label"]');
+
+    if (!page || !root || !floatWrap || !bareWrap || !labelCtrl || !phCtrl || !descCtrl) return;
+
+    bindFieldClear(page);
+
+    const map: Record<string, string> = { ...takeInjectedIconHtmlMap('__dsShowcaseTfIconHtmlMap') };
+
+    let variant: 'filled' | 'outlined' = 'filled';
+    let tone: 'default' | 'error' | 'success' = 'default';
+    let size: 'l' | 'm' = 'l';
+    let iconStartKey = 'none';
+    let iconEndKey = 'none';
+
+    function bodyClass() {
+      return size === 'm' ? 'text-body-xs-plain' : 'text-body-s-plain';
+    }
+
+    function iconSizeForField(): 'm' | 's' {
+      return size === 'l' ? 'm' : 's';
+    }
+
+    function renderIconSlot(wrap: HTMLElement | null, key: string) {
+      if (!wrap) return;
+      if (key === 'none') {
+        wrap.innerHTML = '';
+        return;
+      }
+      const html = map[key] || '';
+      if (!html) {
+        wrap.innerHTML = '';
+        return;
+      }
+      const isz = iconSizeForField();
+      const istyle = key.endsWith('-fill') ? 'fill' : 'outline';
+      wrap.innerHTML = `<span class="ui-icon" data-size="${isz}" data-style="${istyle}">${html}</span>`;
+    }
+
+    function syncCommon(field: HTMLElement | null) {
+      if (!field) return;
+      const input = field.querySelector<HTMLInputElement>('.ui-field__input');
+      const descText = field.querySelector('.ui-field__description-text');
+      const helperEl = field.querySelector('.ui-field__helper');
+      if (!input) return;
+
+      field.setAttribute('data-variant', variant);
+      field.setAttribute('data-tone', tone);
+      field.setAttribute('data-size', size);
+      if (disabledCb?.checked) field.setAttribute('data-disabled', '');
+      else field.removeAttribute('data-disabled');
+
+      input.disabled = Boolean(disabledCb?.checked);
+      input.placeholder = phCtrl.value || ' ';
+      if (tone === 'error') input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
+      input.className = ['ui-field__input', bodyClass()].filter(Boolean).join(' ');
+      if (descText) descText.textContent = descCtrl.value || 'Helper text';
+
+      if (helperEl) {
+        const showHelper = Boolean(helperToggle?.checked);
+        if (showHelper) {
+          helperEl.removeAttribute('hidden');
+          const hid = helperEl.id;
+          if (hid) input.setAttribute('aria-describedby', hid);
+        } else {
+          helperEl.setAttribute('hidden', '');
+          input.removeAttribute('aria-describedby');
+        }
+      }
+
+      renderIconSlot(field.querySelector<HTMLElement>('.ui-field__icon-start'), iconStartKey);
+      renderIconSlot(field.querySelector<HTMLElement>('.ui-field__icon-end'), iconEndKey);
+
+      if (variantLabel) variantLabel.textContent = variant.charAt(0).toUpperCase() + variant.slice(1);
+      if (toneLabel) toneLabel.textContent = tone.charAt(0).toUpperCase() + tone.slice(1);
+      if (sizeLabel) sizeLabel.textContent = size.toUpperCase();
+      if (iconStartLabel) {
+        iconStartLabel.textContent = iconStartKey === 'none' ? 'None' : `icon-${iconStartKey}`;
+      }
+      if (iconEndLabel) {
+        iconEndLabel.textContent = iconEndKey === 'none' ? 'None' : `icon-${iconEndKey}`;
+      }
+    }
+
+    function apply() {
+      const showFloat = Boolean(floatCb?.checked);
+      floatWrap.toggleAttribute('hidden', !showFloat);
+      bareWrap.toggleAttribute('hidden', showFloat);
+
+      const fieldFloat = floatWrap.querySelector('.ui-field');
+      const fieldBare = bareWrap.querySelector('.ui-field');
+      fieldFloat?.setAttribute('data-label', 'yes');
+      fieldBare?.setAttribute('data-label', 'no');
+
+      syncCommon(fieldFloat);
+      syncCommon(fieldBare);
+
+      const floatLabel = fieldFloat?.querySelector('.ui-field__float-stack .ui-field__label');
+      const inputFloat = fieldFloat?.querySelector<HTMLInputElement>('.ui-field__input');
+      const inputBare = fieldBare?.querySelector<HTMLInputElement>('.ui-field__input');
+      if (floatLabel) floatLabel.textContent = labelCtrl.value || 'Label';
+      if (inputFloat) inputFloat.removeAttribute('aria-label');
+      if (inputBare) inputBare.setAttribute('aria-label', labelCtrl.value.trim() || 'Demo input');
+    }
+
+    page.querySelectorAll('[data-ds-pick="variant"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'filled' | 'outlined' | undefined;
+        if (v) {
+          variant = v;
+          apply();
+        }
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="tone"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'default' | 'error' | 'success' | undefined;
+        if (v) {
+          tone = v;
+          apply();
+        }
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="size"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'l' | 'm' | undefined;
+        if (v) {
+          size = v;
+          apply();
+        }
+      });
+    });
+    [labelCtrl, phCtrl, descCtrl].forEach((el) => el.addEventListener('input', apply));
+    disabledCb?.addEventListener('change', apply);
+    floatCb?.addEventListener('change', apply);
+    helperToggle?.addEventListener('change', apply);
+
+    page.querySelectorAll('[data-ds-pick="icon-start"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v !== undefined) {
+          iconStartKey = v;
+          apply();
+        }
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="icon-end"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v !== undefined) {
+          iconEndKey = v;
+          apply();
+        }
+      });
+    });
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'TextField',
+        props: {
+          variant,
+          tone,
+          size,
+          floatingLabel: Boolean(floatCb?.checked),
+          label: labelCtrl.value || 'Label',
+          placeholder: phCtrl.value || 'Input',
+          description: descCtrl.value || 'Helper text',
+          showHelperText: Boolean(helperToggle?.checked),
+          iconStart: iconStartKey === 'none' ? 'none' : `icon-${iconStartKey}.svg`,
+          iconEnd: iconEndKey === 'none' ? 'none' : `icon-${iconEndKey}.svg`,
+          disabled: Boolean(disabledCb?.checked),
+        },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

@@ -444,126 +444,228 @@ html[data-nav-drawer-open='false'] .system-shell__main {
   color: var(--color-content-secondary);
 }
 
-.demo-btn-subsection {
-  margin-top: var(--space-16);
+.ds-radio-demo-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-12);
 }
 
-.demo-btn-subsection__title {
+/* Storybook-style showcase: preview + controls table */
+
+.ds-showcase-page__lede {
+  margin: 0 0 var(--space-16);
+  max-width: 42rem;
+  color: var(--color-content-secondary);
+}
+
+/* When the optional code line is omitted, keep spacing from the title to the lede. */
+.ds-showcase-page .section__title + .ds-showcase-page__lede {
+  margin-top: var(--space-8);
+}
+
+.ds-showcase-page__code {
   margin: 0 0 var(--space-8);
-}
-
-.demo-matrix-wrap {
-  overflow-x: auto;
-  padding-bottom: var(--space-4);
-}
-
-.demo-matrix {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  min-width: min(100%, 40rem);
-}
-
-.demo-matrix__row {
-  display: grid;
-  grid-template-columns: minmax(4.5rem, auto) repeat(4, minmax(0, 1fr));
-  gap: var(--space-6) var(--space-8);
-  align-items: center;
-}
-
-.demo-matrix__row--head {
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-outline-tertiary);
-}
-
-.demo-matrix__corner {
-  display: block;
-}
-
-.demo-matrix__head {
-  text-align: center;
   color: var(--color-content-secondary);
 }
 
-.demo-matrix__state {
-  color: var(--color-content-tertiary);
+.ds-showcase-preview {
+  margin-top: var(--space-16);
+  border: 1px solid var(--color-outline-tertiary);
+  border-radius: var(--radius-low);
+  background: var(--color-surface-base);
+  min-height: 10rem;
+  box-sizing: border-box;
+  overflow: visible;
 }
 
-.demo-matrix__cell {
+.ds-showcase-preview__inner {
   display: flex;
+  align-items: center;
   justify-content: center;
-  min-width: 0;
+  min-height: 10rem;
+  padding: var(--space-24);
+  box-sizing: border-box;
+  overflow: visible;
 }
 
-.tf-matrix-wrap {
-  overflow-x: auto;
-  padding-bottom: var(--space-4);
+.ds-showcase-controls {
+  margin-top: var(--space-16);
+  position: relative;
+  z-index: 2;
 }
 
-.tf-matrix {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  min-width: min(100%, 72rem);
+/*
+ * Table rows paint in DOM order; later rows sit above earlier ones. An absolutely
+ * positioned menu panel from row 1 extends into row 2+ space but was stacking *under*
+ * those rows (each .ui-menu-dropdown had z-index: 1, so siblings lost to later <tr>s).
+ * Lift the whole row while its menu is open so the panel is opaque to hits and paint.
+ */
+.ds-showcase-table tbody tr:has([data-menu-dropdown-panel]:not([hidden])) {
+  position: relative;
+  z-index: 50;
 }
 
-.tf-matrix__row {
-  display: grid;
-  grid-template-columns: minmax(4.5rem, auto) repeat(4, minmax(8rem, 1fr));
-  gap: var(--space-6) var(--space-6);
+.ds-showcase-controls .ui-menu-dropdown__panel {
+  z-index: 40;
+}
+
+.ds-showcase-controls .ui-menu-dropdown__panel .ui-elevated-panel {
+  pointer-events: auto;
+  background: var(--color-surface-base);
+}
+
+.ds-showcase-menu-item-icon {
+  display: inline-flex;
   align-items: center;
-}
-
-.tf-matrix__row--head {
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-outline-tertiary);
-}
-
-.tf-matrix__corner {
-  display: block;
-}
-
-.tf-matrix__head {
-  text-align: center;
-  color: var(--color-content-secondary);
-}
-
-.tf-matrix__state {
-  color: var(--color-content-tertiary);
-}
-
-.tf-matrix__cell {
-  display: flex;
-  justify-content: stretch;
-  width: 100%;
-  min-width: 0;
-  padding-inline: 0;
-}
-
-.tf-demo-slot {
-  display: block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ff69b4;
+  justify-content: center;
   flex-shrink: 0;
 }
 
-.demo-bd-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-12);
-  align-items: flex-start;
+/* ButtonIcon demo: tooltip preview starts off (matches default tooltip={false}); script + toggle enable it. */
+[data-ds-demo='button-icon'].ds-btico-tt-preview-off .ui-tooltip__surface {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-.demo-bd-row__label {
-  flex: 0 0 4.5rem;
-  color: var(--color-content-tertiary);
+[data-ds-demo='button-icon'].ds-btico-tt-preview-off .ui-tooltip:hover .ui-tooltip__surface,
+[data-ds-demo='button-icon'].ds-btico-tt-preview-off .ui-tooltip:focus-within .ui-tooltip__surface {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
-.demo-bd-cells {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-12);
+.ds-showcase-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--color-outline-tertiary);
+  border-radius: var(--radius-low);
+  overflow: visible;
+}
+
+.ds-showcase-table__th {
+  text-align: start;
+  padding: var(--space-8) var(--space-12);
+  background: var(--color-surface-floating);
+  border-bottom: 1px solid var(--color-outline-tertiary);
+  font-weight: inherit;
+}
+
+.ds-showcase-table__th + .ds-showcase-table__th {
+  border-inline-start: 1px solid var(--color-outline-tertiary);
+}
+
+.ds-showcase-table__row:not(:last-child) .ds-showcase-table__label,
+.ds-showcase-table__row:not(:last-child) .ds-showcase-table__control {
+  border-bottom: 1px solid var(--color-outline-tertiary);
+}
+
+.ds-showcase-table__label {
+  vertical-align: middle;
+  padding: var(--space-8) var(--space-12);
+  width: 38%;
+  color: var(--color-content-secondary);
+}
+
+.ds-showcase-table__control {
+  vertical-align: middle;
+  padding: var(--space-8) var(--space-12);
+  min-width: 0;
+}
+
+.ds-showcase-table__control .ui-field {
+  max-width: 100%;
+}
+
+.ds-showcase-copy {
+  margin-top: var(--space-16);
+}
+
+.ds-showcase-pattern {
+  margin-top: var(--space-16);
+}
+
+.ds-showcase-pattern[hidden] {
+  display: none !important;
+}
+
+.ds-showcase-palette {
+  margin-top: var(--space-24);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-outline-tertiary);
+}
+
+.ds-showcase-palette summary {
+  cursor: pointer;
+  color: var(--color-content-secondary);
+  margin-bottom: var(--space-12);
+}
+
+.ds-showcase-checkbox {
+  display: inline-flex;
   align-items: center;
+  gap: var(--space-8);
+}
+
+.ds-showcase-checkbox input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-container-accent-blue);
+}
+
+.ds-showcase-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+}
+
+/* Modal dialog showcase: non-modal show() inside preview cage (demo only) */
+.ds-modal-showcase-preview .ds-showcase-preview__inner {
+  align-items: stretch;
+  min-height: min(70vh, 28rem);
+}
+
+.ds-modal-preview-cage {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  width: 100%;
+  min-height: min(70vh, 28rem);
+  max-height: 70vh;
+  overflow: auto;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+  box-sizing: border-box;
+}
+
+.ds-modal-preview-cage:has(.ds-modal-dialog-scoped[open])::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay-primary);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: var(--radius-low);
+}
+
+.ds-modal-preview-cage .ds-modal-dialog-scoped.ui-modal-dialog[open] {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  min-height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: var(--space-16);
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.ds-modal-preview-cage .ds-modal-dialog-scoped.ui-modal-dialog[open] .ui-modal-dialog__panel {
+  pointer-events: auto;
 }

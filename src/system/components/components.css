@@ -605,7 +605,7 @@ a.ui-btn[data-variant="accent"]:visited {
 .ui-radio {
   position: relative;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-8);
   cursor: pointer;
   user-select: none;
@@ -623,7 +623,6 @@ a.ui-btn[data-variant="accent"]:visited {
 .ui-radio__control {
   position: relative;
   flex-shrink: 0;
-  margin-top: var(--space-2);
   border-radius: var(--radius-highest);
   border: 2px solid var(--color-outline-primary);
   background: var(--color-surface-base);
@@ -702,7 +701,8 @@ a.ui-btn[data-variant="accent"]:visited {
 .ui-tooltip__surface {
   --popover-gap: var(--space-8);
   position: absolute;
-  z-index: 1;
+  /* Above cards / controls; below MenuDropdown fixed panels (320). */
+  z-index: 280;
   width: max-content;
   max-width: min(calc(var(--space-50) * 5), calc(100vw - var(--space-32)));
   padding: var(--space-8) var(--space-10);
@@ -999,6 +999,15 @@ a.ui-btn[data-variant="accent"]:visited {
   min-width: 0;
 }
 
+/* Scroll inside long menus; --menu-dropdown-max-height set on open (see menu-dropdown-placement.ts) */
+.ui-menu-dropdown__panel .ui-menu-list {
+  max-height: var(--menu-dropdown-max-height, min(62vh, 24rem));
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
 .ui-menu-dropdown {
   position: relative;
   display: inline-block;
@@ -1118,11 +1127,65 @@ a.ui-btn[data-variant="accent"]:visited {
 /* ——— Text field ——— */
 
 .ui-field {
+  /* Size L defaults; override [data-size='m'] for compact */
+  --ui-field-control-min-height: 52px;
+  --ui-field-pad-inline-body: var(--space-16);
+  --ui-field-pad-block-body: var(--space-16);
+  --ui-field-pad-float-block: var(--space-8);
+  --ui-field-pad-float-input-top: var(--space-16);
+  /* Idle floating label: label S; floated: label XS */
+  --ui-field-label-idle-font-size: var(--text-label-s-size);
+  --ui-field-label-idle-line-height: var(--text-label-s-line-height);
+  --ui-field-label-idle-font-weight: var(--text-label-s-weight-plain);
+  --ui-field-label-idle-letter-spacing: var(--text-label-s-letter-spacing);
+  --ui-field-input-line-height: var(--text-body-s-line-height);
+  /* Floated label (L: label XS) */
+  --ui-field-label-float-font-size: var(--text-label-xs-size);
+  --ui-field-label-float-line-height: var(--text-label-xs-line-height);
+  --ui-field-label-float-font-weight: var(--text-label-xs-weight-plain);
+  --ui-field-label-float-letter-spacing: var(--text-label-xs-letter-spacing);
+  --ui-field-icon-pad-inline: var(--space-16);
+  --ui-field-slot-pad-inline: var(--space-8);
+  --ui-field-control-gap: 0px;
+  --ui-field-focus-area-gap: 0px;
+  --ui-field-focus-area-pad-inline: 0px;
+  --ui-field-pad-multiline: var(--space-16);
+  --ui-field-multiline-cell-inline-pad: var(--space-16);
+  --ui-field-textarea-min-extra: var(--space-8);
+
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
   width: 100%;
   color: var(--color-content-primary);
+}
+
+.ui-field[data-size='m'] {
+  /* 4+4 + 12 (float band for label XXS) + 18 (body XS line) = 38px content; +2px border = 40px */
+  --ui-field-control-min-height: 40px;
+  --ui-field-pad-inline-body: 0px;
+  --ui-field-pad-block-body: var(--space-4);
+  --ui-field-pad-float-block: var(--space-4);
+  /* Slightly less than label-xxs line-height — tightens label↔input gap without changing text tokens */
+  --ui-field-pad-float-input-top: var(--space-12);
+  /* Idle floating label: label XS; floated: label XXS */
+  --ui-field-label-idle-font-size: var(--text-label-xs-size);
+  --ui-field-label-idle-line-height: var(--text-label-xs-line-height);
+  --ui-field-label-idle-font-weight: var(--text-label-xs-weight-plain);
+  --ui-field-label-idle-letter-spacing: var(--text-label-xs-letter-spacing);
+  --ui-field-input-line-height: var(--text-body-xs-line-height);
+  --ui-field-label-float-font-size: var(--text-label-xxs-size);
+  --ui-field-label-float-line-height: var(--text-label-xxs-line-height);
+  --ui-field-label-float-font-weight: var(--text-label-xxs-weight-plain);
+  --ui-field-label-float-letter-spacing: var(--text-label-xxs-letter-spacing);
+  --ui-field-icon-pad-inline: 0px;
+  --ui-field-slot-pad-inline: var(--space-6);
+  --ui-field-control-gap: var(--space-16);
+  --ui-field-focus-area-gap: var(--space-16);
+  --ui-field-focus-area-pad-inline: var(--space-16);
+  --ui-field-pad-multiline: var(--space-16);
+  --ui-field-multiline-cell-inline-pad: 0px;
+  --ui-field-textarea-min-extra: var(--space-4);
 }
 
 .ui-field[data-label='yes'] .ui-field__control {
@@ -1147,7 +1210,8 @@ a.ui-btn[data-variant="accent"]:visited {
   flex-direction: row;
   align-items: center;
   box-sizing: border-box;
-  min-height: 54px;
+  gap: var(--ui-field-control-gap);
+  min-height: var(--ui-field-control-min-height);
   border: 1px solid var(--color-outline-secondary);
   transition:
     border-color 0.12s ease,
@@ -1168,7 +1232,9 @@ a.ui-btn[data-variant="accent"]:visited {
   align-self: stretch;
   min-width: 0;
   margin: 0;
-  padding: 0;
+  padding-block: 0;
+  padding-inline: var(--ui-field-focus-area-pad-inline);
+  column-gap: var(--ui-field-focus-area-gap);
   cursor: text;
 }
 
@@ -1179,11 +1245,12 @@ a.ui-btn[data-variant="accent"]:visited {
   align-self: stretch;
   min-width: 0;
   margin: 0;
-  padding: 0;
+  padding-block: 0;
+  padding-inline: var(--ui-field-focus-area-pad-inline);
   cursor: text;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
-  column-gap: 0;
+  column-gap: var(--ui-field-focus-area-gap);
   row-gap: 0;
 }
 
@@ -1197,8 +1264,8 @@ a.ui-btn[data-variant="accent"]:visited {
   grid-column: 2;
   grid-row: 1;
   align-self: end;
-  padding-top: var(--space-16);
-  padding-inline: var(--space-16);
+  padding-top: var(--ui-field-pad-multiline);
+  padding-inline: var(--ui-field-multiline-cell-inline-pad);
   padding-bottom: 0;
 }
 
@@ -1207,8 +1274,8 @@ a.ui-btn[data-variant="accent"]:visited {
   grid-row: 2;
   align-self: start;
   padding-top: 0;
-  padding-bottom: var(--space-16);
-  padding-inline: var(--space-16);
+  padding-bottom: var(--ui-field-pad-multiline);
+  padding-inline: var(--ui-field-multiline-cell-inline-pad);
   margin-top: 0;
 }
 
@@ -1245,12 +1312,23 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-field__slot-start:has(*) {
-  padding-inline: var(--space-8);
+  padding-inline: var(--ui-field-slot-pad-inline);
 }
 
 .ui-field__icon-start:has(*),
 .ui-field__icon-end:has(*) {
-  padding-inline: var(--space-16);
+  padding-inline: var(--ui-field-icon-pad-inline);
+}
+
+/* L: pad icons only on the outer edge; body --ui-field-pad-inline-body supplies the 16px to text (avoids 32px icon↔text). */
+.ui-field[data-size='l'] .ui-field__icon-start:has(*) {
+  padding-inline-start: var(--ui-field-icon-pad-inline);
+  padding-inline-end: 0;
+}
+
+.ui-field[data-size='l'] .ui-field__icon-end:has(*) {
+  padding-inline-end: var(--ui-field-icon-pad-inline);
+  padding-inline-start: 0;
 }
 
 .ui-field__icon-start:has(*) .ui-icon,
@@ -1259,7 +1337,33 @@ a.ui-btn[data-variant="accent"]:visited {
 }
 
 .ui-field__slot-end:has(*) {
-  padding-inline: var(--space-8);
+  padding-inline: var(--ui-field-slot-pad-inline);
+}
+
+/* L: pad slots only on the outer edge; body supplies gap to text (avoids stacking with --ui-field-pad-inline-body). */
+.ui-field[data-size='l'] .ui-field__slot-start:has(*) {
+  padding-inline-start: var(--ui-field-slot-pad-inline);
+  padding-inline-end: 0;
+}
+
+.ui-field[data-size='l'] .ui-field__slot-end:has(*) {
+  padding-inline-end: var(--ui-field-slot-pad-inline);
+  padding-inline-start: 0;
+}
+
+/* M: symmetric inset from control border (slot-start: left + block; slot-end: right + block); inner spacing uses control gap + focus-area padding */
+.ui-field[data-size='m'] .ui-field__slot-start:has(*) {
+  padding-left: var(--space-6);
+  padding-right: 0;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
+.ui-field[data-size='m'] .ui-field__slot-end:has(*) {
+  padding-right: var(--space-6);
+  padding-left: 0;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
 }
 
 .ui-field__body {
@@ -1269,14 +1373,14 @@ a.ui-btn[data-variant="accent"]:visited {
   gap: 0;
   justify-content: center;
   min-width: 0;
-  padding-block: var(--space-16);
-  padding-inline: var(--space-16);
+  padding-block: var(--ui-field-pad-block-body);
+  padding-inline: var(--ui-field-pad-inline-body);
 }
 
 .ui-field[data-label='no'] .ui-field__body {
   flex-direction: row;
   align-items: center;
-  padding-block: var(--space-16);
+  padding-block: var(--ui-field-pad-block-body);
 }
 
 .ui-field[data-label='no'][data-multiline] .ui-field__body {
@@ -1284,15 +1388,15 @@ a.ui-btn[data-variant="accent"]:visited {
   align-items: stretch;
 }
 
-/* Floating label (single-line + label) — same outer height as no-label: 8+8 body + 16 input pad + 22 lh = 54 */
+/* Floating label (single-line + label) — L: 8+8+16+20=52; M: 4+4+12+18=38 content + border (+ optional -1px input margin) */
 .ui-field__body--float {
   position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
   min-width: 0;
-  padding-block: var(--space-8);
-  padding-inline: var(--space-16);
+  padding-block: var(--ui-field-pad-float-block);
+  padding-inline: var(--ui-field-pad-inline-body);
 }
 
 /*
@@ -1325,10 +1429,10 @@ a.ui-btn[data-variant="accent"]:visited {
     line-height 0.2s ease,
     font-weight 0.2s ease,
     letter-spacing 0.2s ease;
-  font-size: var(--text-body-m-size);
-  line-height: var(--text-body-m-line-height);
-  font-weight: var(--text-body-m-weight-plain);
-  letter-spacing: var(--text-body-m-letter-spacing);
+  font-size: var(--ui-field-label-idle-font-size);
+  line-height: var(--ui-field-label-idle-line-height);
+  font-weight: var(--ui-field-label-idle-font-weight);
+  letter-spacing: var(--ui-field-label-idle-letter-spacing);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1343,15 +1447,15 @@ a.ui-btn[data-variant="accent"]:visited {
   transform: translateY(-50%);
 }
 
-/* Floated: compact label in the input's padding-top band (same 16px as reserved text offset) */
+/* Floated: compact label in the input's padding-top band (matches reserved text offset) */
 .ui-field[data-floating='yes'] .ui-field__float-stack:focus-within .ui-field__label,
 .ui-field[data-floating='yes'] .ui-field__float-stack:has(.ui-field__input:not(:placeholder-shown)) .ui-field__label {
   top: 0;
   transform: translateY(0);
-  font-size: var(--text-label-xs-size);
-  line-height: var(--text-label-xs-line-height);
-  font-weight: var(--text-label-xs-weight-plain);
-  letter-spacing: var(--text-label-xs-letter-spacing);
+  font-size: var(--ui-field-label-float-font-size);
+  line-height: var(--ui-field-label-float-line-height);
+  font-weight: var(--ui-field-label-float-font-weight);
+  letter-spacing: var(--ui-field-label-float-letter-spacing);
 }
 
 .ui-field[data-floating='yes'] .ui-field__float-stack:not(:focus-within) .ui-field__input:placeholder-shown {
@@ -1392,8 +1496,7 @@ a.ui-btn[data-variant="accent"]:visited {
   border: none;
   background: transparent;
   color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
+  /* Do not use font: inherit — it overrides .text-body-s-plain / .text-body-xs-plain on the same element */
   outline: none;
   box-shadow: none;
   appearance: none;
@@ -1401,20 +1504,25 @@ a.ui-btn[data-variant="accent"]:visited {
   resize: none;
 }
 
-/* After .ui-field__input { padding: 0 } — 16px top pad matches no-label vertical budget with body--float 8+8 */
+/* After .ui-field__input { padding: 0 } — top pad matches no-label vertical budget with body--float */
 .ui-field[data-floating='yes'] .ui-field__float-stack .ui-field__input {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
   width: 100%;
   min-height: 0;
-  line-height: var(--text-body-m-line-height);
-  padding-top: var(--space-16);
+  line-height: var(--ui-field-input-line-height);
+  padding-top: var(--ui-field-pad-float-input-top);
   padding-bottom: 0;
 }
 
+/* M: optical tighten between floated label and first line (layout-only; tokens unchanged) */
+.ui-field[data-size='m'][data-floating='yes'] .ui-field__float-stack .ui-field__input {
+  margin-top: -1px;
+}
+
 .ui-field__textarea {
-  min-height: calc(1.5em + var(--space-8));
+  min-height: calc(1.5em + var(--ui-field-textarea-min-extra));
   resize: vertical;
   field-sizing: content;
 }
@@ -1490,6 +1598,11 @@ a.ui-btn[data-variant="accent"]:visited {
   gap: var(--space-6);
   margin: 0;
   color: var(--color-content-secondary);
+}
+
+/* Author `display: flex` wins over the HTML hidden attribute otherwise */
+.ui-field__helper[hidden] {
+  display: none !important;
 }
 
 .ui-field[data-tone='error'] .ui-field__helper {
@@ -1896,6 +2009,13 @@ a.ui-btn[data-variant="accent"]:visited {
   box-sizing: border-box;
   /* Outline icons use stroke currentColor — ensure contrast on surface-base */
   color: var(--color-content-primary);
+}
+
+/* [hidden] must win over display:flex (otherwise attribute is overridden at same specificity). */
+.ui-modal-dialog__hero[hidden] {
+  display: none !important;
+  padding: 0;
+  min-height: 0;
 }
 
 /* Empty hero (no slot content): collapse. Do not use :has() here — it can fail in some

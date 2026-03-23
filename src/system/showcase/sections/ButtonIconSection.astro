@@ -1,57 +1,365 @@
 ---
 import ButtonIcon from '../../components/ButtonIcon.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import Toggle from '../../components/Toggle.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+import ShowcaseAccentContainerRow from '../templates/ShowcaseAccentContainerRow.astro';
 import Icon from '../../icons/Icon.astro';
-import {
-  btnMatrixSizes,
-  btnMatrixVariants,
-  btnIconMatrixRows,
-  variantLabel,
-  iconSizeForButton,
-} from '../data';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+import ShowcaseIconMenuItems from '../templates/ShowcaseIconMenuItems.astro';
+import { getAllIconVariantMenuEntries, loadAllIconVariantInlineMap } from '../showcase-icons';
+import { accentTokenCssVar, accentTokenMenuLabel, btnMatrixVariants, btnMatrixSizes } from '../data';
+
+const iconVariantMenu = getAllIconVariantMenuEntries();
+const iconHtmlMap: Record<string, string> = loadAllIconVariantInlineMap();
+const defaultIconKey =
+  iconVariantMenu.find((e) => e.key === 'placeholder-outline')?.key ??
+  iconVariantMenu[0]?.key ??
+  'placeholder-outline';
+
+function parseIconVariantKey(key: string): { name: string; style: 'outline' | 'fill' } {
+  const m = /^(.*)-(outline|fill)$/.exec(key);
+  if (!m) return { name: 'placeholder', style: 'outline' };
+  return { name: m[1], style: m[2] as 'outline' | 'fill' };
+}
+
+const defaultIconParts = parseIconVariantKey(defaultIconKey);
+const defaultIconMenuLabel =
+  iconVariantMenu.find((e) => e.key === defaultIconKey)?.menuLabel ?? `icon-${defaultIconKey}`;
+const variantLabels = Object.fromEntries(btnMatrixVariants.map((v) => [v, v.charAt(0).toUpperCase() + v.slice(1)]));
+const ttPositions = ['top', 'bottom', 'left', 'right'] as const;
+const ttAligns = ['start', 'center', 'end'] as const;
 ---
 
-<section class="section" aria-labelledby="button-icon-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="button-icon-heading">ButtonIcon</h2>
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">ButtonIcon</h3>
-    <p class="text-body-s-plain subsection__hint">
-      Same grid as Button · icon-only (<code class="code-inline">icon-placeholder-outline</code>) · L uses icon M; M / S use
-      icon S · <code class="code-inline">label</code> is fixed for the matrix.
-    </p>
-    {
-      btnMatrixSizes.map((size) => (
-        <div class="demo-btn-subsection">
-          <h4 class="text-label-m-emphasized demo-btn-subsection__title">Size {size.toUpperCase()}</h4>
-          <div class="demo-matrix-wrap">
-            <div class="demo-matrix">
-              <div class="demo-matrix__row demo-matrix__row--head">
-                <span class="demo-matrix__corner" aria-hidden="true" />
-                {btnMatrixVariants.map((v) => (
-                  <span class="text-label-xs-plain demo-matrix__head">{variantLabel(v)}</span>
-                ))}
-              </div>
-              {btnIconMatrixRows.map((row) => (
-                <div class="demo-matrix__row">
-                  <span class="text-body-xs-plain demo-matrix__state">{row.label}</span>
-                  {btnMatrixVariants.map((v) => (
-                    <div class="demo-matrix__cell">
-                      {row.id === 'disabled' ? (
-                        <ButtonIcon size={size} variant={v} label="Action" disabled>
-                          <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
-                        </ButtonIcon>
-                      ) : (
-                        <ButtonIcon size={size} variant={v} label="Action">
-                          <Icon name="placeholder" style="outline" size={iconSizeForButton(size)} />
-                        </ButtonIcon>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ))
+<ComponentShowcasePage
+  title="ButtonIcon"
+  headingId="button-icon-heading"
+  description="Icon-only actions for toolbars and compact layouts. Always set an accessible label. Icon size follows the button size (L uses icon M; M and S use icon S). Optional Tooltip (off by default) adds supplementary copy with the same position and alignment options as the Tooltip component."
+>
+  <ShowcasePreviewCard>
+    <div class="ds-showcase-demo-root ds-btico-tt-preview-off" data-ds-demo="button-icon">
+      <ButtonIcon
+        variant="primary"
+        size="m"
+        label="Action"
+        type="button"
+        tooltip={true}
+        tooltipId="ds-btico-preview-tt"
+        tooltipText="Extra context for this action"
+        tooltipPosition="bottom"
+        tooltipAlign="center"
+      >
+        <Icon name={defaultIconParts.name} style={defaultIconParts.style} size="s" />
+      </ButtonIcon>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Variant">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="variant-label">{variantLabels.primary}</span>
+        </ButtonDropdown>
+        {
+          btnMatrixVariants.map((v) => (
+            <MenuItemAction type="button" data-ds-pick="variant" data-value={v}>
+              {variantLabels[v]}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Size">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="size-label">M</span>
+        </ButtonDropdown>
+        {
+          btnMatrixSizes.map((s) => (
+            <MenuItemAction type="button" data-ds-pick="size" data-value={s}>
+              {s.toUpperCase()}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Accessible label">
+      <ShowcaseTextFieldControl id="ds-btico-label" ariaLabel="Accessible label" placeholder="Action" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Show tooltip">
+      <div class="ds-showcase-toggle-wrap" data-ds-toggle="btico-tooltip">
+        <Toggle name="ds-btico-show-tooltip" />
+      </div>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Tooltip text">
+      <ShowcaseTextFieldControl
+        id="ds-btico-tt-text"
+        ariaLabel="Tooltip text"
+        placeholder="Help text"
+        value="Extra context for this action"
+      />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Tooltip position">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="btico-tt-pos-label">Bottom</span>
+        </ButtonDropdown>
+        {
+          ttPositions.map((p) => (
+            <MenuItemAction type="button" data-ds-pick="btico-tt-position" data-value={p}>
+              {p.charAt(0).toUpperCase() + p.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Tooltip align">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="btico-tt-align-label">Center</span>
+        </ButtonDropdown>
+        {
+          ttAligns.map((a) => (
+            <MenuItemAction type="button" data-ds-pick="btico-tt-align" data-value={a}>
+              {a.charAt(0).toUpperCase() + a.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Icon">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="icon-label">{defaultIconMenuLabel}</span>
+        </ButtonDropdown>
+        <ShowcaseIconMenuItems dataPick="icon" entries={iconVariantMenu} />
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseAccentContainerRow />
+    <ShowcaseControlRow label="Disabled">
+      <div class="ds-showcase-toggle-wrap" data-ds-toggle="disabled">
+        <Toggle name="ds-btico-disabled" />
+      </div>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="ButtonIcon" />
+</ComponentShowcasePage>
+
+<script is:inline define:vars={{ iconHtmlMap, defaultIconKey }}>
+  globalThis['__dsShowcaseBticoIconHtmlMap'] = iconHtmlMap;
+  globalThis['__dsShowcaseBticoDefaultIconKey'] = defaultIconKey;
+</script>
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { accentContainerTokens, accentTokenCssVar, accentTokenMenuLabel } from '../data';
+  import { bindFieldClear, getShowcasePage, takeInjectedIconHtmlMap } from '../showcase-ui';
+
+  type AccentTok = (typeof accentContainerTokens)[number];
+
+  /** Preview root must live under this node for control queries (tag-agnostic: class only). */
+  function resolveShowcaseScope(previewRoot: HTMLElement): HTMLElement | null {
+    const fromClosest = previewRoot.closest('.ds-showcase-page');
+    if (fromClosest) return fromClosest;
+
+    const page = getShowcasePage();
+    if (page?.contains(previewRoot)) return page;
+
+    return null;
+  }
+
+  function init() {
+    const root = document.querySelector<HTMLElement>('[data-ds-demo="button-icon"]');
+    if (!root) return;
+
+    const scope = resolveShowcaseScope(root);
+    if (!scope) {
+      if (import.meta.env.DEV) {
+        console.error(
+          '[ButtonIcon showcase] Could not resolve .ds-showcase-page scope for preview root',
+          root,
+        );
+      }
+      return;
     }
-  </div>
-</section>
+
+    bindFieldClear(scope);
+    const btn = root.querySelector('.ui-btn-icon');
+    const labelInput = document.getElementById('ds-btico-label') as HTMLInputElement | null;
+    const iconEl = btn?.querySelector('.ui-icon') as HTMLElement | null;
+    const variantLabel = scope.querySelector('[data-ds-dd="variant-label"]');
+    const sizeLabel = scope.querySelector('[data-ds-dd="size-label"]');
+    const iconLabel = scope.querySelector('[data-ds-dd="icon-label"]');
+    const disabledCb = scope.querySelector<HTMLInputElement>(
+      '[data-ds-toggle="disabled"] input[role="switch"]',
+    );
+    const accentRow = scope.querySelector<HTMLTableRowElement>('tr.js-ds-accent-token-row');
+    const accentLabel = scope.querySelector('[data-ds-dd="accent-token-label"]');
+    const surface = root.querySelector<HTMLElement>('[role="tooltip"]');
+    const ttToggle = scope.querySelector<HTMLInputElement>(
+      '[data-ds-toggle="btico-tooltip"] input[role="switch"]',
+    );
+    const ttTextInput = document.getElementById('ds-btico-tt-text') as HTMLInputElement | null;
+    const ttPosLabel = scope.querySelector('[data-ds-dd="btico-tt-pos-label"]');
+    const ttAlignLabel = scope.querySelector('[data-ds-dd="btico-tt-align-label"]');
+    if (!root || !btn || !labelInput || !iconEl) return;
+
+    const map: Record<string, string> = { ...takeInjectedIconHtmlMap('__dsShowcaseBticoIconHtmlMap') };
+
+    const serverDefaultIconKey = (globalThis as Record<string, unknown>)['__dsShowcaseBticoDefaultIconKey'];
+    const initialIconKey =
+      typeof serverDefaultIconKey === 'string' ? serverDefaultIconKey : 'placeholder-outline';
+
+    let variant = 'primary';
+    let size = 'm';
+    let iconKey = initialIconKey;
+    let accentToken: AccentTok = 'container-accent-blue';
+    let ttPos: 'top' | 'bottom' | 'left' | 'right' = 'bottom';
+    let ttAlign: 'start' | 'center' | 'end' = 'center';
+
+    function iconSizeForBtn(s: string) {
+      return s === 'l' ? 'm' : 's';
+    }
+
+    function syncTooltipUi() {
+      const on = Boolean(ttToggle?.checked);
+      root.classList.toggle('ds-btico-tt-preview-off', !on);
+      if (surface) {
+        surface.setAttribute('data-popover-position', ttPos);
+        surface.setAttribute('data-popover-align', ttAlign);
+        surface.textContent = ttTextInput?.value?.trim() || 'Extra context for this action';
+      }
+      if (btn) {
+        if (on) btn.setAttribute('aria-describedby', 'ds-btico-preview-tt');
+        else btn.removeAttribute('aria-describedby');
+      }
+      if (ttPosLabel) ttPosLabel.textContent = ttPos.charAt(0).toUpperCase() + ttPos.slice(1);
+      if (ttAlignLabel) ttAlignLabel.textContent = ttAlign.charAt(0).toUpperCase() + ttAlign.slice(1);
+    }
+
+    function apply() {
+      btn.setAttribute('data-variant', variant);
+      btn.setAttribute('data-size', size);
+      btn.setAttribute('aria-label', labelInput.value.trim() || 'Action');
+      (btn as HTMLButtonElement).disabled = Boolean(disabledCb?.checked);
+      if (variantLabel) variantLabel.textContent = variant.charAt(0).toUpperCase() + variant.slice(1);
+      if (sizeLabel) sizeLabel.textContent = size.toUpperCase();
+      if (iconLabel) iconLabel.textContent = `icon-${iconKey}`;
+      if (accentRow) accentRow.hidden = variant !== 'accent';
+      if (variant === 'accent') {
+        btn.style.setProperty('background', accentTokenCssVar(accentToken));
+      } else {
+        btn.style.removeProperty('background');
+      }
+      if (accentLabel) accentLabel.textContent = accentTokenMenuLabel(accentToken);
+      const html = map[iconKey] || '';
+      const isz = iconSizeForBtn(size);
+      if (html) {
+        iconEl.setAttribute('data-size', isz);
+        iconEl.setAttribute('data-style', iconKey.endsWith('-fill') ? 'fill' : 'outline');
+        iconEl.innerHTML = html;
+      } else {
+        iconEl.innerHTML = '';
+      }
+      syncTooltipUi();
+    }
+
+    scope.querySelectorAll('[data-ds-pick="variant"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v) {
+          variant = v;
+          apply();
+        }
+      });
+    });
+    scope.querySelectorAll('[data-ds-pick="size"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v) {
+          size = v;
+          apply();
+        }
+      });
+    });
+    scope.querySelectorAll('[data-ds-pick="icon"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v) {
+          iconKey = v;
+          apply();
+        }
+      });
+    });
+    scope.querySelectorAll('[data-ds-pick="accent-token"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (v) {
+          accentToken = v as AccentTok;
+          apply();
+        }
+      });
+    });
+    labelInput.addEventListener('input', apply);
+    disabledCb?.addEventListener('change', apply);
+    ttToggle?.addEventListener('change', apply);
+    ttTextInput?.addEventListener('input', apply);
+    scope.querySelectorAll('[data-ds-pick="btico-tt-position"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as typeof ttPos | undefined;
+        if (v === 'top' || v === 'bottom' || v === 'left' || v === 'right') {
+          ttPos = v;
+          apply();
+        }
+      });
+    });
+    scope.querySelectorAll('[data-ds-pick="btico-tt-align"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as typeof ttAlign | undefined;
+        if (v === 'start' || v === 'center' || v === 'end') {
+          ttAlign = v;
+          apply();
+        }
+      });
+    });
+    apply();
+
+    scope.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const tooltipOn = Boolean(ttToggle?.checked);
+      const text = buildCopyPrompt({
+        component: 'ButtonIcon',
+        props: {
+          variant,
+          size,
+          label: labelInput.value.trim() || 'Action',
+          icon: `icon-${iconKey}.svg`,
+          disabled: Boolean(disabledCb?.checked),
+          ...(variant === 'accent' ? { accentContainer: accentToken } : {}),
+          ...(tooltipOn
+            ? {
+                tooltip: true,
+                tooltipText: ttTextInput?.value?.trim() || 'Extra context for this action',
+                tooltipPosition: ttPos,
+                tooltipAlign: ttAlign,
+              }
+            : { tooltip: false }),
+        },
+        note: 'Set tooltip true with tooltipText, tooltipPosition, and tooltipAlign to match Tooltip; omit or set tooltip false for icon-only.',
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

@@ -1,29 +1,126 @@
 ---
 import Radio from '../../components/Radio.astro';
-import Inline from '../../primitives/Inline.astro';
-import Stack from '../../primitives/Stack.astro';
+import Toggle from '../../components/Toggle.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+
+const sizes = ['l', 'm', 's'] as const;
 ---
 
-<section class="section" aria-labelledby="radio-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="radio-heading">Radio</h2>
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Radio</h3>
-    <p class="text-body-s-plain subsection__hint">
-      Grouped with a shared <code class="code-inline">name</code> · sizes L / M / S.
-    </p>
-    <Stack gap="space-12">
-      <fieldset class="ds-fieldset">
-        <legend class="text-label-s-plain ds-fieldset__legend">Option (M)</legend>
-        <Stack gap="space-8">
-          <Radio name="demo-radio-m" value="a" size="m" checked>Option A</Radio>
-          <Radio name="demo-radio-m" value="b" size="m">Option B</Radio>
-        </Stack>
+<ComponentShowcasePage
+  title="Radio"
+  headingId="radio-heading"
+  description="Single choice within a group. Share the same name attribute across radios; size maps to control and label typography."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="radio">
+      <fieldset class="ds-fieldset ds-radio-demo-stack" style="margin:0;padding:0;border:none;">
+        <legend class="text-label-xs-plain ds-fieldset__legend">Demo</legend>
+        <Radio name="ds-radio-demo" value="a" size="m" checked>Option A</Radio>
+        <Radio name="ds-radio-demo" value="b" size="m">Option B</Radio>
+        <Radio name="ds-radio-demo" value="c" size="m">Option C</Radio>
       </fieldset>
-      <Inline gap="space-16" align="center">
-        <Radio name="demo-radio-sizes" value="l" size="l" checked>Large</Radio>
-        <Radio name="demo-radio-sizes" value="m" size="m">Medium</Radio>
-        <Radio name="demo-radio-sizes" value="s" size="s">Small</Radio>
-      </Inline>
-    </Stack>
-  </div>
-</section>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Size">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="size-label">M</span>
+        </ButtonDropdown>
+        {
+          sizes.map((s) => (
+            <MenuItemAction type="button" data-ds-pick="size" data-value={s}>
+              {s.toUpperCase()}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Label prefix">
+      <ShowcaseTextFieldControl id="ds-radio-label" ariaLabel="Label prefix for options A–C" placeholder="Option" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Disabled">
+      <div class="ds-showcase-toggle-wrap" data-ds-toggle="disabled">
+        <Toggle name="ds-radio-disabled-ctrl" />
+      </div>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Radio" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="radio"]');
+    const radios = root?.querySelectorAll<HTMLElement>('.ui-radio');
+    const inputs = root?.querySelectorAll<HTMLInputElement>('.ui-radio__input');
+    const labelEls = root?.querySelectorAll('.ui-radio__label');
+    const textInput = document.getElementById('ds-radio-label') as HTMLInputElement | null;
+    const sizeLabel = page?.querySelector('[data-ds-dd="size-label"]');
+    const disabledCb = page?.querySelector<HTMLInputElement>(
+      '[data-ds-toggle="disabled"] input[role="switch"]',
+    );
+    if (!page || !root || !radios?.length || !inputs?.length || !labelEls?.length || !textInput) return;
+    bindFieldClear(page);
+
+    let size: 'l' | 'm' | 's' = 'm';
+
+    function apply() {
+      const base = textInput.value.trim() || 'Option';
+      labelEls[0].textContent = `${base} A`;
+      labelEls[1].textContent = `${base} B`;
+      labelEls[2].textContent = `${base} C`;
+      radios.forEach((radio) => radio.setAttribute('data-size', size));
+      if (sizeLabel) sizeLabel.textContent = size.toUpperCase();
+      inputs.forEach((input) => {
+        input.disabled = Boolean(disabledCb?.checked);
+      });
+    }
+
+    page.querySelectorAll('[data-ds-pick="size"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as (typeof sizes)[number] | undefined;
+        if (v) {
+          size = v;
+          apply();
+        }
+      });
+    });
+    textInput.addEventListener('input', apply);
+    disabledCb?.addEventListener('change', apply);
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Radio',
+        props: {
+          size,
+          labelPrefix: textInput.value.trim() || 'Option',
+          disabled: Boolean(disabledCb?.checked),
+          name: 'demo-radio-group',
+        },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

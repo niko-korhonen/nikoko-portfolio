@@ -1,0 +1,166 @@
+---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+
+const positions = ['top', 'bottom', 'left', 'right'] as const;
+const aligns = ['start', 'center', 'end'] as const;
+---
+
+<ComponentShowcasePage
+  title="MenuDropdown"
+  headingId="menu-dropdown-heading"
+  description="Anchored menu surface: slot a trigger (commonly ButtonDropdown) and MenuItemAction rows. The panel uses ElevatedPanel and MenuList; placement is driven by data-popover-position and data-popover-align on the menu panel (see placement model in src/system/placement.ts)."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="menu-dropdown" class="ds-md-showcase-preview-inner">
+      <MenuDropdown position="bottom" align="start">
+        <ButtonDropdown slot="trigger" variant="secondary" size="m" type="button">
+          <span data-ds-md-trigger-label>Actions</span>
+        </ButtonDropdown>
+        <MenuItemAction type="button">First action</MenuItemAction>
+        <MenuItemAction type="button">Second action</MenuItemAction>
+        <MenuItemAction type="button">Third action</MenuItemAction>
+      </MenuDropdown>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Position">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="md-pos-label">Bottom</span>
+        </ButtonDropdown>
+        {
+          positions.map((p) => (
+            <MenuItemAction type="button" data-ds-pick="md-position" data-value={p}>
+              {p.charAt(0).toUpperCase() + p.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Align">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="md-align-label">Start</span>
+        </ButtonDropdown>
+        {
+          aligns.map((a) => (
+            <MenuItemAction type="button" data-ds-pick="md-align" data-value={a}>
+              {a.charAt(0).toUpperCase() + a.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Trigger label">
+      <ShowcaseTextFieldControl id="ds-md-label" ariaLabel="Trigger button label" placeholder="Actions" value="Actions" />
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="MenuDropdown" />
+</ComponentShowcasePage>
+
+<style>
+  .ds-md-showcase-preview-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 12rem;
+    width: 100%;
+    padding: var(--space-24);
+    box-sizing: border-box;
+  }
+</style>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage } from '../showcase-ui';
+
+  type Position = 'top' | 'bottom' | 'left' | 'right';
+  type Align = 'start' | 'center' | 'end';
+
+  const posTitles: Record<Position, string> = {
+    top: 'Top',
+    bottom: 'Bottom',
+    left: 'Left',
+    right: 'Right',
+  };
+  const alignTitles: Record<Align, string> = {
+    start: 'Start',
+    center: 'Center',
+    end: 'End',
+  };
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="menu-dropdown"]');
+    const panel = root?.querySelector<HTMLElement>('[data-menu-dropdown-panel]');
+    const triggerLabelSpan = root?.querySelector('[data-ds-md-trigger-label]');
+    const labelInput = document.getElementById('ds-md-label') as HTMLInputElement | null;
+    const posDd = page?.querySelector('[data-ds-dd="md-pos-label"]');
+    const alignDd = page?.querySelector('[data-ds-dd="md-align-label"]');
+    if (!page || !root || !panel || !triggerLabelSpan || !labelInput) return;
+
+    bindFieldClear(page);
+
+    let position: Position = 'bottom';
+    let align: Align = 'start';
+
+    function apply() {
+      panel.setAttribute('data-popover-position', position);
+      panel.setAttribute('data-popover-align', align);
+      triggerLabelSpan.textContent = labelInput.value.trim() || 'Actions';
+      if (posDd) posDd.textContent = posTitles[position];
+      if (alignDd) alignDd.textContent = alignTitles[align];
+    }
+
+    page.querySelectorAll('[data-ds-pick="md-position"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as Position | undefined;
+        if (v && (v === 'top' || v === 'bottom' || v === 'left' || v === 'right')) {
+          position = v;
+          apply();
+        }
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="md-align"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as Align | undefined;
+        if (v && (v === 'start' || v === 'center' || v === 'end')) {
+          align = v;
+          apply();
+        }
+      });
+    });
+    labelInput.addEventListener('input', apply);
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'MenuDropdown',
+        props: {
+          position,
+          align,
+          triggerLabel: labelInput.value.trim() || 'Actions',
+        },
+        note: 'Use slot name="trigger" for ButtonDropdown or another control; children become menu items (e.g. MenuItemAction).',
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

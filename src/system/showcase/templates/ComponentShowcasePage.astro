@@ -1,0 +1,31 @@
+---
+/**
+ * Standard shell for /system/:slug pages: title, description, then slots for
+ * preview + controls + optional footer (e.g. copy prompt).
+ *
+ * New component workflow: (1) add component under src/system/components/
+ * (2) add nav item in nav.ts when ready (3) create *Section.astro using this
+ * template + preview + table + client script (4) register in demo-registry.ts
+ */
+interface Props {
+  title: string;
+  /** Optional extra import line under the title (e.g. multiple primitives). Omit when title is the component name. */
+  codeName?: string;
+  description: string;
+  headingId: string;
+  class?: string;
+}
+
+const { title, codeName, description, headingId, class: className = '' } = Astro.props;
+---
+
+<section class:list={['ds-showcase-page', 'section', className]} aria-labelledby={headingId}>
+  <h2 class="text-headline-s-plain section__title" id={headingId}>
+    {title}
+  </h2>
+  {codeName ? <p class="text-code-xs-plain ds-showcase-page__code">{codeName}</p> : null}
+  <p class="text-body-xs-plain ds-showcase-page__lede">
+    {description}
+  </p>
+  <slot />
+</section>

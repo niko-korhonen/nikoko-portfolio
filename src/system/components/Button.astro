@@ -12,6 +12,8 @@ interface Props {
   href?: string;
   /** When used inside ModalDialog (button only), closes the dialog on click. */
   dialogClose?: boolean;
+  /** Showcase text-field Clear: target input id. */
+  'data-ds-clear'?: string;
 }
 
 const {
@@ -22,6 +24,7 @@ const {
   class: className = '',
   href,
   dialogClose = false,
+  'data-ds-clear': dataDsClear,
 } = Astro.props;
 
 const typoClass =
@@ -32,7 +35,13 @@ const btnClass = ['ui-btn', 'ui-focus-ring', typoClass, className].filter(Boolea
 
 {
   href ? (
-    <a class={btnClass} href={href} data-variant={variant} data-size={size}>
+    <a
+      class={btnClass}
+      href={href}
+      data-variant={variant}
+      data-size={size}
+      {...(dataDsClear !== undefined ? { 'data-ds-clear': dataDsClear } : {})}
+    >
       <span class="ui-btn__icon">
         <slot name="icon-start" />
       </span>
@@ -51,6 +60,7 @@ const btnClass = ['ui-btn', 'ui-focus-ring', typoClass, className].filter(Boolea
       data-variant={variant}
       data-size={size}
       {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
+      {...(dataDsClear !== undefined ? { 'data-ds-clear': dataDsClear } : {})}
     >
       <span class="ui-btn__icon">
         <slot name="icon-start" />

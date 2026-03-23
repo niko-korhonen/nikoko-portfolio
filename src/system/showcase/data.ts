@@ -159,11 +159,11 @@ export const typoCategories: TypoCat[] = [
     name: 'code',
     label: 'Code',
     sizes: [
-      { classSuffix: 'code-l', sample: 'const x = 1' },
-      { classSuffix: 'code-m', sample: 'const x = 1' },
-      { classSuffix: 'code-s', sample: 'const x = 1' },
-      { classSuffix: 'code-xs', sample: 'const x = 1' },
-      { classSuffix: 'code-xxs', sample: 'const x = 1' },
+      { classSuffix: 'code-l', sample: 'Code L' },
+      { classSuffix: 'code-m', sample: 'Code M' },
+      { classSuffix: 'code-s', sample: 'Code S' },
+      { classSuffix: 'code-xs', sample: 'Code XS' },
+      { classSuffix: 'code-xxs', sample: 'Code XXS' },
     ],
   },
 ];
@@ -192,6 +192,32 @@ export const spacingTokens = [
   'space-68',
   'space-74',
 ] as const;
+
+/** Tokens under `--color-container-accent-*` for accent variant showcase controls */
+export const accentContainerTokens = [
+  'container-accent-blue',
+  'container-accent-purple',
+  'container-accent-positive',
+  'container-accent-warning',
+  'container-accent-negative',
+  'container-accent-subtle-blue',
+  'container-accent-subtle-purple',
+  'container-accent-subtle-positive',
+  'container-accent-subtle-warning',
+  'container-accent-subtle-negative',
+] as const;
+
+export function accentTokenCssVar(token: (typeof accentContainerTokens)[number]): string {
+  return `var(--color-${token})`;
+}
+
+export function accentTokenMenuLabel(token: (typeof accentContainerTokens)[number]): string {
+  return token
+    .replace(/^container-accent-/, '')
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 export const btnMatrixVariants = ['primary', 'secondary', 'ghost', 'accent'] as const;
 export const btnMatrixSizes = ['l', 'm', 's'] as const;
@@ -234,6 +260,29 @@ export function variantLabel(v: string) {
 
 export function iconSizeForButton(size: 'l' | 'm' | 's'): 'm' | 's' {
   return size === 'l' ? 'm' : 's';
+}
+
+/** Grouped icon names for showcase picker (outline and/or fill assets). */
+export type IconBaseCatalogEntry = {
+  name: string;
+  hasOutline: boolean;
+  hasFill: boolean;
+};
+
+export function buildIconBaseCatalog(
+  entries: { name: string; style: 'fill' | 'outline' }[],
+): IconBaseCatalogEntry[] {
+  const map = new Map<string, { outline: boolean; fill: boolean }>();
+  for (const e of entries) {
+    const cur = map.get(e.name) ?? { outline: false, fill: false };
+    if (e.style === 'outline') cur.outline = true;
+    else cur.fill = true;
+    map.set(e.name, cur);
+  }
+  return [...map.entries()]
+    .filter(([, v]) => v.outline || v.fill)
+    .map(([name, v]) => ({ name, hasOutline: v.outline, hasFill: v.fill }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function loadAllIconEntries(): { name: string; style: 'fill' | 'outline' }[] {

@@ -1,0 +1,20 @@
+---
+import Button from '../../components/Button.astro';
+import TextField from '../../components/TextField.astro';
+
+interface Props {
+  id: string;
+  /** Accessible name (no visible floating label). */
+  ariaLabel: string;
+  placeholder?: string;
+  value?: string;
+}
+
+const { id, ariaLabel, placeholder = '', value } = Astro.props;
+---
+
+<TextField size="m" variant="filled" id={id} ariaLabel={ariaLabel} placeholder={placeholder} value={value}>
+  <Button slot="slot-end" type="button" variant="primary" size="s" class="js-ds-field-clear" data-ds-clear={id}>
+    Clear
+  </Button>
+</TextField>

@@ -1,89 +1,190 @@
 ---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
 import Cluster from '../../primitives/Cluster.astro';
 import Container from '../../primitives/Container.astro';
 import Inline from '../../primitives/Inline.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
 import Section from '../../primitives/Section.astro';
 import Stack from '../../primitives/Stack.astro';
 import Surface from '../../primitives/Surface.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+
+const patterns = [
+  { id: 'container', label: 'Container' },
+  { id: 'stack', label: 'Stack' },
+  { id: 'inline', label: 'Inline' },
+  { id: 'cluster', label: 'Cluster' },
+  { id: 'section', label: 'Section' },
+  { id: 'surface', label: 'Surface' },
+  { id: 'composition', label: 'Composition' },
+] as const;
 ---
 
-<section class="section" aria-labelledby="layout-primitives-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="layout-primitives-heading">Layout primitives</h2>
-  <p class="text-body-s-plain section__note">
-    Structural building blocks from <code class="code-inline">src/system/primitives/</code>. Pass spacing token
-    names (e.g. <code class="code-inline">gap=&quot;space-8&quot;</code>, <code class="code-inline">padding=&quot;space-16&quot;</code>).
-  </p>
+<ComponentShowcasePage
+  title="Layout"
+  codeName="Container, Stack, Inline, Cluster, Section, Surface"
+  headingId="layout-primitives-heading"
+  description="Structural building blocks from src/system/primitives: spacing token props for gap and padding, optional surfaces, and composition patterns for pages and panels."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="layout" style="width:100%;">
+      <div class="ds-layout-tier" data-layout-pattern="container">
+        <Container size="default">
+          <div class="lp-demo-cell text-label-s-plain">size=&quot;default&quot; (max: --layout-container-max)</div>
+        </Container>
+      </div>
 
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Container</h3>
-    <p class="text-body-s-plain subsection__hint">Centers content, horizontal padding, max width.</p>
-    <Stack gap="space-8">
-      <Container size="default">
-        <div class="lp-demo-cell text-label-s-plain">size=&quot;default&quot; (max: --layout-container-max)</div>
-      </Container>
-      <Container size="wide">
-        <div class="lp-demo-cell text-label-s-plain">size=&quot;wide&quot; (max: --layout-container-max-wide)</div>
-      </Container>
-    </Stack>
-  </div>
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="stack">
+        <Stack gap="space-8" align="stretch">
+          <div class="lp-demo-cell text-body-s-plain">Row one</div>
+          <div class="lp-demo-cell text-body-s-plain">Row two</div>
+          <div class="lp-demo-cell text-body-s-plain">Row three</div>
+        </Stack>
+      </div>
 
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Stack</h3>
-    <p class="text-body-s-plain subsection__hint">Vertical flex; gap and align-items.</p>
-    <Stack gap="space-8" align="stretch">
-      <div class="lp-demo-cell text-body-s-plain">Row one</div>
-      <div class="lp-demo-cell text-body-s-plain">Row two</div>
-      <div class="lp-demo-cell text-body-s-plain">Row three</div>
-    </Stack>
-  </div>
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="inline">
+        <Inline gap="space-8" align="center" justify="between">
+          <span class="text-label-s-plain lp-demo-pill">Left</span>
+          <span class="text-label-s-plain lp-demo-pill">Center area</span>
+          <span class="text-label-s-plain lp-demo-pill">Right</span>
+        </Inline>
+      </div>
 
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Inline</h3>
-    <p class="text-body-s-plain subsection__hint">Horizontal row; gap, align, justify.</p>
-    <Inline gap="space-8" align="center" justify="between">
-      <span class="text-label-s-plain lp-demo-pill">Left</span>
-      <span class="text-label-s-plain lp-demo-pill">Center area</span>
-      <span class="text-label-s-plain lp-demo-pill">Right</span>
-    </Inline>
-  </div>
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="cluster">
+        <Cluster gap="space-8" align="center">
+          <span class="text-label-s-plain lp-demo-pill">One</span>
+          <span class="text-label-s-plain lp-demo-pill">Two</span>
+          <span class="text-label-s-plain lp-demo-pill">Three</span>
+          <span class="text-label-s-plain lp-demo-pill">Four</span>
+          <span class="text-label-s-plain lp-demo-pill">Five</span>
+        </Cluster>
+      </div>
 
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Cluster</h3>
-    <p class="text-body-s-plain subsection__hint">Wraps items to new rows.</p>
-    <Cluster gap="space-8" align="center">
-      <span class="text-label-s-plain lp-demo-pill">One</span>
-      <span class="text-label-s-plain lp-demo-pill">Two</span>
-      <span class="text-label-s-plain lp-demo-pill">Three</span>
-      <span class="text-label-s-plain lp-demo-pill">Four</span>
-      <span class="text-label-s-plain lp-demo-pill">Five</span>
-    </Cluster>
-  </div>
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="section">
+        <Section padding="space-16" surface="elevation">
+          <p class="text-body-s-plain">padding=&quot;space-16&quot; · surface=&quot;elevation&quot;</p>
+        </Section>
+      </div>
 
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Section</h3>
-    <p class="text-body-s-plain subsection__hint">Padding and optional surface background.</p>
-    <Section padding="space-16" surface="elevation">
-      <p class="text-body-s-plain">padding=&quot;space-16&quot; · surface=&quot;elevation&quot;</p>
-    </Section>
-  </div>
-
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Surface</h3>
-    <p class="text-body-s-plain subsection__hint">Surface token, padding, radius.</p>
-    <Surface variant="floating" padding="space-16" radius="medium">
-      <p class="text-body-s-plain">variant=&quot;floating&quot; · padding=&quot;space-16&quot; · radius=&quot;medium&quot;</p>
-    </Surface>
-  </div>
-
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Composition</h3>
-    <p class="text-body-s-plain subsection__hint">Container → Stack → Surface.</p>
-    <Container size="default">
-      <Stack gap="space-16">
-        <Surface variant="elevation" padding="space-8" radius="low">
-          <p class="text-body-s-plain">Nested example</p>
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="surface">
+        <Surface variant="floating" padding="space-16" radius="medium">
+          <p class="text-body-s-plain">variant=&quot;floating&quot; · padding=&quot;space-16&quot; · radius=&quot;medium&quot;</p>
         </Surface>
-      </Stack>
-    </Container>
-  </div>
-</section>
+      </div>
+
+      <div class="ds-layout-tier ds-layout-tier--hidden" data-layout-pattern="composition">
+        <Container size="default">
+          <Stack gap="space-16">
+            <Surface variant="elevation" padding="space-8" radius="low">
+              <p class="text-body-s-plain">Nested example</p>
+            </Surface>
+          </Stack>
+        </Container>
+      </div>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Pattern">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="layout-pattern-label">Container</span>
+        </ButtonDropdown>
+        {
+          patterns.map((p) => (
+            <MenuItemAction type="button" data-ds-pick="layout-pattern" data-value={p.id}>
+              {p.label}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Layout" />
+</ComponentShowcasePage>
+
+<style>
+  .ds-layout-tier--hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="layout"]');
+    const label = page?.querySelector('[data-ds-dd="layout-pattern-label"]');
+    if (!page || !root) return;
+
+    let pattern:
+      | 'container'
+      | 'stack'
+      | 'inline'
+      | 'cluster'
+      | 'section'
+      | 'surface'
+      | 'composition' = 'container';
+
+    const titles: Record<string, string> = {
+      container: 'Container',
+      stack: 'Stack',
+      inline: 'Inline',
+      cluster: 'Cluster',
+      section: 'Section',
+      surface: 'Surface',
+      composition: 'Composition',
+    };
+
+    function show() {
+      root.querySelectorAll('[data-layout-pattern]').forEach((el) => {
+        const p = (el as HTMLElement).dataset.layoutPattern;
+        (el as HTMLElement).classList.toggle('ds-layout-tier--hidden', p !== pattern);
+      });
+      if (label) label.textContent = titles[pattern] ?? pattern;
+    }
+
+    page.querySelectorAll('[data-ds-pick="layout-pattern"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as
+          | 'container'
+          | 'stack'
+          | 'inline'
+          | 'cluster'
+          | 'section'
+          | 'surface'
+          | 'composition'
+          | undefined;
+        if (v) {
+          pattern = v;
+          show();
+        }
+      });
+    });
+    show();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Layout',
+        props: { pattern },
+        note: 'Import from src/system/primitives; pass gap, padding, align, justify, surface, variant, radius as needed.',
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

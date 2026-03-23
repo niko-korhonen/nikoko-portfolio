@@ -1,76 +1,260 @@
 ---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
 import SegmentControl from '../../components/SegmentControl.astro';
 import Icon from '../../icons/Icon.astro';
-import { iconSizes, iconGridSegmentItems, loadAllIconEntries } from '../data';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import Toggle from '../../components/Toggle.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+import { buildIconBaseCatalog, iconSizes, loadAllIconEntries } from '../data';
 
 const allIconEntries = loadAllIconEntries();
+const iconBaseCatalog = buildIconBaseCatalog(allIconEntries);
+const defaultCatalogEntry = iconBaseCatalog[0] ?? {
+  name: 'placeholder',
+  hasOutline: true,
+  hasFill: false,
+};
 ---
 
-<section class="section" aria-labelledby="icons-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="icons-heading">Icon sizes</h2>
-  <p class="text-body-s-plain section__note">
-    Same SVG scaled with <code class="code-inline">width</code> / <code class="code-inline">height</code> →
-    <code class="code-inline">var(--icon-*)</code>
-    · outline icons use <code class="code-inline">1.5px</code> strokes with{' '}
-    <code class="code-inline">vector-effect: non-scaling-stroke</code> (constant on screen)
-  </p>
-  <ul class="icon-row">
-    {
-      iconSizes.map(({ key, label }) => (
-        <li class="icon-item">
-          <Icon name="placeholder" style="outline" size={key} />
-          <span class="text-body-xs-plain">{`--icon-${key}`} ({label})</span>
-        </li>
-      ))
-    }
-  </ul>
+<ComponentShowcasePage
+  title="Icon"
+  headingId="icons-heading"
+  description="Inline SVG icons with outline and fill styles. Sizes map to icon tokens; outline strokes stay visually consistent via non-scaling stroke. Pick a name and size to preview; the grid below lists every asset in public/icons."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="icon-preview" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-12);">
+      <span data-ds-icon-slot>
+        <Icon name={defaultCatalogEntry.name} style="outline" size="m" />
+      </span>
+      <code class="text-code-xs-plain" data-ds-icon-meta>placeholder · outline · M</code>
+    </div>
+  </ShowcasePreviewCard>
 
-  <h3 class="text-label-l-emphasized icon-library-heading">All icons</h3>
-  <p class="text-body-s-plain section__note icon-library-note">
-    Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the control
-    below to resize the grid.
-  </p>
-  <div class="subsection icon-sizes-toolbar">
-    <SegmentControl
-      class="js-icon-size-segment"
-      semantic="radiogroup"
-      size="m"
-      ariaLabel="Grid icon size"
-      defaultValue="l"
-      items={[...iconGridSegmentItems]}
-    />
-  </div>
-  <ul class="icon-grid-all" id="icon-grid-all" aria-label="All icons">
-    {
-      allIconEntries.map(({ name, style }) => (
-        <li class="icon-grid-cell" title={`${name} (${style})`}>
-          <Icon name={name} style={style} size="l" />
-        </li>
-      ))
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Icon">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="icon-name-label">{defaultCatalogEntry.name}</span>
+        </ButtonDropdown>
+        {
+          iconBaseCatalog.map((entry) => (
+            <MenuItemAction
+              type="button"
+              data-ds-pick="icon-name"
+              data-value={entry.name}
+              data-icon-outline={entry.hasOutline ? 'true' : 'false'}
+              data-icon-fill={entry.hasFill ? 'true' : 'false'}
+            >
+              <span slot="slot-start" class="ds-showcase-menu-item-icon" aria-hidden="true">
+                <Icon
+                  name={entry.name}
+                  style={entry.hasOutline ? 'outline' : 'fill'}
+                  size="s"
+                />
+              </span>
+              {entry.name}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Fill">
+      <div class="ds-showcase-toggle-wrap" data-ds-toggle="icon-fill">
+        <Toggle name="ds-icon-fill" />
+      </div>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Size">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="icon-size-label">M</span>
+        </ButtonDropdown>
+        {
+          iconSizes.map(({ key, label }) => (
+            <MenuItemAction type="button" data-ds-pick="icon-size" data-value={key}>
+              {label}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Icon" />
+
+  <details class="ds-showcase-palette">
+    <summary class="text-label-s-plain">All icons in library</summary>
+    <p class="text-body-xs-plain icon-library-note" style="margin-top: var(--space-12)">
+      Every <code class="code-inline">public/icons/icon-*-(fill|outline).svg</code> file · default size L · use the control
+      below to resize the grid.
+    </p>
+    <div class="subsection icon-sizes-toolbar">
+      <SegmentControl
+        class="js-icon-size-segment"
+        semantic="radiogroup"
+        size="m"
+        ariaLabel="Grid icon size"
+        defaultValue="l"
+        items={[
+          { value: 'l', label: 'Large', content: 'label' as const },
+          { value: 'm', label: 'Medium', content: 'label' as const },
+          { value: 's', label: 'Small', content: 'label' as const },
+          { value: 'xs', label: 'Extra Small', content: 'label' as const },
+        ]}
+      />
+    </div>
+    <ul class="icon-grid-all" id="icon-grid-all" aria-label="All icons">
+      {
+        allIconEntries.map(({ name, style }) => (
+          <li class="icon-grid-cell" title={`${name} (${style})`}>
+            <Icon name={name} style={style} size="l" />
+          </li>
+        ))
+      }
+    </ul>
+  </details>
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { getShowcasePage } from '../showcase-ui';
+  import { prepareInlineIcon } from '../../icons/inlineIcon';
+
+  const iconSvgCache: Record<string, string> = {};
+
+  async function loadSvg(name: string, style: 'outline' | 'fill') {
+    const key = `${name}-${style}`;
+    if (iconSvgCache[key]) return iconSvgCache[key];
+    const res = await fetch(`/icons/icon-${name}-${style}.svg`);
+    if (!res.ok) return '';
+    const raw = await res.text();
+    const prep = prepareInlineIcon(raw);
+    iconSvgCache[key] = prep;
+    return prep;
+  }
+
+  function init() {
+    const page = getShowcasePage();
+    const slot = document.querySelector('[data-ds-icon-slot]');
+    const meta = document.querySelector('[data-ds-icon-meta]');
+    const nameLabel = page?.querySelector('[data-ds-dd="icon-name-label"]');
+    const sizeLabel = page?.querySelector('[data-ds-dd="icon-size-label"]');
+    const fillToggle = page?.querySelector<HTMLInputElement>('[data-ds-toggle="icon-fill"] input[role="switch"]');
+    if (!page || !slot || !meta || !fillToggle) return;
+
+    let name = '';
+    let hasOutline = true;
+    let hasFill = false;
+    let fillToggleOn = false;
+    let size: 'l' | 'm' | 's' | 'xs' = 'm';
+
+    const firstPick = page.querySelector<HTMLElement>('[data-ds-pick="icon-name"]');
+    if (firstPick?.dataset.value) {
+      name = firstPick.dataset.value;
+      hasOutline = firstPick.dataset.iconOutline === 'true';
+      hasFill = firstPick.dataset.iconFill === 'true';
+    } else {
+      name = 'placeholder';
     }
-  </ul>
-</section>
+
+    function syncFillToggleState() {
+      const both = hasOutline && hasFill;
+      fillToggle.disabled = !both;
+      if (!both) {
+        fillToggle.checked = Boolean(hasFill && !hasOutline);
+      } else {
+        fillToggle.checked = fillToggleOn;
+      }
+    }
+
+    function effectiveStyle(): 'outline' | 'fill' {
+      if (hasOutline && hasFill) return fillToggleOn ? 'fill' : 'outline';
+      if (hasOutline) return 'outline';
+      return 'fill';
+    }
+
+    async function apply() {
+      syncFillToggleState();
+      const style = effectiveStyle();
+      const svg = await loadSvg(name, style);
+      if (!svg) return;
+      const sizeUpper = size.toUpperCase();
+      slot.innerHTML = `<span class="ui-icon" data-size="${size}" data-style="${style}">${svg}</span>`;
+      meta.textContent = `${name} · ${style} · ${sizeUpper}`;
+      if (nameLabel) nameLabel.textContent = name;
+      if (sizeLabel) sizeLabel.textContent = sizeUpper;
+    }
+
+    page.querySelectorAll('[data-ds-pick="icon-name"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value;
+        if (!v) return;
+        name = v;
+        hasOutline = (el as HTMLElement).dataset.iconOutline === 'true';
+        hasFill = (el as HTMLElement).dataset.iconFill === 'true';
+        if (hasOutline && hasFill) {
+          fillToggleOn = false;
+        } else if (!hasOutline && hasFill) {
+          fillToggleOn = true;
+        } else {
+          fillToggleOn = false;
+        }
+        void apply();
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="icon-size"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'l' | 'm' | 's' | 'xs' | undefined;
+        if (v) {
+          size = v;
+          void apply();
+        }
+      });
+    });
+    fillToggle.addEventListener('change', () => {
+      fillToggleOn = fillToggle.checked;
+      void apply();
+    });
+    void apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Icon',
+        props: { name, style: effectiveStyle(), size },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>
 
 <script is:inline>
   (function () {
     const grid = document.getElementById('icon-grid-all');
     if (!grid) return;
-
-    function applyIconSize(size) {
-      grid.querySelectorAll('.ui-icon').forEach((el) => {
-        el.setAttribute('data-size', size);
-      });
-    }
-
-    const segmentRoot = document.querySelector('.js-icon-size-segment');
-    if (segmentRoot) {
-      segmentRoot.addEventListener('segment-change', (e) => {
-        const v = e && e.detail && e.detail.value;
-        applyIconSize(typeof v === 'string' ? v : 'l');
-      });
-      const selected = segmentRoot.querySelector('.ui-segment__cell[data-selected="true"]');
-      const v = selected && selected.getAttribute('data-value');
-      if (typeof v === 'string' && v) applyIconSize(v);
-    }
+    document.addEventListener(
+      'segment-change',
+      function (e) {
+        const t = e.target;
+        if (!(t instanceof Element) || !t.closest('.js-icon-size-segment')) return;
+        const ev = e;
+        var v = ev.detail && ev.detail.value;
+        if (v !== 'l' && v !== 'm' && v !== 's' && v !== 'xs') return;
+        grid.querySelectorAll('.ui-icon').forEach(function (icon) {
+          icon.setAttribute('data-size', v);
+        });
+      },
+      true,
+    );
   })();
 </script>

@@ -44,56 +44,15 @@ const panelId = `menu-panel-${randomUUID()}`;
   </div>
 </div>
 
-<script define:vars={{ panelId }}>
-  (function () {
-    const panel = document.getElementById(panelId);
-    if (!panel) return;
-    const root = panel.closest('[data-menu-dropdown]');
-    if (!root) return;
-    const trigger = root.querySelector('[data-menu-dropdown-trigger]');
-    if (!(trigger instanceof HTMLElement)) return;
+<script>
+  import { initAllMenuDropdowns } from './menu-dropdown-placement';
 
-    function isOpen() {
-      return !panel.hasAttribute('hidden');
-    }
-
-    function setOpen(open) {
-      if (open) {
-        panel.removeAttribute('hidden');
-        trigger.setAttribute('aria-expanded', 'true');
-      } else {
-        panel.setAttribute('hidden', '');
-        trigger.setAttribute('aria-expanded', 'false');
-      }
-    }
-
-    trigger.setAttribute('aria-haspopup', 'true');
-    trigger.setAttribute('aria-expanded', 'false');
-    trigger.setAttribute('aria-controls', panelId);
-
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setOpen(!isOpen());
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!isOpen()) return;
-      if (e.target instanceof Node && root.contains(e.target)) return;
-      setOpen(false);
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen()) {
-        setOpen(false);
-        trigger.focus();
-      }
-    });
-
-    panel.addEventListener('click', (e) => {
-      const t = e.target;
-      if (t instanceof HTMLElement && t.closest('button, a[href], [role="menuitem"]')) {
-        setOpen(false);
-      }
-    });
-  })();
+  function boot() {
+    initAllMenuDropdowns();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 </script>

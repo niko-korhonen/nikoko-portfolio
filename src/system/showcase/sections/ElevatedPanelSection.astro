@@ -1,18 +1,69 @@
 ---
-import Cluster from '../../primitives/Cluster.astro';
 import ElevatedPanel from '../../components/ElevatedPanel.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
 ---
 
-<section class="section" aria-labelledby="elevated-panel-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="elevated-panel-heading">Elevated panel</h2>
-  <p class="text-body-s-plain section__note">
-    <code class="code-inline">ElevatedPanel</code> uses <code class="code-inline">surface-base</code>,{' '}
-    <code class="code-inline">radius-medium</code>, <code class="code-inline">outline-tertiary</code>, and{' '}
-    <code class="code-inline">--shadow-l</code> (same shell as menu surface).
-  </p>
-  <Cluster gap="space-16" align="end">
-    <ElevatedPanel class="ds-elevated-demo">
-      <p class="text-body-s-plain" style="margin:0">Reusable elevated panel (same shell as menu surface).</p>
-    </ElevatedPanel>
-  </Cluster>
-</section>
+<ComponentShowcasePage
+  title="ElevatedPanel"
+  headingId="elevated-panel-heading"
+  description="Surface shell shared with menu panels: base surface, medium radius, tertiary outline, and large shadow. Use to wrap grouped content or lists inside overlays."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="elevated-panel" style="width:100%;max-width:18rem;">
+      <ElevatedPanel class="ds-elevated-demo">
+        <p class="text-body-s-plain" style="margin:0" data-ds-ep-body>
+          Reusable elevated panel (same shell as menu surface).
+        </p>
+      </ElevatedPanel>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Body text">
+      <ShowcaseTextFieldControl id="ds-ep-text" ariaLabel="Panel body text" placeholder="Panel text" />
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="ElevatedPanel" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const body = page.querySelector('[data-ds-ep-body]');
+    const textCtrl = document.getElementById('ds-ep-text') as HTMLInputElement | null;
+    if (!page || !body || !textCtrl) return;
+    bindFieldClear(page);
+
+    function apply() {
+      body.textContent = textCtrl.value || 'Reusable elevated panel (same shell as menu surface).';
+    }
+    textCtrl.addEventListener('input', apply);
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'ElevatedPanel',
+        props: {
+          children: textCtrl.value || 'Panel content',
+        },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

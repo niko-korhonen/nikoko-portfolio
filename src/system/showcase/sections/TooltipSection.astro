@@ -1,40 +1,152 @@
 ---
-import Cluster from '../../primitives/Cluster.astro';
 import Tooltip from '../../components/Tooltip.astro';
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+
+const positions = ['top', 'bottom', 'left', 'right'] as const;
+const aligns = ['start', 'center', 'end'] as const;
 ---
 
-<section class="section" aria-labelledby="tooltip-heading">
-  <h2 class="text-headline-s-emphasized section__title" id="tooltip-heading">Tooltip</h2>
-  <div class="subsection">
-    <h3 class="text-label-l-emphasized subsection__title">Tooltip</h3>
-    <p class="text-body-s-plain subsection__hint">
-      Hover or focus the anchor · pair <code class="code-inline">id</code> with
-      <code class="code-inline">aria-describedby</code> on the trigger.
-    </p>
-    <Cluster gap="space-12" align="center">
-      <Tooltip id="sys-tooltip-1">
+<ComponentShowcasePage
+  title="Tooltip"
+  headingId="tooltip-heading"
+  description="Short contextual help on hover or focus. Pair the tooltip id with aria-describedby on the trigger. Placement uses the same position and alignment model as menus and anchored overlays."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="tooltip">
+      <Tooltip id="ds-tooltip-preview">
         <button
           type="button"
           slot="trigger"
           class="text-label-s-plain ui-focus-ring"
-          aria-describedby="sys-tooltip-1"
+          style="border:none;background:transparent;padding:var(--space-8);cursor:pointer;"
+          id="ds-tt-trigger"
+          aria-describedby="ds-tooltip-preview"
         >
-          Keyboard or hover
+          <span data-ds-tt-trigger-text>Keyboard or hover</span>
         </button>
-        <span slot="content">Short help copy using body XS typography tokens.</span>
+        <span slot="content" data-ds-tt-content>Short help copy using body XS typography tokens.</span>
       </Tooltip>
-      <Tooltip id="sys-tooltip-2">
-        <span
-          slot="trigger"
-          tabindex="0"
-          role="button"
-          class="text-body-s-plain ui-focus-ring"
-          aria-describedby="sys-tooltip-2"
-        >
-          Inline text trigger
-        </span>
-        <span slot="content">Tooltip surface uses surface, outline, and spacing tokens.</span>
-      </Tooltip>
-    </Cluster>
-  </div>
-</section>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Position">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="pos-label">Top</span>
+        </ButtonDropdown>
+        {
+          positions.map((p) => (
+            <MenuItemAction type="button" data-ds-pick="position" data-value={p}>
+              {p.charAt(0).toUpperCase() + p.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Align">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="align-label">Center</span>
+        </ButtonDropdown>
+        {
+          aligns.map((a) => (
+            <MenuItemAction type="button" data-ds-pick="align" data-value={a}>
+              {a.charAt(0).toUpperCase() + a.slice(1)}
+            </MenuItemAction>
+          ))
+        }
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Trigger text">
+      <ShowcaseTextFieldControl id="ds-tt-ctrl-trigger" ariaLabel="Trigger text" placeholder="Text" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Tooltip content">
+      <ShowcaseTextFieldControl id="ds-tt-ctrl-content" ariaLabel="Tooltip content" placeholder="Help text" />
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="Tooltip" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="tooltip"]');
+    const surface = root?.querySelector<HTMLElement>('[role="tooltip"]');
+    const triggerText = root?.querySelector('[data-ds-tt-trigger-text]');
+    const contentEl = root?.querySelector('[data-ds-tt-content]');
+    const triggerCtrl = document.getElementById('ds-tt-ctrl-trigger') as HTMLInputElement | null;
+    const contentCtrl = document.getElementById('ds-tt-ctrl-content') as HTMLInputElement | null;
+    const posLabel = page?.querySelector('[data-ds-dd="pos-label"]');
+    const alignLabel = page?.querySelector('[data-ds-dd="align-label"]');
+    if (!page || !surface || !triggerText || !contentEl || !triggerCtrl || !contentCtrl) return;
+    bindFieldClear(page);
+
+    let position: (typeof positions)[number] = 'top';
+    let align: (typeof aligns)[number] = 'center';
+
+    function apply() {
+      surface.setAttribute('data-popover-position', position);
+      surface.setAttribute('data-popover-align', align);
+      triggerText.textContent = triggerCtrl.value || 'Keyboard or hover';
+      contentEl.textContent = contentCtrl.value || 'Short help copy using body XS typography tokens.';
+      if (posLabel) posLabel.textContent = position.charAt(0).toUpperCase() + position.slice(1);
+      if (alignLabel) alignLabel.textContent = align.charAt(0).toUpperCase() + align.slice(1);
+    }
+
+    page.querySelectorAll('[data-ds-pick="position"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as (typeof positions)[number] | undefined;
+        if (v) {
+          position = v;
+          apply();
+        }
+      });
+    });
+    page.querySelectorAll('[data-ds-pick="align"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as (typeof aligns)[number] | undefined;
+        if (v) {
+          align = v;
+          apply();
+        }
+      });
+    });
+    triggerCtrl.addEventListener('input', apply);
+    contentCtrl.addEventListener('input', apply);
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'Tooltip',
+        props: {
+          position,
+          align,
+          triggerText: triggerCtrl.value || 'Keyboard or hover',
+          content: contentCtrl.value || 'Help text',
+        },
+        note: 'Set id on Tooltip and aria-describedby on the trigger to match.',
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

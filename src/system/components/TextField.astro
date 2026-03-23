@@ -3,10 +3,12 @@ import { randomUUID } from 'node:crypto';
 
 export type TextFieldVariant = 'filled' | 'outlined';
 export type TextFieldTone = 'default' | 'error' | 'success';
+export type TextFieldSize = 'l' | 'm';
 
 interface Props {
   variant?: TextFieldVariant;
   tone?: TextFieldTone;
+  size?: TextFieldSize;
   /** Visible label (inside the control when set). Use with <slot name="label" /> as alternative. */
   label?: string;
   /** Required when there is no visible label (accessibility). */
@@ -27,6 +29,7 @@ interface Props {
 const {
   variant = 'filled',
   tone = 'default',
+  size = 'l',
   label = '',
   ariaLabel,
   id: idProp,
@@ -61,6 +64,8 @@ const floatingPlaceholder =
 
 const rootClass = ['ui-field', className].filter(Boolean).join(' ');
 const floating = hasLabel && !multiline;
+const inputTextClass = size === 'm' ? 'text-body-xs-plain' : 'text-body-s-plain';
+const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-plain';
 ---
 
 <div
@@ -71,6 +76,7 @@ const floating = hasLabel && !multiline;
   data-disabled={disabled ? '' : undefined}
   data-multiline={multiline ? '' : undefined}
   data-floating={floating ? 'yes' : undefined}
+  data-size={size}
 >
   <div class="ui-field__control">
     <div class="ui-field__slot-start">
@@ -88,7 +94,7 @@ const floating = hasLabel && !multiline;
           <span class="ui-field__body ui-field__body--float">
             <span class="ui-field__float-stack">
               <input
-                class="ui-field__input text-body-m-plain"
+                class:list={['ui-field__input', inputTextClass]}
                 type={type}
                 id={id}
                 name={name}
@@ -105,11 +111,11 @@ const floating = hasLabel && !multiline;
           </span>
         ) : hasLabel && multiline ? (
           <>
-            <span class="ui-field__label ui-field__label--stacked text-label-xs-plain">
+            <span class:list={['ui-field__label', 'ui-field__label--stacked', stackedLabelClass]}>
               {label ? label : <slot name="label" />}
             </span>
             <textarea
-              class="ui-field__textarea ui-field__input text-body-m-plain"
+              class:list={['ui-field__textarea', 'ui-field__input', inputTextClass]}
               id={id}
               name={name}
               rows={rows}
@@ -123,7 +129,7 @@ const floating = hasLabel && !multiline;
           <span class="ui-field__body">
             {multiline ? (
               <textarea
-                class="ui-field__textarea ui-field__input text-body-m-plain"
+                class:list={['ui-field__textarea', 'ui-field__input', inputTextClass]}
                 id={id}
                 name={name}
                 rows={rows}
@@ -135,7 +141,7 @@ const floating = hasLabel && !multiline;
               >{value ?? ''}</textarea>
             ) : (
               <input
-                class="ui-field__input text-body-m-plain"
+                class:list={['ui-field__input', inputTextClass]}
                 type={type}
                 id={id}
                 name={name}

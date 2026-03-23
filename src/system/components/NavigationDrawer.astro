@@ -6,13 +6,15 @@ import ItemDivider from './ItemDivider.astro';
 import ItemHeader from './ItemHeader.astro';
 import SegmentControl from './SegmentControl.astro';
 import Icon from '../icons/Icon.astro';
-import { SYSTEM_NAV_GROUPS, isNavItemActive } from '../showcase/nav';
+import { INTRO_NAV_ITEM, SYSTEM_NAV_GROUPS, isNavItemActive } from '../showcase/nav';
 
 interface Props {
   currentPath: string;
 }
 
 const { currentPath } = Astro.props;
+
+const introActive = isNavItemActive(currentPath, INTRO_NAV_ITEM);
 
 const themeSegmentItems = [
   { value: 'system', icon: 'lock', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'System theme' },
@@ -46,6 +48,15 @@ const themeSegmentItems = [
   </div>
   <p class="text-display-s-plain ui-nav-drawer__brand">Niko UI</p>
   <nav class="ui-nav-drawer__nav" aria-label="Sections">
+    <ItemAction
+      variant="inline"
+      href={INTRO_NAV_ITEM.href}
+      active={introActive}
+      aria-current={introActive ? 'page' : undefined}
+    >
+      {INTRO_NAV_ITEM.label}
+    </ItemAction>
+    <ItemDivider />
     {
       SYSTEM_NAV_GROUPS.map((group, gi) => (
         <>

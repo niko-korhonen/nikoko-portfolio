@@ -1,0 +1,152 @@
+---
+import ButtonDropdown from '../../components/ButtonDropdown.astro';
+import Toggle from '../../components/Toggle.astro';
+import ItemAction from '../../components/ItemAction.astro';
+import MenuDropdown from '../../components/MenuDropdown.astro';
+import MenuItemAction from '../../components/MenuItemAction.astro';
+import Icon from '../../icons/Icon.astro';
+import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
+import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
+import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
+import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
+import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
+---
+
+<ComponentShowcasePage
+  title="ItemAction"
+  headingId="item-action-heading"
+  description="Tappable list rows with floating or inline surfaces. Optional description, detail, and chevron; slots for leading and trailing icons. Interactive states mirror ghost buttons; use as a link with href or as a label wrapper for custom controls."
+>
+  <ShowcasePreviewCard>
+    <div data-ds-demo="item-action" style="width:100%;max-width:28rem;">
+      <ItemAction class="ds-ia-live" variant="floating" description="Supporting line" detail="Detail" chevron>
+        Label
+      </ItemAction>
+    </div>
+  </ShowcasePreviewCard>
+
+  <ShowcaseControlsTable>
+    <ShowcaseControlRow label="Variant">
+      <MenuDropdown>
+        <ButtonDropdown slot="trigger" variant="secondary" size="s" type="button">
+          <span data-ds-dd="ia-var-label">Floating</span>
+        </ButtonDropdown>
+        <MenuItemAction type="button" data-ds-pick="ia-variant" data-value="floating">
+          Floating
+        </MenuItemAction>
+        <MenuItemAction type="button" data-ds-pick="ia-variant" data-value="inline">
+          Inline
+        </MenuItemAction>
+      </MenuDropdown>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Label">
+      <ShowcaseTextFieldControl id="ds-ia-label" ariaLabel="Primary label" placeholder="Label" value="Label" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Description">
+      <ShowcaseTextFieldControl
+        id="ds-ia-desc"
+        ariaLabel="Description"
+        placeholder="Supporting line"
+        value="Supporting line"
+      />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Detail">
+      <ShowcaseTextFieldControl id="ds-ia-detail" ariaLabel="Detail" placeholder="Detail" value="Detail" />
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Chevron">
+      <div class="ds-showcase-toggle-wrap" data-ds-ia-chevron-wrap>
+        <Toggle name="ds-ia-chevron-ctrl" checked />
+      </div>
+    </ShowcaseControlRow>
+    <ShowcaseControlRow label="Disabled">
+      <div class="ds-showcase-toggle-wrap" data-ds-ia-disabled-wrap>
+        <Toggle name="ds-ia-disabled-ctrl" />
+      </div>
+    </ShowcaseControlRow>
+  </ShowcaseControlsTable>
+
+  <ShowcaseCopyPrompt componentLabel="ItemAction" />
+</ComponentShowcasePage>
+
+<script>
+  import { buildCopyPrompt } from '../copy-prompt';
+  import { bindFieldClear, getShowcasePage } from '../showcase-ui';
+
+  function init() {
+    const page = getShowcasePage();
+    const root = document.querySelector('[data-ds-demo="item-action"]');
+    const btn = root?.querySelector<HTMLElement>('.ds-ia-live');
+    const labelEl = btn?.querySelector('.ui-item__label');
+    const labelCtrl = document.getElementById('ds-ia-label') as HTMLInputElement | null;
+    const descCtrl = document.getElementById('ds-ia-desc') as HTMLInputElement | null;
+    const detailCtrl = document.getElementById('ds-ia-detail') as HTMLInputElement | null;
+    const chevronCb = page.querySelector<HTMLInputElement>('[data-ds-ia-chevron-wrap] input[role="switch"]');
+    const disabledCb = page.querySelector<HTMLInputElement>(
+      '[data-ds-ia-disabled-wrap] input[role="switch"]',
+    );
+    const varLabel = page.querySelector('[data-ds-dd="ia-var-label"]');
+    if (!page || !root || !btn || !labelEl || !labelCtrl || !descCtrl || !detailCtrl) return;
+
+    bindFieldClear(page);
+
+    let variant: 'floating' | 'inline' = 'floating';
+
+    function apply() {
+      btn.setAttribute('data-variant', variant);
+      if (varLabel) varLabel.textContent = variant.charAt(0).toUpperCase() + variant.slice(1);
+      if (labelEl) labelEl.textContent = labelCtrl.value || 'Label';
+      const descEl = btn.querySelector('.ui-item__description');
+      const detailEl = btn.querySelector('.ui-item__detail');
+      if (descEl) {
+        const t = descCtrl.value.trim();
+        descEl.textContent = t;
+        descEl.style.display = t ? '' : 'none';
+      }
+      if (detailEl) {
+        const t = detailCtrl.value.trim();
+        detailEl.textContent = t;
+        detailEl.style.display = t ? '' : 'none';
+      }
+      (btn as HTMLButtonElement).disabled = Boolean(disabledCb?.checked);
+      const chev = btn.querySelector('.ui-item__chevron');
+      if (chev) (chev as HTMLElement).style.display = chevronCb?.checked ? '' : 'none';
+    }
+
+    page.querySelectorAll('[data-ds-pick="ia-variant"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const v = (el as HTMLElement).dataset.value as 'floating' | 'inline' | undefined;
+        if (v) {
+          variant = v;
+          apply();
+        }
+      });
+    });
+    [labelCtrl, descCtrl, detailCtrl].forEach((c) => c.addEventListener('input', apply));
+    chevronCb?.addEventListener('change', apply);
+    disabledCb?.addEventListener('change', apply);
+    apply();
+
+    page.querySelector('.js-ds-showcase-copy')?.addEventListener('click', async () => {
+      const text = buildCopyPrompt({
+        component: 'ItemAction',
+        props: {
+          variant,
+          label: labelCtrl.value || 'Label',
+          description: descCtrl.value || 'Supporting line',
+          detail: detailCtrl.value || 'Detail',
+          chevron: Boolean(chevronCb?.checked),
+          disabled: Boolean(disabledCb?.checked),
+        },
+      });
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>

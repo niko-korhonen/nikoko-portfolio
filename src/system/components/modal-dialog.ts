@@ -11,7 +11,10 @@ export function initModalDialogs(): void {
 }
 
 function initModalDialog(dialog: HTMLDialogElement): void {
-  const dismissible = dialog.getAttribute('data-dismissible') !== 'false';
+  /** Read on each interaction so showcase / runtime updates to data-dismissible apply. */
+  function dismissible(): boolean {
+    return dialog.getAttribute('data-dismissible') !== 'false';
+  }
 
   /** After showModal(), UA focuses the first focusable; move focus to the dialog root without blocking Tab to controls. */
   const mo = new MutationObserver(() => {
@@ -26,11 +29,11 @@ function initModalDialog(dialog: HTMLDialogElement): void {
   mo.observe(dialog, { attributes: true, attributeFilter: ['open'] });
 
   dialog.addEventListener('cancel', (e) => {
-    if (!dismissible) e.preventDefault();
+    if (!dismissible()) e.preventDefault();
   });
 
   dialog.addEventListener('click', (e) => {
-    if (e.target === dialog && dismissible) dialog.close();
+    if (e.target === dialog && dismissible()) dialog.close();
   });
 
   dialog.addEventListener('click', (e) => {

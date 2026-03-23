@@ -1,4 +1,8 @@
 ---
+import { randomUUID } from 'node:crypto';
+import Tooltip from './Tooltip.astro';
+import type { PopoverAlign, PopoverPosition } from '../placement';
+
 export type ButtonIconVariant = 'primary' | 'secondary' | 'ghost' | 'accent';
 export type ButtonIconSize = 'l' | 'm' | 's';
 
@@ -14,6 +18,25 @@ interface Props {
   href?: string;
   /** When used inside ModalDialog, closes the dialog on click. */
   dialogClose?: boolean;
+  /**
+   * When true, wraps the control in Tooltip for supplementary description (hover / focus).
+   * Default false.
+   */
+  tooltip?: boolean;
+  /**
+   * Tooltip copy when `tooltip` is true. Ignored if the `tooltip` slot provides content.
+   * Defaults to `label` when omitted.
+   */
+  tooltipText?: string;
+  /** @default 'top' */
+  tooltipPosition?: PopoverPosition;
+  /** @default 'center' */
+  tooltipAlign?: PopoverAlign;
+  /**
+   * Stable id for the tooltip surface and `aria-describedby` on the trigger.
+   * Random when omitted.
+   */
+  tooltipId?: string;
 }
 
 const {
@@ -25,20 +48,62 @@ const {
   class: className = '',
   href,
   dialogClose = false,
+  tooltip = false,
+  tooltipText,
+  tooltipPosition = 'top',
+  tooltipAlign = 'center',
+  tooltipId: tooltipIdProp,
 } = Astro.props;
 
 const iconClass = ['ui-btn-icon', 'ui-focus-ring', className].filter(Boolean).join(' ');
+
+const hasTooltipSlot = Astro.slots.has('tooltip');
+const tooltipIdResolved = tooltip ? (tooltipIdProp ?? `btico-tt-${randomUUID()}`) : '';
+const tooltipDefaultContent = tooltipText ?? label;
 ---
 
 {
-  href ? (
-    <a
-      class={iconClass}
-      href={href}
-      data-variant={variant}
-      data-size={size}
-      aria-label={label}
-    >
+  tooltip ? (
+    <Tooltip id={tooltipIdResolved} position={tooltipPosition} align={tooltipAlign}>
+      {href ? (
+        <a
+          slot="trigger"
+          class={iconClass}
+          href={href}
+          data-variant={variant}
+          data-size={size}
+          aria-label={label}
+          aria-describedby={tooltipIdResolved}
+        >
+          <slot />
+        </a>
+      ) : (
+        <button
+          slot="trigger"
+          class={iconClass}
+          type={type}
+          disabled={disabled}
+          data-variant={variant}
+          data-size={size}
+          aria-label={label}
+          aria-describedby={tooltipIdResolved}
+          {...dialogClose ? ({ 'data-modal-dialog-close': '' } as const) : {}}
+        >
+          <slot />
+        </button>
+      )}
+      {
+        hasTooltipSlot ? (
+          <span slot="content" class="ui-btn-icon__tooltip-slot">
+            <slot name="tooltip" />
+          </span>
+        ) : (
+          <span slot="content">{tooltipDefaultContent}</span>
+        )
+      }
+    </Tooltip>
+  ) : href ? (
+    <a class={iconClass} href={href} data-variant={variant} data-size={size} aria-label={label}>
       <slot />
     </a>
   ) : (
