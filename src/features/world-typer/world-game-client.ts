@@ -133,11 +133,16 @@ export function initWorldGame(dom: WorldGameDom): () => void {
   function onGuessSubmit(): void {
     if (phase !== 'playing' || !mapApi) return;
     const raw = dom.guessInput.value;
-    dom.guessInput.value = '';
     const key = normalizeGuessName(raw);
-    if (!key) return;
+    if (!key) {
+      dom.guessInput.value = '';
+      return;
+    }
     const id = mapApi.matchNormalized(key);
-    if (!id) return;
+    if (!id) {
+      dom.guessInput.value = '';
+      return;
+    }
     if (guessedIds.has(id)) {
       enqueueAnchoredToast(dom.guessToastRoot, 'neutral', 'Already guessed');
       return;
@@ -146,6 +151,7 @@ export function initWorldGame(dom: WorldGameDom): () => void {
     mapApi.markGuessed(id);
     updateScorePill();
     enqueueAnchoredToast(dom.guessToastRoot, 'success', 'Correct');
+    dom.guessInput.value = '';
   }
 
   const onTimerClick = () => {
@@ -240,8 +246,31 @@ export function initWorldGame(dom: WorldGameDom): () => void {
 
   setPhase('preStart');
 
+  const gameRoot = dom.mapHost.parentElement;
+  const vv = window.visualViewport;
+  function syncGameToVisualViewport(): void {
+    if (!vv || !gameRoot?.classList.contains('world-game')) return;
+    gameRoot.style.setProperty('--world-game-vv-top', `${vv.offsetTop}px`);
+    gameRoot.style.setProperty('--world-game-vv-left', `${vv.offsetLeft}px`);
+    gameRoot.style.setProperty('--world-game-vv-width', `${vv.width}px`);
+    gameRoot.style.setProperty('--world-game-vv-height', `${vv.height}px`);
+  }
+  let onViewportChange: (() => void) | undefined;
+  if (vv && gameRoot?.classList.contains('world-game')) {
+    onViewportChange = () => syncGameToVisualViewport();
+    vv.addEventListener('resize', onViewportChange);
+    vv.addEventListener('scroll', onViewportChange);
+    window.addEventListener('resize', onViewportChange);
+    syncGameToVisualViewport();
+  }
+
   return () => {
     disposed = true;
+    if (vv && onViewportChange) {
+      vv.removeEventListener('resize', onViewportChange);
+      vv.removeEventListener('scroll', onViewportChange);
+      window.removeEventListener('resize', onViewportChange);
+    }
     timer.dispose();
     mapApi?.dispose();
     mapApi = null;
