@@ -1,0 +1,18 @@
+---
+interface Props {
+  /** Prop name as shown in code (e.g. autocomplete). */
+  prop: string;
+  class?: string;
+}
+
+const { prop, class: className = '' } = Astro.props;
+---
+
+<tr class:list={['ds-showcase-table__row', className]}>
+  <td class="ds-showcase-table__label ds-showcase-table__prop-code">
+    <code class="code-inline">{prop}</code>
+  </td>
+  <td class="text-body-xs-plain ds-showcase-table__control">
+    <slot />
+  </td>
+</tr>

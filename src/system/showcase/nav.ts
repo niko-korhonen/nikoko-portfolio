@@ -27,6 +27,9 @@ function sortNavItemsByLabel(items: NavItem[]): NavItem[] {
 /** Intro lives above the Primitives section in the drawer (see NavigationDrawer). */
 export const INTRO_NAV_ITEM: NavItem = { label: 'Intro', slug: null, href: '/system' };
 
+/** Leave the design system shell back to the site landing page (see NavigationDrawer). */
+export const EXIT_SYSTEM_NAV_ITEM: NavItem = { label: 'Exit system demo', slug: null, href: '/' };
+
 const PRIMITIVES_NAV_ITEMS: NavItem[] = [
   { label: 'Colors', slug: 'colors', href: '/system/colors' },
   { label: 'Typography', slug: 'typography', href: '/system/typography' },

@@ -525,6 +525,16 @@ html[data-nav-drawer-open='false'] .system-shell__main {
   background: var(--color-surface-base);
 }
 
+/* Props documentation table (non-interactive): top-align for multi-line descriptions. */
+.ds-showcase-props-doc .ds-showcase-table--props-doc .ds-showcase-table__label,
+.ds-showcase-props-doc .ds-showcase-table--props-doc .ds-showcase-table__control {
+  vertical-align: top;
+}
+
+.ds-showcase-table__prop-code .code-inline {
+  white-space: nowrap;
+}
+
 .ds-showcase-menu-item-icon {
   display: inline-flex;
   align-items: center;

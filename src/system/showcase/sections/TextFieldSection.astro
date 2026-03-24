@@ -8,6 +8,8 @@ import ComponentShowcasePage from '../templates/ComponentShowcasePage.astro';
 import ShowcasePreviewCard from '../templates/ShowcasePreviewCard.astro';
 import ShowcaseControlsTable from '../templates/ShowcaseControlsTable.astro';
 import ShowcaseControlRow from '../templates/ShowcaseControlRow.astro';
+import ShowcasePropsDocTable from '../templates/ShowcasePropsDocTable.astro';
+import ShowcasePropsDocRow from '../templates/ShowcasePropsDocRow.astro';
 import ShowcaseCopyPrompt from '../templates/ShowcaseCopyPrompt.astro';
 import ShowcaseTextFieldControl from '../templates/ShowcaseTextFieldControl.astro';
 import ShowcaseIconMenuItems from '../templates/ShowcaseIconMenuItems.astro';
@@ -136,6 +138,35 @@ const iconHtmlMap: Record<string, string> = { none: '', ...loadAllIconVariantInl
       </div>
     </ShowcaseControlRow>
   </ShowcaseControlsTable>
+
+  <ShowcasePropsDocTable>
+    <ShowcasePropsDocRow prop="id">Optional stable id for the input; a random id is generated if omitted.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="name">Form field name.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="value">Initial value for the input or textarea.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="type">
+      Single-line input type: <code class="code-inline">text</code>, <code class="code-inline">search</code>,{' '}
+      <code class="code-inline">email</code>, <code class="code-inline">password</code>, <code class="code-inline">url</code>,{' '}
+      <code class="code-inline">tel</code>.
+    </ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="multiline">When true, renders a textarea instead of a single-line input.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="rows">Textarea row count when <code class="code-inline">multiline</code> is set.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="class">Optional class on the root field wrapper.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="floatingLabel">
+      When a visible label is present, set to <code class="code-inline">false</code> for a stacked label above the field instead
+      of the default floating label.
+    </ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="ariaLabel">Accessible name when there is no visible label (required in that case).</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="autocomplete">Passed to the native control; use e.g. <code class="code-inline">off</code> to discourage autofill heuristics.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="autocorrect">Non-standard; often honored on iOS to tune auto-correction.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="autocapitalize">Native <code class="code-inline">autocapitalize</code> hint (e.g. <code class="code-inline">none</code>).</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="spellcheck">Maps to the native <code class="code-inline">spellcheck</code> attribute.</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="enterkeyhint">Hint for the Enter key label on virtual keyboards (e.g. <code class="code-inline">done</code>).</ShowcasePropsDocRow>
+    <ShowcasePropsDocRow prop="slots">
+      Optional <code class="code-inline">label</code>, <code class="code-inline">description</code>,{' '}
+      <code class="code-inline">icon-start</code> / <code class="code-inline">icon-end</code>,{' '}
+      <code class="code-inline">slot-start</code> / <code class="code-inline">slot-end</code>.
+    </ShowcasePropsDocRow>
+  </ShowcasePropsDocTable>
 
   <ShowcaseCopyPrompt componentLabel="TextField" />
 </ComponentShowcasePage>

@@ -6,7 +6,7 @@ import ItemDivider from './ItemDivider.astro';
 import ItemHeader from './ItemHeader.astro';
 import SegmentControl from './SegmentControl.astro';
 import Icon from '../icons/Icon.astro';
-import { INTRO_NAV_ITEM, SYSTEM_NAV_GROUPS, isNavItemActive } from '../showcase/nav';
+import { EXIT_SYSTEM_NAV_ITEM, INTRO_NAV_ITEM, SYSTEM_NAV_GROUPS, isNavItemActive } from '../showcase/nav';
 
 interface Props {
   currentPath: string;
@@ -15,6 +15,7 @@ interface Props {
 const { currentPath } = Astro.props;
 
 const introActive = isNavItemActive(currentPath, INTRO_NAV_ITEM);
+const exitSystemActive = isNavItemActive(currentPath, EXIT_SYSTEM_NAV_ITEM);
 
 const themeSegmentItems = [
   { value: 'system', icon: 'lock', iconStyle: 'outline' as const, content: 'icon' as const, ariaLabel: 'System theme' },
@@ -55,6 +56,15 @@ const themeSegmentItems = [
       aria-current={introActive ? 'page' : undefined}
     >
       {INTRO_NAV_ITEM.label}
+    </ItemAction>
+    <ItemAction
+      variant="inline"
+      href={EXIT_SYSTEM_NAV_ITEM.href}
+      active={exitSystemActive}
+      aria-current={exitSystemActive ? 'page' : undefined}
+    >
+      {EXIT_SYSTEM_NAV_ITEM.label}
+      <Icon slot="slot-end" name="stepback" style="outline" size="s" />
     </ItemAction>
     <ItemDivider />
     {

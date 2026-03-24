@@ -29,6 +29,13 @@ interface Props {
    * Set to false for a stacked label above the input.
    */
   floatingLabel?: boolean;
+  /** Hint for autofill / password managers; omit for default browser behavior. */
+  autocomplete?: string;
+  /** iOS Safari: reduces unwanted correction suggestions (non-standard). */
+  autocorrect?: string;
+  autocapitalize?: string;
+  spellcheck?: boolean;
+  enterkeyhint?: string;
 }
 
 const {
@@ -48,7 +55,20 @@ const {
   class: className = '',
   description = '',
   floatingLabel: floatingLabelProp,
+  autocomplete,
+  autocorrect,
+  autocapitalize,
+  spellcheck,
+  enterkeyhint,
 } = Astro.props;
+
+const mobileInputAttrs = {
+  ...(autocomplete !== undefined ? { autocomplete } : {}),
+  ...(autocorrect !== undefined ? { autocorrect } : {}),
+  ...(autocapitalize !== undefined ? { autocapitalize } : {}),
+  ...(spellcheck !== undefined ? { spellcheck } : {}),
+  ...(enterkeyhint !== undefined ? { enterkeyhint } : {}),
+};
 
 const hasLabelSlot = Astro.slots.has('label');
 const hasDescriptionSlot = Astro.slots.has('description');
@@ -116,6 +136,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
                 disabled={disabled}
                 aria-invalid={tone === 'error' ? true : undefined}
                 aria-describedby={hasHelper ? helperId : undefined}
+                {...mobileInputAttrs}
               />
               <span class="ui-field__label">
                 {label ? label : <slot name="label" />}
@@ -138,6 +159,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
                 disabled={disabled}
                 aria-invalid={tone === 'error' ? true : undefined}
                 aria-describedby={hasHelper ? helperId : undefined}
+                {...mobileInputAttrs}
               />
             </span>
           </>
@@ -155,6 +177,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
               disabled={disabled}
               aria-invalid={tone === 'error' ? true : undefined}
               aria-describedby={hasHelper ? helperId : undefined}
+              {...mobileInputAttrs}
             >{value ?? ''}</textarea>
           </>
         ) : (
@@ -170,6 +193,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
                 aria-invalid={tone === 'error' ? true : undefined}
                 aria-describedby={hasHelper ? helperId : undefined}
                 aria-label={ariaLabel}
+                {...mobileInputAttrs}
               >{value ?? ''}</textarea>
             ) : (
               <input
@@ -183,6 +207,7 @@ const stackedLabelClass = size === 'm' ? 'text-label-xs-plain' : 'text-label-s-p
                 aria-invalid={tone === 'error' ? true : undefined}
                 aria-describedby={hasHelper ? helperId : undefined}
                 aria-label={ariaLabel}
+                {...mobileInputAttrs}
               />
             )}
           </span>
