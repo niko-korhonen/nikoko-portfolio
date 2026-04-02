@@ -49,7 +49,9 @@ export type PrimitiveSlug = (typeof primitiveSlugs)[number];
 
 export const componentSlugs = [
   'button',
+  'button-dropdown',
   'button-icon',
+  'toggle',
   'item-row-action',
   'item-row-static',
   'item-row-divider',

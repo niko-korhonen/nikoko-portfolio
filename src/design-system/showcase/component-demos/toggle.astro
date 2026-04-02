@@ -1,0 +1,64 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import Inline from '../../components/primitives/Inline.astro';
+import Toggle from '../../components/ui/Toggle.astro';
+---
+
+<Stack gap="24">
+  <div>
+    <p class="ds-type-label-l-short" style="color: var(--foreground-secondary); margin-bottom: var(--spacing-12);">
+      Interactive
+    </p>
+    <Inline gap="16" wrap align="center">
+      <Toggle aria-label="Example off" />
+      <Toggle checked aria-label="Example on" />
+      <Toggle disabled aria-label="Disabled off" />
+      <Toggle checked disabled aria-label="Disabled on" />
+    </Inline>
+  </div>
+
+  <div>
+    <p class="ds-type-label-l-short" style="color: var(--foreground-secondary); margin-bottom: var(--spacing-12);">
+      States (off / on)
+    </p>
+    <div
+      style="display: grid; grid-template-columns: auto repeat(2, minmax(0, 1fr)); gap: var(--spacing-16) var(--spacing-24); align-items: center; max-width: 28rem;"
+    >
+      <span></span>
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">Off</span>
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">On</span>
+
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">Default</span>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-off-default">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-on-default">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">Hover</span>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-off-hover">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-on-hover">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">Press</span>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-off-press">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-on-press">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+
+      <span class="ds-type-label-s-short" style="color: var(--foreground-secondary);">Disabled</span>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-off-disabled">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+      <div class="ds-toggle ds-toggle--static ds-toggle--static-on-disabled">
+        <span class="ds-toggle__track"><span class="ds-toggle__knob"></span></span>
+      </div>
+    </div>
+  </div>
+</Stack>

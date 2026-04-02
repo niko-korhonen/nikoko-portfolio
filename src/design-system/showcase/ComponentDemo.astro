@@ -1,6 +1,8 @@
 ---
 import Button from './component-demos/button.astro';
+import ButtonDropdown from './component-demos/button-dropdown.astro';
 import ButtonIcon from './component-demos/button-icon.astro';
+import Toggle from './component-demos/toggle.astro';
 import ItemRowAction from './component-demos/item-row-action.astro';
 import ItemRowStatic from './component-demos/item-row-static.astro';
 import ItemRowDivider from './component-demos/item-row-divider.astro';
@@ -16,7 +18,9 @@ const { slug } = Astro.props;
 ---
 
 {slug === 'button' && <Button />}
+{slug === 'button-dropdown' && <ButtonDropdown />}
 {slug === 'button-icon' && <ButtonIcon />}
+{slug === 'toggle' && <Toggle />}
 {slug === 'item-row-action' && <ItemRowAction />}
 {slug === 'item-row-static' && <ItemRowStatic />}
 {slug === 'item-row-divider' && <ItemRowDivider />}

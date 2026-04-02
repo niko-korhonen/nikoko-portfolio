@@ -143,6 +143,69 @@
   width: 100%;
 }
 
+/* Button dropdown: label + chevron (same layout as Button with trailing icon) */
+.ds-btn-dropdown .ds-btn__label {
+  min-width: 0;
+}
+
+/* MenuDropdown trigger when disabled (native :disabled not available on div) */
+.ds-menu-dropdown-trigger--disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+  pointer-events: none;
+}
+
+/* Menu open: .ds-btn trigger uses “selected” interactive tokens */
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--fill:not(:disabled) {
+  background: var(--interactive-solid-select);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--fill:hover:not(:disabled) {
+  background: var(--interactive-solid-hover);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--fill:active:not(:disabled) {
+  background: var(--interactive-solid-press);
+}
+
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--outline:not(:disabled) {
+  border-color: var(--interactive-outline-select);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--outline:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--outline:active:not(:disabled) {
+  border-color: var(--interactive-outline-press);
+}
+
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--subtle:not(:disabled) {
+  background: var(--interactive-subtle-select);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--subtle:hover:not(:disabled) {
+  background: var(--interactive-subtle-hover);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--subtle:active:not(:disabled) {
+  background: var(--interactive-subtle-press);
+}
+
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost:not(:disabled) {
+  background: var(--interactive-ghost-select);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost:hover:not(:disabled) {
+  background: var(--interactive-ghost-hover);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost:active:not(:disabled) {
+  background: var(--interactive-ghost-press);
+}
+
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost-inverse:not(:disabled) {
+  background: var(--interactive-ghost-inverse-select);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost-inverse:hover:not(:disabled) {
+  background: var(--interactive-ghost-inverse-hover);
+}
+.ds-menu-dropdown-root[data-open='true'] .ds-btn.ds-btn--ghost-inverse:active:not(:disabled) {
+  background: var(--interactive-ghost-inverse-press);
+}
+
 /* Button icon (square) */
 .ds-btn-icon {
   display: inline-flex;
@@ -450,4 +513,187 @@ a.ds-item-row {
 
 .ds-item-row--static.ds-item-row--ghost::before {
   display: none;
+}
+
+/* ---------- Toggle ---------- */
+.ds-toggle {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.ds-toggle:has(.ds-toggle__input:disabled) {
+  cursor: not-allowed;
+}
+
+.ds-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ds-toggle__input:focus {
+  outline: none;
+}
+
+.ds-toggle__input:focus-visible + .ds-toggle__track {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-toggle__track {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: calc(var(--spacing-6) + var(--spacing-20) + var(--spacing-26));
+  min-height: calc(var(--spacing-6) + var(--spacing-20) + var(--spacing-6));
+  border-radius: var(--radius-infinite);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    padding 0.12s ease;
+}
+
+.ds-toggle__knob {
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color 0.12s ease;
+}
+
+/* Off */
+.ds-toggle__input:not(:checked) + .ds-toggle__track {
+  padding: var(--spacing-6) var(--spacing-26) var(--spacing-6) var(--spacing-6);
+  background: transparent;
+  border: 1px solid var(--interactive-outline-default);
+}
+
+.ds-toggle__input:not(:checked) + .ds-toggle__track .ds-toggle__knob {
+  background: var(--foreground-primary);
+}
+
+.ds-toggle:hover:not(:has(.ds-toggle__input:disabled))
+  .ds-toggle__input:not(:checked)
+  + .ds-toggle__track {
+  border-color: var(--interactive-outline-hover);
+}
+
+.ds-toggle__input:not(:checked):active:not(:disabled) + .ds-toggle__track {
+  border-color: var(--interactive-outline-press);
+}
+
+/* On */
+.ds-toggle__input:checked + .ds-toggle__track {
+  padding: var(--spacing-6) var(--spacing-6) var(--spacing-6) var(--spacing-26);
+  background: var(--interactive-solid-default);
+  border: 1px solid transparent;
+}
+
+.ds-toggle__input:checked + .ds-toggle__track .ds-toggle__knob {
+  background: var(--foreground-inverse);
+}
+
+.ds-toggle:hover:not(:has(.ds-toggle__input:disabled)) .ds-toggle__input:checked + .ds-toggle__track {
+  background: var(--interactive-solid-hover);
+}
+
+.ds-toggle__input:checked:active:not(:disabled) + .ds-toggle__track {
+  background: var(--interactive-solid-press);
+}
+
+/* Disabled */
+.ds-toggle__input:disabled:not(:checked) + .ds-toggle__track {
+  border-color: var(--border-muted);
+}
+
+.ds-toggle__input:disabled:not(:checked) + .ds-toggle__track .ds-toggle__knob {
+  background: var(--foreground-secondary);
+}
+
+.ds-toggle__input:disabled:checked + .ds-toggle__track {
+  background: var(--interactive-subtle-default);
+  border-color: transparent;
+}
+
+.ds-toggle__input:disabled:checked + .ds-toggle__track .ds-toggle__knob {
+  background: var(--foreground-inverse);
+}
+
+/* Static swatches (design matrix — no input) */
+.ds-toggle--static .ds-toggle__track {
+  pointer-events: none;
+}
+
+.ds-toggle--static {
+  cursor: default;
+}
+
+.ds-toggle--static-off-default .ds-toggle__track,
+.ds-toggle--static-off-hover .ds-toggle__track,
+.ds-toggle--static-off-press .ds-toggle__track,
+.ds-toggle--static-off-disabled .ds-toggle__track {
+  padding: var(--spacing-6) var(--spacing-26) var(--spacing-6) var(--spacing-6);
+  background: transparent;
+  border: 1px solid var(--interactive-outline-default);
+}
+
+.ds-toggle--static-off-hover .ds-toggle__track {
+  border-color: var(--interactive-outline-hover);
+}
+
+.ds-toggle--static-off-press .ds-toggle__track {
+  border-color: var(--interactive-outline-press);
+}
+
+.ds-toggle--static-off-disabled .ds-toggle__track {
+  border-color: var(--border-muted);
+}
+
+.ds-toggle--static-off-default .ds-toggle__knob,
+.ds-toggle--static-off-hover .ds-toggle__knob,
+.ds-toggle--static-off-press .ds-toggle__knob {
+  background: var(--foreground-primary);
+}
+
+.ds-toggle--static-off-disabled .ds-toggle__knob {
+  background: var(--foreground-secondary);
+}
+
+.ds-toggle--static-on-default .ds-toggle__track,
+.ds-toggle--static-on-hover .ds-toggle__track,
+.ds-toggle--static-on-press .ds-toggle__track,
+.ds-toggle--static-on-disabled .ds-toggle__track {
+  padding: var(--spacing-6) var(--spacing-6) var(--spacing-6) var(--spacing-26);
+  border: 1px solid transparent;
+}
+
+.ds-toggle--static-on-default .ds-toggle__track {
+  background: var(--interactive-solid-default);
+}
+
+.ds-toggle--static-on-hover .ds-toggle__track {
+  background: var(--interactive-solid-hover);
+}
+
+.ds-toggle--static-on-press .ds-toggle__track {
+  background: var(--interactive-solid-press);
+}
+
+.ds-toggle--static-on-disabled .ds-toggle__track {
+  background: var(--interactive-subtle-default);
+}
+
+.ds-toggle--static-on-default .ds-toggle__knob,
+.ds-toggle--static-on-hover .ds-toggle__knob,
+.ds-toggle--static-on-press .ds-toggle__knob,
+.ds-toggle--static-on-disabled .ds-toggle__knob {
+  background: var(--foreground-inverse);
 }

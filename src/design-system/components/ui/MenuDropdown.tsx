@@ -23,6 +23,8 @@ export interface MenuDropdownProps {
   /** Visual trigger (icon, text); must not be a nested interactive element. */
   trigger: ComponentChildren;
   triggerClass?: string;
+  /** When true, the trigger is inert and the menu cannot open. */
+  disabled?: boolean;
   items: MenuItem[];
   placement?: MenuPlacement;
   align?: MenuAlign;
@@ -34,6 +36,7 @@ export function MenuDropdown(props: MenuDropdownProps) {
   const {
     trigger,
     triggerClass = 'ds-btn-icon ds-btn-icon--ghost ds-btn-icon--m',
+    disabled = false,
     items,
     placement = 'bottom',
     align = 'start',
@@ -58,6 +61,10 @@ export function MenuDropdown(props: MenuDropdownProps) {
       close: () => setOpenRef.current(false),
     });
   }, [myId]);
+
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
 
   useLayoutEffect(() => {
     const menu = menuRef.current;
@@ -128,6 +135,7 @@ export function MenuDropdown(props: MenuDropdownProps) {
   }, [open, placement, align, items.length]);
 
   function toggle() {
+    if (disabled) return;
     setOpen((prev) => {
       if (prev) return false;
       closeOtherMenuDropdowns(myId);
@@ -139,23 +147,31 @@ export function MenuDropdown(props: MenuDropdownProps) {
     <div
       ref={wrapRef}
       class="ds-menu-dropdown-root"
+      data-open={open ? 'true' : 'false'}
       style={{ position: 'relative', display: 'inline-flex' }}
     >
       <div
         ref={triggerRef}
-        class={triggerClass}
         onClick={() => toggle()}
         onKeyDown={(e) => {
+          if (disabled) return;
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             toggle();
           }
         }}
         role="button"
-        tabIndex={0}
+        tabIndex={disabled ? -1 : 0}
         aria-haspopup="menu"
-        aria-expanded={open}
+        aria-expanded={disabled ? false : open}
+        aria-disabled={disabled ? true : undefined}
         aria-label={ariaLabel}
+        class={[
+          triggerClass,
+          disabled ? 'ds-menu-dropdown-trigger--disabled' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
       >
         {trigger}
       </div>

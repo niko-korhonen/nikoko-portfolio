@@ -1,0 +1,37 @@
+---
+interface Props {
+  class?: string;
+  disabled?: boolean;
+  checked?: boolean;
+  name?: string;
+  id?: string;
+  required?: boolean;
+  'aria-label'?: string;
+}
+const {
+  class: className = '',
+  disabled = false,
+  checked = false,
+  name,
+  id,
+  required,
+  'aria-label': ariaLabel,
+} = Astro.props;
+---
+
+<label class:list={['ds-toggle', className]}>
+  <input
+    type="checkbox"
+    class="ds-toggle__input"
+    role="switch"
+    disabled={disabled}
+    name={name}
+    id={id}
+    required={required}
+    aria-label={ariaLabel}
+    {...checked ? { checked: true } : {}}
+  />
+  <span class="ds-toggle__track" aria-hidden="true">
+    <span class="ds-toggle__knob"></span>
+  </span>
+</label>

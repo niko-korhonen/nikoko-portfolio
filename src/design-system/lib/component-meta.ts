@@ -8,9 +8,19 @@ export const componentMeta: Record<
     title: 'Button',
     description: 'Five variants, three sizes, optional icons, pill radius, token-driven interactive states.',
   },
+  'button-dropdown': {
+    title: 'Button dropdown',
+    description:
+      'Same sizes and variants as Button with a trailing chevron; opens a menu and uses selected tokens while open.',
+  },
   'button-icon': {
     title: 'Button icon',
     description: 'Icon-only button with the same variants plus a selected state.',
+  },
+  toggle: {
+    title: 'Toggle',
+    description:
+      'Binary switch with outline track when off and solid fill when on; token-driven hover, press, and disabled states.',
   },
   'item-row-action': {
     title: 'Item row (action)',
