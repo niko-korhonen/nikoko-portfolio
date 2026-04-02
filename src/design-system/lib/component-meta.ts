@@ -22,6 +22,11 @@ export const componentMeta: Record<
     description:
       'Binary switch with outline track when off and solid fill when on; token-driven hover, press, and disabled states.',
   },
+  radio: {
+    title: 'Radio',
+    description:
+      '20×20 control: outline ring on surface-1 when unselected; solid fill with radio-filled dot in inverse when selected.',
+  },
   'item-row-action': {
     title: 'Item row (action)',
     description: 'Interactive row with label, optional description, detail, slots, and chevron.',

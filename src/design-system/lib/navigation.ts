@@ -52,6 +52,7 @@ export const componentSlugs = [
   'button-dropdown',
   'button-icon',
   'toggle',
+  'radio',
   'item-row-action',
   'item-row-static',
   'item-row-divider',

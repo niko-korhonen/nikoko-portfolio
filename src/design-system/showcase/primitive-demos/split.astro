@@ -3,6 +3,18 @@ import DsSplit from '../../components/primitives/Split.astro';
 ---
 
 <DsSplit secondaryWidth="8rem" collapseMobile={true}>
-  <div slot="secondary" style="padding: var(--spacing-12); background: var(--surface-3); border-radius: var(--radius-s);" class="ds-type-label-m-short">Side</div>
-  <div slot="primary" style="padding: var(--spacing-12); background: var(--surface-2); border-radius: var(--radius-s);" class="ds-type-body-l-tall">Primary region grows.</div>
+  <div
+    slot="secondary"
+    class="ds-type-code-m-tall"
+    style="padding: var(--spacing-12); background: var(--surface-3); border-radius: var(--radius-s); color: var(--foreground-secondary);"
+  >
+    Side
+  </div>
+  <div
+    slot="primary"
+    class="ds-type-code-m-tall"
+    style="padding: var(--spacing-12); background: var(--surface-2); border-radius: var(--radius-s); color: var(--foreground-secondary);"
+  >
+    Primary region grows.
+  </div>
 </DsSplit>

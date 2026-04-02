@@ -23,6 +23,14 @@
   line-height: var(--type-code-m-line-height-tall);
 }
 
+.ds-showcase-page .ds-type-code-m-tall code,
+.ds-showcase-demo-panel .ds-type-code-m-tall code {
+  font-family: var(--font-code);
+  font-size: var(--type-code-m-size);
+  font-weight: var(--type-code-m-weight);
+  line-height: var(--type-code-m-line-height-tall);
+}
+
 /* Showcase shell (/s/) layout — full viewport height; TOC + main scroll independently */
 .ds-showcase {
   display: flex;
@@ -166,10 +174,95 @@ html[data-toc-desktop-collapsed] .ds-showcase-toc--desktop {
 }
 
 .ds-showcase-demo-panel {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Storybook-style preview + controls (component demos) */
+.ds-showcase-playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  width: 100%;
+}
+
+.ds-showcase-playground__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
   padding: var(--spacing-24);
-  border: 1px solid var(--border-muted);
+  box-sizing: border-box;
+  border: 1px dashed var(--border-muted);
   border-radius: var(--radius-m);
-  background: var(--surface-2);
+  background: var(--surface-1);
+}
+
+.ds-showcase-controls {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ds-showcase-controls thead th {
+  padding-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--border-muted);
+  vertical-align: bottom;
+}
+
+.ds-showcase-controls__head-name {
+  text-align: start;
+  width: 40%;
+}
+
+.ds-showcase-controls__head-control {
+  text-align: end;
+  width: 60%;
+}
+
+.ds-showcase-controls__row td {
+  border-top: 1px solid var(--border-muted);
+  padding-block: var(--spacing-12);
+  vertical-align: middle;
+}
+
+.ds-showcase-controls__control {
+  text-align: end;
+}
+
+.ds-showcase-textfield {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 16rem;
+  max-height: 32px;
+  margin-left: auto;
+  display: block;
+  padding: var(--spacing-6) var(--spacing-8);
+  border: 1px solid var(--interactive-outline-default);
+  border-radius: var(--radius-s);
+  background: var(--surface-1);
+  color: var(--foreground-primary);
+  font-family: inherit;
+}
+
+.ds-showcase-textfield::placeholder {
+  color: var(--foreground-secondary);
+}
+
+.ds-showcase-textfield:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+
+.ds-showcase-textfield:focus {
+  outline: none;
+  border-color: var(--interactive-outline-press);
+}
+
+.ds-showcase-textfield:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 @media (max-width: 599px) {

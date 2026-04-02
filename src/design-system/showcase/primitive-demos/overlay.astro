@@ -4,12 +4,12 @@ import Stack from '../../components/primitives/Stack.astro';
 import Button from '../../components/ui/Button.astro';
 ---
 
-<p class="ds-type-body-l-tall" style="margin-bottom: var(--spacing-16);">
+<p class="ds-type-code-m-tall" style="margin-bottom: var(--spacing-16); color: var(--foreground-secondary);">
   Temporary layer with scrim. Use the showcase shell overlay on mobile for the full navigation pattern.
 </p>
 <Overlay id="demo-overlay" placement="bottom" scrim dismissible modal={false}>
   <Stack gap="12" style="padding: var(--spacing-24);">
-    <p class="ds-type-label-l-short">Demo panel</p>
+    <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">Demo panel</p>
     <Button variant="outline" size="s" type="button" id="demo-overlay-close">
       Close
     </Button>

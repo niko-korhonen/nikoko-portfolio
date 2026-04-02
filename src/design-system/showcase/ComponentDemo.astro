@@ -1,13 +1,14 @@
 ---
-import Button from './component-demos/button.astro';
-import ButtonDropdown from './component-demos/button-dropdown.astro';
-import ButtonIcon from './component-demos/button-icon.astro';
-import Toggle from './component-demos/toggle.astro';
-import ItemRowAction from './component-demos/item-row-action.astro';
-import ItemRowStatic from './component-demos/item-row-static.astro';
-import ItemRowDivider from './component-demos/item-row-divider.astro';
-import ItemRowHeader from './component-demos/item-row-header.astro';
-import MenuDropdown from './component-demos/menu-dropdown.astro';
+import { ButtonPlayground } from './playgrounds/ButtonPlayground';
+import { ButtonDropdownPlayground } from './playgrounds/ButtonDropdownPlayground';
+import { ButtonIconPlayground } from './playgrounds/ButtonIconPlayground';
+import { TogglePlayground } from './playgrounds/TogglePlayground';
+import { RadioPlayground } from './playgrounds/RadioPlayground';
+import { ItemRowActionPlayground } from './playgrounds/ItemRowActionPlayground';
+import { ItemRowStaticPlayground } from './playgrounds/ItemRowStaticPlayground';
+import { ItemRowDividerPlayground } from './playgrounds/ItemRowDividerPlayground';
+import { ItemRowHeaderPlayground } from './playgrounds/ItemRowHeaderPlayground';
+import { MenuDropdownPlayground } from './playgrounds/MenuDropdownPlayground';
 import type { ComponentSlug } from '../lib/navigation';
 
 interface Props {
@@ -17,12 +18,13 @@ interface Props {
 const { slug } = Astro.props;
 ---
 
-{slug === 'button' && <Button />}
-{slug === 'button-dropdown' && <ButtonDropdown />}
-{slug === 'button-icon' && <ButtonIcon />}
-{slug === 'toggle' && <Toggle />}
-{slug === 'item-row-action' && <ItemRowAction />}
-{slug === 'item-row-static' && <ItemRowStatic />}
-{slug === 'item-row-divider' && <ItemRowDivider />}
-{slug === 'item-row-header' && <ItemRowHeader />}
-{slug === 'menu-dropdown' && <MenuDropdown />}
+{slug === 'button' && <ButtonPlayground client:load />}
+{slug === 'button-dropdown' && <ButtonDropdownPlayground client:load />}
+{slug === 'button-icon' && <ButtonIconPlayground client:load />}
+{slug === 'toggle' && <TogglePlayground client:load />}
+{slug === 'radio' && <RadioPlayground client:load />}
+{slug === 'item-row-action' && <ItemRowActionPlayground client:load />}
+{slug === 'item-row-static' && <ItemRowStaticPlayground client:load />}
+{slug === 'item-row-divider' && <ItemRowDividerPlayground client:load />}
+{slug === 'item-row-header' && <ItemRowHeaderPlayground client:load />}
+{slug === 'menu-dropdown' && <MenuDropdownPlayground client:load />}

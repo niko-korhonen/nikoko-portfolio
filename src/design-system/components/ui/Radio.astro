@@ -1,0 +1,41 @@
+---
+import Icon from '../media/Icon.astro';
+
+interface Props {
+  class?: string;
+  disabled?: boolean;
+  checked?: boolean;
+  name: string;
+  value: string;
+  id?: string;
+  required?: boolean;
+  'aria-label'?: string;
+}
+const {
+  class: className = '',
+  disabled = false,
+  checked = false,
+  name,
+  value,
+  id,
+  required,
+  'aria-label': ariaLabel,
+} = Astro.props;
+---
+
+<label class:list={['ds-radio', className]}>
+  <input
+    type="radio"
+    class="ds-radio__input"
+    disabled={disabled}
+    name={name}
+    value={value}
+    id={id}
+    required={required}
+    aria-label={ariaLabel}
+    {...checked ? { checked: true } : {}}
+  />
+  <span class="ds-radio__visual" aria-hidden="true">
+    <Icon name="radio-filled" size="xl" class="ds-radio__icon" />
+  </span>
+</label>

@@ -5,18 +5,18 @@ import { semanticColorCategories } from '../../lib/showcase-demos-data';
 ---
 
 <Stack gap="24">
-  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
     Semantic tokens resolve from the active theme and color scheme (light/dark). Use these names in components — never raw palette values.
   </p>
   {
     semanticColorCategories.map((cat) => (
       <Stack gap="12">
         <div>
-          <p class="ds-type-label-l-short" style="color: var(--foreground-primary);">
+          <p class="ds-type-code-m-tall" style="color: var(--foreground-primary);">
             {cat.title}
           </p>
           {cat.description && (
-            <p class="ds-type-body-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
+            <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
               {cat.description}
             </p>
           )}
@@ -29,7 +29,7 @@ import { semanticColorCategories } from '../../lib/showcase-demos-data';
                 style={`background: var(--${token});`}
                 aria-hidden="true"
               />
-              <span class="ds-type-label-xs-short" style="color: var(--foreground-secondary); word-break: break-word;">
+              <span class="ds-type-code-m-tall" style="color: var(--foreground-secondary); word-break: break-word;">
                 {token}
               </span>
             </Stack>

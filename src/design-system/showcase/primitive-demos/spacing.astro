@@ -5,14 +5,14 @@ import { spacingScaleKeys } from '../../lib/showcase-demos-data';
 ---
 
 <Stack gap="16">
-  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
-    Density spacing scale — use <code class="ds-type-code-l-tall">--spacing-*</code> for gaps, padding, and layout rhythm.
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
+    Density spacing scale — use <code>--spacing-*</code> for gaps, padding, and layout rhythm.
   </p>
   <Stack gap="6">
     {
       spacingScaleKeys.map((s) => (
         <Inline gap="12" align="center">
-          <code class="ds-type-code-l-tall" style="width: 8rem; flex-shrink: 0;">
+          <code class="ds-type-code-m-tall" style="width: 8rem; flex-shrink: 0;">
             --spacing-{s}
           </code>
           <div

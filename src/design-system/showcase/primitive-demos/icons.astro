@@ -14,12 +14,11 @@ const iconNames = fs
 ---
 
 <Stack gap="16">
-  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
-    SVG assets in <code class="ds-type-code-l-tall">/public/icons</code>, referenced via the Icon component or
-    <code class="ds-type-code-l-tall">--icon-src</code> mask. Sizes: <code class="ds-type-code-l-tall">xxl</code> through
-    <code class="ds-type-code-l-tall">s</code> (see <code class="ds-type-code-l-tall">--icon-*</code> tokens).
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
+    SVG assets in <code>/public/icons</code>, referenced via the Icon component or <code>--icon-src</code> mask. Sizes:
+    <code>xxl</code> through <code>s</code> (see <code>--icon-*</code> tokens).
   </p>
-  <p class="ds-type-label-m-short" style="color: var(--foreground-secondary);">
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
     {iconNames.length} icons
   </p>
   <DsGrid columns="repeat(auto-fill, minmax(7.5rem, 1fr))" gap="12">
@@ -27,7 +26,7 @@ const iconNames = fs
       iconNames.map((name) => (
         <div class="ds-showcase-icon-cell">
           <Icon name={name} size="l" />
-          <span class="ds-type-label-xs-short" style="color: var(--foreground-secondary);">
+          <span class="ds-type-code-m-tall" style="color: var(--foreground-secondary); word-break: break-word;">
             {name}
           </span>
         </div>

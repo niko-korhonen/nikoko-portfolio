@@ -27,7 +27,7 @@ const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout title={`${title} · Design system`}>
-  <div class="ds-showcase ds-surface-1">
+  <div class="ds-showcase ds-surface-2">
     <div class="ds-showcase__rail-wrap">
       <Rail class="ds-rail--hide-mobile">
         <Stack gap="8" align="center">
@@ -59,14 +59,14 @@ const currentPath = Astro.url.pathname;
         <aside slot="secondary" class="ds-showcase-toc ds-showcase-toc--desktop ds-surface-2">
           <TocPanel sections={tocSections} currentPath={currentPath} />
         </aside>
-        <div slot="primary" class="ds-surface-1" style="min-height: 0;">
+        <div slot="primary" class="ds-surface-2" style="min-height: 0;">
           <Container>
             <Stack gap="16" class="ds-showcase-page" style="padding-block: var(--spacing-24);">
               <header>
                 <h1 class="ds-type-headline-m">{title}</h1>
                 {
                   description && (
-                    <p class="ds-type-body-xl-tall" style="color: var(--foreground-secondary); max-width: 48rem;">
+                    <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary); max-width: 48rem;">
                       {description}
                     </p>
                   )

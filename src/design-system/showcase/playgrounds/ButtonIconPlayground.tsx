@@ -1,0 +1,141 @@
+import { useState } from 'preact/hooks';
+import { DsIcon } from '../../components/ui/DsIcon';
+import { ShowcasePlayground, ShowcaseControlRow } from './ShowcasePlayground';
+import { ShowcaseToggle } from './ShowcaseToggle';
+import { ShowcaseSelect } from './ShowcaseSelect';
+
+const sizeOpts = [
+  { id: 'l', label: 'L' },
+  { id: 'm', label: 'M' },
+  { id: 's', label: 'S' },
+];
+
+const variantOpts = [
+  { id: 'fill', label: 'Fill' },
+  { id: 'outline', label: 'Outline' },
+  { id: 'subtle', label: 'Subtle' },
+  { id: 'ghost', label: 'Ghost' },
+  { id: 'ghost-inverse', label: 'Ghost inv.' },
+];
+
+const iconOpts = [
+  { id: 'search-outlined', label: 'Search' },
+  { id: 'settings-gear-outlined', label: 'Settings' },
+  { id: 'heart-outlined', label: 'Heart' },
+  { id: 'sun-outlined', label: 'Sun' },
+];
+
+export function ButtonIconPlayground() {
+  const [size, setSize] = useState<'l' | 'm' | 's'>('m');
+  const [variant, setVariant] = useState<
+    'fill' | 'outline' | 'subtle' | 'ghost' | 'ghost-inverse'
+  >('fill');
+  const [icon, setIcon] = useState('search-outlined');
+  const [selected, setSelected] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const v =
+    variant === 'ghost-inverse'
+      ? 'ghost-inverse'
+      : variant === 'ghost'
+        ? 'ghost'
+        : variant;
+  const cls = [
+    'ds-btn-icon',
+    `ds-btn-icon--${v}`,
+    `ds-btn-icon--${size}`,
+    selected && 'ds-btn-icon--selected',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const inner = (
+    <button
+      type="button"
+      class={cls}
+      disabled={disabled}
+      aria-label="Icon button"
+      aria-pressed={selected ? 'true' : undefined}
+    >
+      <DsIcon name={icon} size={size === 'l' ? 'xl' : size === 'm' ? 'l' : 'm'} />
+    </button>
+  );
+
+  const preview =
+    variant === 'ghost-inverse' ? (
+      <span
+        style={{
+          display: 'inline-flex',
+          padding: 'var(--spacing-8)',
+          background: 'var(--surface-inverse)',
+          borderRadius: 'var(--radius-m)',
+        }}
+      >
+        {inner}
+      </span>
+    ) : (
+      inner
+    );
+
+  return (
+    <ShowcasePlayground preview={preview}>
+      <ShowcaseControlRow
+        name="Size"
+        control={
+          <ShowcaseSelect
+            aria-label="Size"
+            value={size}
+            options={sizeOpts}
+            onChange={(id) => setSize(id as 'l' | 'm' | 's')}
+          />
+        }
+      />
+      <ShowcaseControlRow
+        name="Variant"
+        control={
+          <ShowcaseSelect
+            aria-label="Variant"
+            value={variant}
+            options={variantOpts}
+            onChange={(id) =>
+              setVariant(
+                id as 'fill' | 'outline' | 'subtle' | 'ghost' | 'ghost-inverse',
+              )
+            }
+          />
+        }
+      />
+      <ShowcaseControlRow
+        name="Icon"
+        control={
+          <ShowcaseSelect
+            aria-label="Icon"
+            value={icon}
+            options={iconOpts}
+            onChange={setIcon}
+          />
+        }
+      />
+      <ShowcaseControlRow
+        name="Selected"
+        control={
+          <ShowcaseToggle
+            aria-label="Selected"
+            checked={selected}
+            onChange={setSelected}
+          />
+        }
+      />
+      <ShowcaseControlRow
+        name="Disabled"
+        control={
+          <ShowcaseToggle
+            aria-label="Disabled"
+            checked={disabled}
+            onChange={setDisabled}
+          />
+        }
+      />
+    </ShowcasePlayground>
+  );
+}

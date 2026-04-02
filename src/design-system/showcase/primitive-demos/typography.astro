@@ -4,18 +4,18 @@ import { typographySections } from '../../lib/showcase-demos-data';
 ---
 
 <Stack gap="24">
-  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
     CSS utility classes map to density typography tokens. Display and headline use Saans; label and body use Google Sans Flex; code uses Google Sans Code.
   </p>
   {
     typographySections.map((section) => (
       <Stack gap="12">
         <div>
-          <p class="ds-type-label-l-short" style="color: var(--foreground-primary);">
+          <p class="ds-type-code-m-tall" style="color: var(--foreground-primary);">
             {section.title}
           </p>
           {section.subtitle && (
-            <p class="ds-type-body-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
+            <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
               {section.subtitle}
             </p>
           )}

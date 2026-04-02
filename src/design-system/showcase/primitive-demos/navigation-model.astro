@@ -3,11 +3,11 @@ import Stack from '../../components/primitives/Stack.astro';
 ---
 
 <Stack gap="12">
-  <p class="ds-type-body-l-tall">
+  <p class="ds-type-code-m-tall" style="color: var(--foreground-secondary);">
     Navigation data lives in a single module so Rail, sidebar TOC, mobile bar, and overlays stay aligned. See
-    <code class="ds-type-code-l-tall">src/design-system/lib/navigation.ts</code>.
+    <code>src/design-system/lib/navigation.ts</code>.
   </p>
-  <ul class="ds-type-body-l-tall" style="margin: 0; padding-left: var(--spacing-24); color: var(--foreground-secondary);">
+  <ul class="ds-type-code-m-tall" style="margin: 0; padding-left: var(--spacing-24); color: var(--foreground-secondary);">
     <li>Each item: id, label, optional icon, destination, group, priority, order, optional children.</li>
     <li>Primary items surface in compact patterns; overflow uses overlay / “More”.</li>
     <li>Do not redefine labels or routes per pattern — import from the shared model.</li>
