@@ -1,0 +1,70 @@
+---
+import Icon from '../media/Icon.astro';
+
+interface Props {
+  variant?: 'fill' | 'outline' | 'subtle' | 'ghost' | 'ghost-inverse';
+  size?: 'l' | 'm' | 's';
+  block?: boolean;
+  disabled?: boolean;
+  selected?: boolean;
+  type?: 'button' | 'submit';
+  href?: string;
+  icon: string;
+  label: string;
+  class?: string;
+  id?: string;
+  dataAction?: string;
+}
+const {
+  variant = 'subtle',
+  size = 'm',
+  block = false,
+  disabled = false,
+  selected = false,
+  type = 'button',
+  href,
+  icon,
+  label,
+  class: className = '',
+  id,
+  dataAction,
+} = Astro.props;
+
+const v =
+  variant === 'ghost-inverse'
+    ? 'ghost-inverse'
+    : variant === 'ghost'
+      ? 'ghost'
+      : variant;
+
+const iconSize = size === 'l' ? 'xl' : size === 'm' ? 'l' : 'm';
+
+const cls = [
+  'ds-btn-icon',
+  `ds-btn-icon--${v}`,
+  `ds-btn-icon--${size}`,
+  block && 'ds-btn-icon--block',
+  selected && 'ds-btn-icon--selected',
+  className,
+];
+---
+
+{
+  href && !disabled ? (
+    <a href={href} class:list={cls} aria-label={label} id={id} data-action={dataAction}>
+      <Icon name={icon} size={iconSize} />
+    </a>
+  ) : (
+    <button
+      type={type}
+      disabled={disabled}
+      class:list={cls}
+      aria-label={label}
+      aria-pressed={selected ? 'true' : undefined}
+      id={id}
+      data-action={dataAction}
+    >
+      <Icon name={icon} size={iconSize} />
+    </button>
+  )
+}

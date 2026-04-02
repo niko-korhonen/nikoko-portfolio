@@ -1,0 +1,65 @@
+---
+import Icon from '../media/Icon.astro';
+
+interface Props {
+  variant?: 'fill' | 'outline' | 'subtle' | 'ghost' | 'ghost-inverse';
+  size?: 'l' | 'm' | 's';
+  block?: boolean;
+  disabled?: boolean;
+  type?: 'button' | 'submit';
+  href?: string;
+  class?: string;
+  leadingIcon?: string;
+  trailingIcon?: string;
+  id?: string;
+}
+const {
+  variant = 'fill',
+  size = 'm',
+  block = false,
+  disabled = false,
+  type = 'button',
+  href,
+  class: className = '',
+  leadingIcon,
+  trailingIcon,
+  id,
+} = Astro.props;
+
+const v =
+  variant === 'ghost-inverse'
+    ? 'ghost-inverse'
+    : variant === 'ghost'
+      ? 'ghost'
+      : variant;
+
+const iconSize = size === 'l' ? 'xl' : size === 'm' ? 'l' : 'm';
+
+const cls = [
+  'ds-btn',
+  `ds-btn--${v}`,
+  `ds-btn--${size}`,
+  block && 'ds-btn--block',
+  className,
+];
+---
+
+{
+  href && !disabled ? (
+    <a href={href} class:list={cls} id={id}>
+      {leadingIcon && <Icon name={leadingIcon} size={iconSize} />}
+      <span class="ds-btn__label">
+        <slot />
+      </span>
+      {trailingIcon && <Icon name={trailingIcon} size={iconSize} />}
+    </a>
+  ) : (
+    <button type={type} disabled={disabled} class:list={cls} id={id}>
+      {leadingIcon && <Icon name={leadingIcon} size={iconSize} />}
+      <span class="ds-btn__label">
+        <slot />
+      </span>
+      {trailingIcon && <Icon name={trailingIcon} size={iconSize} />}
+    </button>
+  )
+}

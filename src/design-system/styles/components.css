@@ -1,0 +1,453 @@
+/* Icons — mask so color = currentColor */
+.ds-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: var(--icon-src) center / contain no-repeat;
+  mask: var(--icon-src) center / contain no-repeat;
+}
+
+.ds-icon--xxl {
+  width: var(--icon-xxl);
+  height: var(--icon-xxl);
+}
+.ds-icon--xl {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
+.ds-icon--l {
+  width: var(--icon-l);
+  height: var(--icon-l);
+}
+.ds-icon--m {
+  width: var(--icon-m);
+  height: var(--icon-m);
+}
+.ds-icon--s {
+  width: var(--icon-s);
+  height: var(--icon-s);
+}
+
+/* ---------- Button ---------- */
+.ds-btn {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-infinite);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.ds-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-btn:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.ds-btn--fill {
+  background: var(--interactive-solid-default);
+  color: var(--foreground-inverse);
+}
+.ds-btn--fill:hover:not(:disabled) {
+  background: var(--interactive-solid-hover);
+}
+.ds-btn--fill:active:not(:disabled) {
+  background: var(--interactive-solid-press);
+}
+
+.ds-btn--outline {
+  background: transparent;
+  color: var(--foreground-primary);
+  border: 1px solid var(--interactive-outline-default);
+}
+.ds-btn--outline:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+.ds-btn--outline:active:not(:disabled) {
+  border-color: var(--interactive-outline-press);
+}
+
+.ds-btn--subtle {
+  background: var(--interactive-subtle-default);
+  color: var(--foreground-primary);
+}
+.ds-btn--subtle:hover:not(:disabled) {
+  background: var(--interactive-subtle-hover);
+}
+.ds-btn--subtle:active:not(:disabled) {
+  background: var(--interactive-subtle-press);
+}
+
+.ds-btn--ghost {
+  background: var(--interactive-ghost-default);
+  color: var(--foreground-primary);
+}
+.ds-btn--ghost:hover:not(:disabled) {
+  background: var(--interactive-ghost-hover);
+}
+.ds-btn--ghost:active:not(:disabled) {
+  background: var(--interactive-ghost-press);
+}
+
+.ds-btn--ghost-inverse {
+  background: var(--interactive-ghost-inverse-default);
+  color: var(--foreground-inverse);
+}
+.ds-btn--ghost-inverse:hover:not(:disabled) {
+  background: var(--interactive-ghost-inverse-hover);
+}
+.ds-btn--ghost-inverse:active:not(:disabled) {
+  background: var(--interactive-ghost-inverse-press);
+}
+
+.ds-btn--l {
+  gap: var(--spacing-8);
+  padding: var(--spacing-16) var(--spacing-24);
+  font-size: var(--type-label-xl-size);
+  font-weight: var(--type-label-xl-weight);
+  line-height: var(--type-label-xl-line-height-short);
+}
+
+.ds-btn--m {
+  gap: var(--spacing-8);
+  padding: var(--spacing-12) var(--spacing-18);
+  font-size: var(--type-label-l-size);
+  font-weight: var(--type-label-l-weight);
+  line-height: var(--type-label-l-line-height-short);
+}
+
+.ds-btn--s {
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-14);
+  font-size: var(--type-label-m-size);
+  font-weight: var(--type-label-m-weight);
+  line-height: var(--type-label-m-line-height-short);
+}
+
+.ds-btn--block {
+  width: 100%;
+}
+
+/* Button icon (square) */
+.ds-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-infinite);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.ds-btn-icon:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-btn-icon:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.ds-btn-icon--fill {
+  background: var(--interactive-solid-default);
+  color: var(--foreground-inverse);
+}
+.ds-btn-icon--fill:hover:not(:disabled) {
+  background: var(--interactive-solid-hover);
+}
+.ds-btn-icon--fill:active:not(:disabled) {
+  background: var(--interactive-solid-press);
+}
+.ds-btn-icon--fill.ds-btn-icon--selected {
+  background: var(--interactive-solid-select);
+}
+
+.ds-btn-icon--outline {
+  background: transparent;
+  color: var(--foreground-primary);
+  border: 1px solid var(--interactive-outline-default);
+}
+.ds-btn-icon--outline:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+.ds-btn-icon--outline:active:not(:disabled) {
+  border-color: var(--interactive-outline-press);
+}
+.ds-btn-icon--outline.ds-btn-icon--selected {
+  border-color: var(--interactive-outline-select);
+}
+
+.ds-btn-icon--subtle {
+  background: var(--interactive-subtle-default);
+  color: var(--foreground-primary);
+}
+.ds-btn-icon--subtle:hover:not(:disabled) {
+  background: var(--interactive-subtle-hover);
+}
+.ds-btn-icon--subtle:active:not(:disabled) {
+  background: var(--interactive-subtle-press);
+}
+.ds-btn-icon--subtle.ds-btn-icon--selected {
+  background: var(--interactive-subtle-select);
+}
+
+.ds-btn-icon--ghost {
+  background: var(--interactive-ghost-default);
+  color: var(--foreground-primary);
+}
+.ds-btn-icon--ghost:hover:not(:disabled) {
+  background: var(--interactive-ghost-hover);
+}
+.ds-btn-icon--ghost:active:not(:disabled) {
+  background: var(--interactive-ghost-press);
+}
+.ds-btn-icon--ghost.ds-btn-icon--selected {
+  background: var(--interactive-ghost-select);
+}
+
+.ds-btn-icon--ghost-inverse {
+  background: var(--interactive-ghost-inverse-default);
+  color: var(--foreground-inverse);
+}
+.ds-btn-icon--ghost-inverse:hover:not(:disabled) {
+  background: var(--interactive-ghost-inverse-hover);
+}
+.ds-btn-icon--ghost-inverse:active:not(:disabled) {
+  background: var(--interactive-ghost-inverse-press);
+}
+.ds-btn-icon--ghost-inverse.ds-btn-icon--selected {
+  background: var(--interactive-ghost-inverse-select);
+}
+
+.ds-btn-icon--l {
+  padding: var(--spacing-16);
+}
+.ds-btn-icon--m {
+  padding: var(--spacing-12);
+}
+.ds-btn-icon--s {
+  padding: var(--spacing-8);
+}
+
+.ds-btn-icon--block {
+  width: 100%;
+}
+
+/* ---------- Item rows ---------- */
+.ds-item-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+  color: inherit;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+a.ds-item-row {
+  text-decoration: none;
+  color: inherit;
+}
+
+.ds-item-row:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.ds-item-row:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.ds-item-row--subtle,
+.ds-item-row--outline {
+  gap: var(--spacing-16);
+  padding: var(--spacing-16);
+  border-radius: var(--radius-m);
+}
+
+.ds-item-row--subtle {
+  background: var(--interactive-subtle-default);
+}
+.ds-item-row--subtle:hover:not(:disabled) {
+  background: var(--interactive-subtle-hover);
+}
+.ds-item-row--subtle:active:not(:disabled) {
+  background: var(--interactive-subtle-press);
+}
+.ds-item-row--subtle.ds-item-row--selected:not(:disabled) {
+  background: var(--interactive-subtle-select);
+}
+.ds-item-row--subtle.ds-item-row--selected:hover:not(:disabled) {
+  background: var(--interactive-subtle-hover);
+}
+.ds-item-row--subtle.ds-item-row--selected:active:not(:disabled) {
+  background: var(--interactive-subtle-press);
+}
+
+.ds-item-row--outline {
+  background: transparent;
+  border: 1px solid var(--border-muted);
+}
+.ds-item-row--outline:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+.ds-item-row--outline:active:not(:disabled) {
+  border-color: var(--interactive-outline-press);
+}
+.ds-item-row--outline.ds-item-row--selected:not(:disabled) {
+  border-color: var(--interactive-outline-select);
+}
+.ds-item-row--outline.ds-item-row--selected:hover:not(:disabled) {
+  border-color: var(--interactive-outline-hover);
+}
+.ds-item-row--outline.ds-item-row--selected:active:not(:disabled) {
+  border-color: var(--interactive-outline-press);
+}
+
+/* Ghost: content flush horizontally; ::before bleeds 16px past the row edges (visual only). */
+.ds-item-row--ghost {
+  gap: var(--spacing-16);
+  padding: var(--spacing-12) 0;
+  border-radius: var(--radius-s);
+}
+
+.ds-item-row--ghost::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: calc(-1 * var(--spacing-16));
+  right: calc(-1 * var(--spacing-16));
+  top: 0;
+  bottom: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  pointer-events: none;
+}
+
+.ds-item-row--ghost:hover:not(:disabled)::before {
+  background: var(--interactive-ghost-hover);
+}
+.ds-item-row--ghost:active:not(:disabled)::before {
+  background: var(--interactive-ghost-press);
+}
+.ds-item-row--ghost.ds-item-row--selected:not(:disabled)::before {
+  background: var(--interactive-ghost-select);
+}
+.ds-item-row--ghost.ds-item-row--selected:hover:not(:disabled)::before {
+  background: var(--interactive-ghost-hover);
+}
+.ds-item-row--ghost.ds-item-row--selected:active:not(:disabled)::before {
+  background: var(--interactive-ghost-press);
+}
+
+.ds-item-row__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-16);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Stretch primary text block + trailing meta + chevron to the same row height so baselines/icons align. */
+.ds-item-row__main,
+.ds-item-row__detail,
+.ds-item-row__chevron {
+  align-self: stretch;
+}
+
+.ds-item-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Title vs secondary copy: explicit weights so body never reads as label (same 14/18 in tokens). */
+.ds-item-row .ds-item-row__main .ds-type-label-l-short {
+  font-weight: var(--type-label-l-weight);
+}
+
+.ds-item-row .ds-item-row__main .ds-type-body-l-short,
+.ds-item-row .ds-item-row__detail.ds-type-body-l-short {
+  font-weight: var(--type-body-l-weight);
+}
+
+.ds-item-row__detail {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+  text-align: right;
+}
+
+.ds-item-row__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+  color: var(--foreground-secondary);
+}
+
+.ds-item-row__chevron .ds-icon {
+  display: block;
+}
+
+.ds-item-row-divider {
+  height: 1px;
+  background: var(--border-muted);
+  margin-block: var(--spacing-12);
+  width: 100%;
+}
+
+.ds-item-row-header {
+  color: var(--foreground-secondary);
+  padding-block: var(--spacing-12);
+  box-sizing: border-box;
+}
+
+.ds-item-row--static {
+  cursor: default;
+}
+
+.ds-item-row--static.ds-item-row--ghost::before {
+  display: none;
+}

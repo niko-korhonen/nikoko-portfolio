@@ -1,0 +1,46 @@
+@import '../generated/tokens.css';
+
+:root {
+  --font-display: 'Saans', system-ui, sans-serif;
+  --font-body: 'Google Sans Flex', system-ui, sans-serif;
+  --font-code: 'Google Sans Code', ui-monospace, monospace;
+  /* Structural layout (documented on /s/primitive/split); not color/spacing tokens */
+  --layout-sidebar-width: 280px;
+  --layout-overlay-panel-width: min(100vw - var(--spacing-32), 320px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  background: var(--surface-1);
+  color: var(--foreground-primary);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-surface-1 {
+  background: var(--surface-1);
+}
+
+.ds-surface-2 {
+  background: var(--surface-2);
+}

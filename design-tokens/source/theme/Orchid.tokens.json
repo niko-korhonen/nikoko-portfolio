@@ -1,0 +1,642 @@
+{
+  "Foreground": {
+    "Secondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313797950745,
+          0.3333333432674408,
+          0.886274516582489
+        ],
+        "alpha": 1,
+        "hex": "#E055E2"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:382",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:974fe7f7a75bab69e890c3058ea09f1f4aa0159d/-1:-1",
+          "targetVariableName": "Orchid/700",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    }
+  },
+  "Surface": {
+    "1": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9137254953384399,
+          0.9882352948188782
+        ],
+        "alpha": 1,
+        "hex": "#FFE9FC"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:8:82",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:521a2a4eb8e1e8160e6d81df3fb69e5605fac3c7/-1:-1",
+          "targetVariableName": "Orchid/100",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "2": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.8823529481887817,
+          0.9843137264251709
+        ],
+        "alpha": 1,
+        "hex": "#FFE1FB"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:8:83",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:b69b969a8f769c403f36da681126f9cf7e796b2e/-1:-1",
+          "targetVariableName": "Orchid/150",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "3": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.8549019694328308,
+          0.9803921580314636
+        ],
+        "alpha": 1,
+        "hex": "#FFDAFA"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:12:92",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:68babb134f963a0518ce6cab5bc11405eceb502b/-1:-1",
+          "targetVariableName": "Orchid/200",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "4": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9960784316062927,
+          0.7803921699523926,
+          0.9725490212440491
+        ],
+        "alpha": 1,
+        "hex": "#FEC7F8"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:43:544",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:a4350183351c96093c347d99ef3c7c5a68b7dd04/-1:-1",
+          "targetVariableName": "Orchid/300",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "5": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9137254953384399,
+          0.9882352948188782
+        ],
+        "alpha": 1,
+        "hex": "#FFE9FC"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:13:354",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:521a2a4eb8e1e8160e6d81df3fb69e5605fac3c7/-1:-1",
+          "targetVariableName": "Orchid/100",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "6": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:13:355",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:3e753473a10e31f1baae160d0e6e0715ca0ee4e8/-1:-1",
+          "targetVariableName": "Core/100",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "Brand": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8039215803146362,
+          0.22745098173618317,
+          0.8078431487083435
+        ],
+        "alpha": 1,
+        "hex": "#CD3ACE"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:16:5",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+          "targetVariableName": "Orchid/800",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "Inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.27843138575553894,
+          0.054901961237192154,
+          0.27450981736183167
+        ],
+        "alpha": 1,
+        "hex": "#470E46"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:13:356",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:d3854224793def241bac5876187fb1a5bc38a1d3/-1:-1",
+          "targetVariableName": "Orchid/1300",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "Border": {
+      "5": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9843137264251709,
+            0.6823529601097107,
+            0.9647058844566345
+          ],
+          "alpha": 1,
+          "hex": "#FBAEF6"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:13:357",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:a7bc16ad9c73de672d892f7529a836df9c797a3f/-1:-1",
+            "targetVariableName": "Orchid/400",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      }
+    }
+  },
+  "Border": {
+    "Strong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.27843138575553894,
+          0.054901961237192154,
+          0.27450981736183167
+        ],
+        "alpha": 1,
+        "hex": "#470E46"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:1133",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:d3854224793def241bac5876187fb1a5bc38a1d3/-1:-1",
+          "targetVariableName": "Orchid/1300",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "Subtle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.45490196347236633,
+          0.929411768913269
+        ],
+        "alpha": 1,
+        "hex": "#ED74ED"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:1134",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7204d85059b7342503b333430a6e5e609513639d/-1:-1",
+          "targetVariableName": "Orchid/600",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "Muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9960784316062927,
+          0.7803921699523926,
+          0.9725490212440491
+        ],
+        "alpha": 1,
+        "hex": "#FEC7F8"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:1135",
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:a4350183351c96093c347d99ef3c7c5a68b7dd04/-1:-1",
+          "targetVariableName": "Orchid/300",
+          "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+          "targetVariableSetName": "Palette"
+        },
+        "com.figma.isOverride": true
+      }
+    }
+  },
+  "Interactive": {
+    "Solid": {
+      "Default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8039215803146362,
+            0.22745098173618317,
+            0.8078431487083435
+          ],
+          "alpha": 1,
+          "hex": "#CD3ACE"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:84",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+            "targetVariableName": "Orchid/800",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.615686297416687,
+            0.0117647061124444,
+            0.6196078658103943
+          ],
+          "alpha": 1,
+          "hex": "#9D039E"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:85",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:48c18a311099dbe087daa4595aefd9cf634600b3/-1:-1",
+            "targetVariableName": "Orchid/1000",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Press": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3921568691730499,
+            0.0235294122248888,
+            0.3921568691730499
+          ],
+          "alpha": 1,
+          "hex": "#640664"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:86",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:1789a782a12910b2825bf94f7bce48aab5c11f66/-1:-1",
+            "targetVariableName": "Orchid/1200",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Select": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8039215803146362,
+            0.22745098173618317,
+            0.8078431487083435
+          ],
+          "alpha": 1,
+          "hex": "#CD3ACE"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:22:684",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+            "targetVariableName": "Orchid/800",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "Outline": {
+      "Default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8039215803146362,
+            0.22745098173618317,
+            0.8078431487083435
+          ],
+          "alpha": 1,
+          "hex": "#CD3ACE"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:87",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+            "targetVariableName": "Orchid/800",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.615686297416687,
+            0.0117647061124444,
+            0.6196078658103943
+          ],
+          "alpha": 1,
+          "hex": "#9D039E"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:88",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:48c18a311099dbe087daa4595aefd9cf634600b3/-1:-1",
+            "targetVariableName": "Orchid/1000",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Press": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3921568691730499,
+            0.0235294122248888,
+            0.3921568691730499
+          ],
+          "alpha": 1,
+          "hex": "#640664"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:89",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:1789a782a12910b2825bf94f7bce48aab5c11f66/-1:-1",
+            "targetVariableName": "Orchid/1200",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Focus": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8039215803146362,
+            0.22745098173618317,
+            0.8078431487083435
+          ],
+          "alpha": 1,
+          "hex": "#CD3ACE"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:90",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+            "targetVariableName": "Orchid/800",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Select": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8039215803146362,
+            0.22745098173618317,
+            0.8078431487083435
+          ],
+          "alpha": 1,
+          "hex": "#CD3ACE"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:107",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f12aa1e9e2bc1bf227cb6f6204137382fa85ca68/-1:-1",
+            "targetVariableName": "Orchid/800",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "Subtle": {
+      "Default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9960784316062927,
+            0.7803921699523926,
+            0.9725490212440491
+          ],
+          "alpha": 1,
+          "hex": "#FEC7F8"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:91",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:a4350183351c96093c347d99ef3c7c5a68b7dd04/-1:-1",
+            "targetVariableName": "Orchid/300",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9843137264251709,
+            0.6823529601097107,
+            0.9647058844566345
+          ],
+          "alpha": 1,
+          "hex": "#FBAEF6"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:92",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:a7bc16ad9c73de672d892f7529a836df9c797a3f/-1:-1",
+            "targetVariableName": "Orchid/400",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Press": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9607843160629272,
+            0.572549045085907,
+            0.9529411792755127
+          ],
+          "alpha": 1,
+          "hex": "#F592F3"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:93",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:6280a2d25af42401feff2886a4d919da7fddbe05/-1:-1",
+            "targetVariableName": "Orchid/500",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Focus": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.8549019694328308,
+            0.9803921580314636
+          ],
+          "alpha": 1,
+          "hex": "#FFDAFA"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:101",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:68babb134f963a0518ce6cab5bc11405eceb502b/-1:-1",
+            "targetVariableName": "Orchid/200",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "Select": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9960784316062927,
+            0.7803921699523926,
+            0.9725490212440491
+          ],
+          "alpha": 1,
+          "hex": "#FEC7F8"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:8:108",
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:a4350183351c96093c347d99ef3c7c5a68b7dd04/-1:-1",
+            "targetVariableName": "Orchid/300",
+            "targetVariableSetId": "VariableCollectionId:6d05c20dca1ff28eff787110178e96851860de38/-1:-1",
+            "targetVariableSetName": "Palette"
+          },
+          "com.figma.isOverride": true
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Orchid"
+  }
+}

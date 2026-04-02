@@ -1,0 +1,17 @@
+---
+/**
+ * Full navigation in a temporary overlay — same nav data as Rail / SidebarNav.
+ */
+import Overlay from '../primitives/Overlay.astro';
+
+interface Props {
+  id: string;
+  scrim?: boolean;
+  dismissible?: boolean;
+  class?: string;
+}
+const { id, scrim = true, dismissible = true, class: className = '' } = Astro.props;
+---
+<Overlay id={id} placement="full" scrim={scrim} dismissible={dismissible} modal={false} class={className}>
+  <slot />
+</Overlay>

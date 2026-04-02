@@ -1,0 +1,19 @@
+---
+interface Props {
+  axis?: 'x' | 'y' | 'both';
+  textAlign?: 'left' | 'center';
+  class?: string;
+}
+const { axis = 'both', textAlign, class: className = '' } = Astro.props;
+const axisClass =
+  axis === 'x' ? 'ds-center--x' : axis === 'y' ? 'ds-center--y' : 'ds-center--both';
+const textClass =
+  textAlign === 'left'
+    ? 'ds-center--text-left'
+    : textAlign === 'center'
+      ? 'ds-center--text-center'
+      : '';
+---
+<div class:list={['ds-center', axisClass, textClass, className]}>
+  <slot />
+</div>

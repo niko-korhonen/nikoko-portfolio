@@ -1,0 +1,32 @@
+.ds-menu-dropdown {
+  position: fixed;
+  z-index: 3000;
+  min-width: 10rem;
+  max-width: min(100vw - var(--spacing-24), 20rem);
+  padding: var(--spacing-8) var(--spacing-24);
+  margin: 0;
+  list-style: none;
+  background: var(--surface-5);
+  border: 1px solid var(--surface-border-5);
+  border-radius: var(--radius-m);
+  box-shadow:
+    calc(var(--surface-shadow-5-x) * 1px) calc(var(--surface-shadow-5-y) * 1px)
+      calc(var(--surface-shadow-5-blur) * 1px) calc(var(--surface-shadow-5-spread) * 1px)
+      var(--surface-shadow-5-color);
+  box-sizing: border-box;
+}
+
+.ds-menu-dropdown[data-open='false'] {
+  display: none;
+  pointer-events: none;
+}
+
+/* Options use ItemRowAction ghost pattern (see components.css .ds-item-row--ghost). */
+.ds-menu-dropdown__option {
+  margin: 0;
+}
+
+.ds-menu-dropdown__option .ds-item-row {
+  width: 100%;
+  text-align: left;
+}

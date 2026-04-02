@@ -1,0 +1,24 @@
+---
+interface Props {
+  secondaryWidth?: string;
+  collapseMobile?: boolean;
+  class?: string;
+}
+const {
+  secondaryWidth,
+  collapseMobile = true,
+  class: className = '',
+} = Astro.props;
+const style = secondaryWidth ? `--ds-split-secondary-width: ${secondaryWidth};` : undefined;
+---
+<div
+  class:list={['ds-split', collapseMobile && 'ds-split--collapse-mobile', className]}
+  style={style}
+>
+  <div class="ds-split__secondary">
+    <slot name="secondary" />
+  </div>
+  <div class="ds-split__primary">
+    <slot name="primary" />
+  </div>
+</div>

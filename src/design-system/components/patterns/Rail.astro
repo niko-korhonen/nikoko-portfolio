@@ -1,0 +1,12 @@
+---
+/**
+ * Compact vertical rail: icon-first primary actions. Usually lives beside Split.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<div class:list={['ds-rail', 'ds-surface-2', className]}>
+  <slot />
+</div>

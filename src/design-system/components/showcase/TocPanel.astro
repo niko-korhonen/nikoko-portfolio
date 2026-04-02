@@ -1,0 +1,35 @@
+---
+import Stack from '../primitives/Stack.astro';
+import ItemRowAction from '../ui/ItemRowAction.astro';
+import ItemRowDivider from '../ui/ItemRowDivider.astro';
+import ItemRowHeader from '../ui/ItemRowHeader.astro';
+import { isNavItemCurrent, type NavItem } from '../../lib/navigation';
+
+interface Props {
+  sections: { header: string; items: NavItem[] }[];
+  /** Current URL pathname (e.g. Astro.url.pathname) for active TOC item. */
+  currentPath: string;
+}
+const { sections, currentPath } = Astro.props;
+---
+
+<Stack gap="0" class="ds-showcase-toc-inner">
+  {
+    sections.map((section, si) => (
+      <>
+        <ItemRowHeader>{section.header}</ItemRowHeader>
+        <Stack gap="0">
+          {section.items.map((item) => (
+            <ItemRowAction
+              variant="ghost"
+              href={item.destination}
+              label={item.label}
+              selected={isNavItemCurrent(item.destination, currentPath)}
+            />
+          ))}
+        </Stack>
+        {si < sections.length - 1 && <ItemRowDivider />}
+      </>
+    ))
+  }
+</Stack>

@@ -1,0 +1,13 @@
+---
+/**
+ * Persistent sidebar navigation with grouping — feed content from navigation.ts.
+ */
+interface Props {
+  class?: string;
+  'aria-label'?: string;
+}
+const { class: className = '', 'aria-label': ariaLabel = 'Sidebar navigation' } = Astro.props;
+---
+<nav class:list={['ds-sidebar-nav', 'ds-surface-2', className]} aria-label={ariaLabel}>
+  <slot />
+</nav>

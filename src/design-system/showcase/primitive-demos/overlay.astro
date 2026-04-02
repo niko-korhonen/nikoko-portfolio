@@ -1,0 +1,29 @@
+---
+import Overlay from '../../components/primitives/Overlay.astro';
+import Stack from '../../components/primitives/Stack.astro';
+import Button from '../../components/ui/Button.astro';
+---
+
+<p class="ds-type-body-l-tall" style="margin-bottom: var(--spacing-16);">
+  Temporary layer with scrim. Use the showcase shell overlay on mobile for the full navigation pattern.
+</p>
+<Overlay id="demo-overlay" placement="bottom" scrim dismissible modal={false}>
+  <Stack gap="12" style="padding: var(--spacing-24);">
+    <p class="ds-type-label-l-short">Demo panel</p>
+    <Button variant="outline" size="s" type="button" id="demo-overlay-close">
+      Close
+    </Button>
+  </Stack>
+</Overlay>
+<Button variant="fill" size="m" type="button" id="demo-overlay-open">Open overlay</Button>
+<script is:inline>
+  (function () {
+    var o = document.getElementById('demo-overlay');
+    document.getElementById('demo-overlay-open')?.addEventListener('click', function () {
+      o?.setAttribute('data-open', 'true');
+    });
+    document.getElementById('demo-overlay-close')?.addEventListener('click', function () {
+      o?.setAttribute('data-open', 'false');
+    });
+  })();
+</script>

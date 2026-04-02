@@ -1,0 +1,16 @@
+---
+import Inline from '../../components/primitives/Inline.astro';
+---
+
+<Inline gap="16" wrap align="end">
+  {
+    ['xxs', 'xs', 's', 'm', 'l', 'xl', 'infinite'].map((r) => (
+      <div style="display: flex; flex-direction: column; align-items: center; gap: var(--spacing-8);">
+        <div
+          style={`width: var(--spacing-48); height: var(--spacing-48); background: var(--surface-4); border-radius: var(--radius-${r}); border: 1px solid var(--border-muted);`}
+        />
+        <span class="ds-type-label-xs-short">{r}</span>
+      </div>
+    ))
+  }
+</Inline>

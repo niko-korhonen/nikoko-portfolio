@@ -1,0 +1,41 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import DsGrid from '../../components/primitives/Grid.astro';
+import { semanticColorCategories } from '../../lib/showcase-demos-data';
+---
+
+<Stack gap="24">
+  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
+    Semantic tokens resolve from the active theme and color scheme (light/dark). Use these names in components — never raw palette values.
+  </p>
+  {
+    semanticColorCategories.map((cat) => (
+      <Stack gap="12">
+        <div>
+          <p class="ds-type-label-l-short" style="color: var(--foreground-primary);">
+            {cat.title}
+          </p>
+          {cat.description && (
+            <p class="ds-type-body-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
+              {cat.description}
+            </p>
+          )}
+        </div>
+        <DsGrid columns="repeat(auto-fill, minmax(6.5rem, 1fr))" gap="12">
+          {cat.tokens.map((token) => (
+            <Stack gap="4">
+              <div
+                class="ds-showcase-color-swatch"
+                style={`background: var(--${token});`}
+                aria-hidden="true"
+              />
+              <span class="ds-type-label-xs-short" style="color: var(--foreground-secondary); word-break: break-word;">
+                {token}
+              </span>
+            </Stack>
+          ))}
+        </DsGrid>
+      </Stack>
+    ))
+  }
+</Stack>

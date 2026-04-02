@@ -1,0 +1,56 @@
+---
+interface Props {
+  id: string;
+  placement?: 'left' | 'right' | 'bottom' | 'full';
+  scrim?: boolean;
+  dismissible?: boolean;
+  modal?: boolean;
+  class?: string;
+}
+const {
+  id,
+  placement = 'left',
+  scrim = true,
+  dismissible = true,
+  modal = false,
+  class: className = '',
+} = Astro.props;
+---
+<div
+  class:list={['ds-overlay', className]}
+  id={id}
+  data-open="false"
+  data-placement={placement}
+  data-dismissible={dismissible ? 'true' : 'false'}
+  data-modal={modal ? 'true' : 'false'}
+  aria-hidden="true"
+  role={modal ? 'dialog' : undefined}
+  aria-modal={modal ? 'true' : undefined}
+>
+  {
+    scrim && (
+      <button
+        type="button"
+        class="ds-overlay__scrim ds-overlay__scrim-btn"
+        aria-label="Close overlay"
+        data-overlay-scrim
+      />
+    )
+  }
+  <div class="ds-overlay__panel">
+    <slot />
+  </div>
+</div>
+
+<style is:global>
+  .ds-overlay__scrim-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+  }
+</style>

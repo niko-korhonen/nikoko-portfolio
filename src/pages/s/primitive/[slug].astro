@@ -1,0 +1,18 @@
+---
+import ShowcaseLayout from '../../../layouts/ShowcaseLayout.astro';
+import PrimitiveDemo from '../../../design-system/showcase/PrimitiveDemo.astro';
+import { primitiveSlugs } from '../../../design-system/lib/navigation';
+import { primitiveMeta } from '../../../design-system/lib/primitive-meta';
+import type { PrimitiveSlug } from '../../../design-system/lib/navigation';
+
+export function getStaticPaths() {
+  return primitiveSlugs.map((slug) => ({ params: { slug } }));
+}
+
+const slug = Astro.params.slug as PrimitiveSlug;
+const meta = primitiveMeta[slug];
+---
+
+<ShowcaseLayout title={meta.title} description={meta.description}>
+  <PrimitiveDemo slot="demo" slug={slug} />
+</ShowcaseLayout>

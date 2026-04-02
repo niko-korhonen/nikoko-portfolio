@@ -1,215 +1,106 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import AnchoredToast from '../system/components/AnchoredToast.astro';
-import Button from '../system/components/Button.astro';
-import ButtonDropdown from '../system/components/ButtonDropdown.astro';
-import ButtonIcon from '../system/components/ButtonIcon.astro';
-import MenuDropdown from '../system/components/MenuDropdown.astro';
-import MenuItemAction from '../system/components/MenuItemAction.astro';
-import ModalDialog from '../system/components/ModalDialog.astro';
-import Icon from '../system/icons/Icon.astro';
+import ButtonIcon from '../design-system/components/ui/ButtonIcon.astro';
+import { LandingBadgePhysics } from '../components/LandingBadgePhysics';
 ---
 
-<BaseLayout title="Niko UI">
-  <div class="home-shell">
-    <div id="rain-backdrop" class="rain-backdrop" aria-hidden="true"></div>
-
-    <nav class="home-chrome" aria-label="Site">
-      <Button variant="ghost" size="m" class="home-open-modal" type="button">Niko</Button>
-      <div class="home-chrome__theme-next-icon home-theme-menu">
-        <MenuDropdown>
-          <ButtonDropdown slot="trigger" variant="ghost" size="m" type="button">Theme</ButtonDropdown>
-          <MenuItemAction type="button" role="menuitem" data-theme-value="system">
-            <Icon slot="slot-start" name="lock" style="outline" size="s" />
-            System
-          </MenuItemAction>
-          <MenuItemAction type="button" role="menuitem" data-theme-value="light">
-            <Icon slot="slot-start" name="sun" style="outline" size="s" />
-            Light
-          </MenuItemAction>
-          <MenuItemAction type="button" role="menuitem" data-theme-value="dark">
-            <Icon slot="slot-start" name="moon" style="outline" size="s" />
-            Dark
-          </MenuItemAction>
-        </MenuDropdown>
-        <ButtonIcon variant="ghost" size="m" label="World typer game" href="/g/world">
-          <Icon name="globe" style="fill" size="m" />
-        </ButtonIcon>
-        <ButtonIcon variant="ghost" size="m" label="Open design system showcase" href="/system">
-          <Icon name="code" style="outline" size="m" />
-        </ButtonIcon>
+<BaseLayout title="Niko">
+  <div class="landing-playground ds-surface-1">
+    <LandingBadgePhysics client:load />
+    <div class="landing-chrome">
+      <div class="landing-chrome__tr">
+        <ButtonIcon
+          variant="ghost"
+          size="m"
+          icon="code-outlined"
+          label="Design system"
+          href="/s/"
+        />
       </div>
-    </nav>
-
-    <ModalDialog id="home-intro-modal" layout="centered">
-      <ButtonIcon slot="toolbar" variant="ghost" size="m" label="Close dialog" dialogClose>
-        <Icon name="cross" style="outline" size="s" />
-      </ButtonIcon>
-      <Icon slot="hero" name="handraised" style="outline" size="l" />
-      <span slot="title">Hello stranger</span>
-      <span slot="description"
-        >If you want to chat about me or design, feel free to send me an email.</span
-      >
-      <AnchoredToast
-        slot="center"
-        class="home-copy-toast"
-        variant="success"
-        message="Copied to clipboard"
-        position="top"
-        align="center"
-      >
-        <Button slot="trigger" variant="primary" size="l" type="button" class="home-copy-email">Copy email</Button>
-      </AnchoredToast>
-    </ModalDialog>
+      <div class="landing-chrome__bl">
+        <p class="landing-name">
+          <span class="landing-name__line">Niko</span>
+          <span class="landing-name__line">Korhonen</span>
+        </p>
+      </div>
+    </div>
   </div>
 </BaseLayout>
 
-<script>
-  (function () {
-    const storageKey = 'niko-ui-theme';
-
-    function apply(value: 'system' | 'light' | 'dark') {
-      const root = document.documentElement;
-      if (value === 'system') {
-        root.removeAttribute('data-theme');
-        root.style.colorScheme = '';
-      } else {
-        root.setAttribute('data-theme', value);
-        root.style.colorScheme = value;
-      }
-      try {
-        localStorage.setItem(storageKey, value);
-      } catch {
-        /* ignore */
-      }
-    }
-
-    document.querySelectorAll('.home-theme-menu [data-theme-value]').forEach((el) => {
-      el.addEventListener('click', () => {
-        const v = el.getAttribute('data-theme-value');
-        if (v === 'light' || v === 'dark' || v === 'system') {
-          apply(v);
-        }
-      });
-    });
-
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved === 'light' || saved === 'dark' || saved === 'system') {
-        apply(saved);
-      }
-    } catch {
-      /* ignore */
-    }
-  })();
-</script>
-
-<script>
-  import { enqueueAnchoredToast, initAnchoredToasts } from '../system/components/anchored-toast.ts';
-  import { initRainBackdrop } from '../scripts/rain-backdrop';
-
-  const rain = document.getElementById('rain-backdrop');
-  if (rain) initRainBackdrop(rain);
-
-  function setupChrome() {
-    initAnchoredToasts();
-
-    document.querySelector('.home-open-modal')?.addEventListener('click', () => {
-      document.getElementById('home-intro-modal')?.showModal();
-    });
-
-    const toastRoot = document.querySelector<HTMLElement>('.home-copy-toast[data-anchored-toast]');
-    document.querySelector('.home-copy-email')?.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      try {
-        await navigator.clipboard.writeText('niko@nikoko.com');
-        if (toastRoot) enqueueAnchoredToast(toastRoot, 'success', 'Copied to clipboard');
-      } catch {
-        if (toastRoot) enqueueAnchoredToast(toastRoot, 'error', 'Could not copy');
-      }
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupChrome, { once: true });
-  } else {
-    setupChrome();
-  }
-</script>
-
 <style>
-  :global(html) {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .home-shell {
+  .landing-playground {
     position: relative;
-    box-sizing: border-box;
     min-height: 100dvh;
-    height: 100dvh;
-    max-height: 100dvh;
     overflow: hidden;
-    background: var(--color-surface-base);
   }
-
-  .rain-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+  .landing-playground :global(canvas) {
+    display: block;
     touch-action: none;
-    overflow: hidden;
   }
 
-  .home-chrome {
-    position: fixed;
-    z-index: 10;
-    inset: var(--space-8) var(--space-8) auto var(--space-8);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-8);
+  .landing-chrome {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
   }
 
-  .home-chrome :global(.ui-btn),
-  .home-chrome :global(.ui-btn-icon) {
+  .landing-chrome__tr {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     pointer-events: auto;
   }
 
-  .home-chrome__theme-next-icon {
-    display: flex;
-    align-items: center;
-    column-gap: var(--space-2);
-    row-gap: 0;
-    padding-block: 0;
-    pointer-events: auto;
+  .landing-chrome__bl {
+    position: absolute;
+    bottom: var(--landing-name-inset);
+    left: var(--landing-name-inset);
+    max-width: calc(100vw - var(--landing-name-inset) * 2);
+    pointer-events: none;
   }
 
-  /** Toast stack lives in dialog; keep above modal panel chrome */
-  :global(#home-intro-modal .home-copy-toast .ui-anchored-toast__stack) {
-    z-index: 2;
+  .landing-playground {
+    --landing-name-inset: 24px;
   }
 
-  /** Black pill text SVGs: read on dark surfaces only after invert */
-  :global(html[data-theme="dark"] #rain-backdrop .rain-backdrop__piece--invert-dark) {
-    filter: invert(1);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(html:not([data-theme]) #rain-backdrop .rain-backdrop__piece--invert-dark) {
-      filter: invert(1);
+  @media (min-width: 600px) {
+    .landing-playground {
+      --landing-name-inset: 48px;
     }
   }
 
-  :global(.rain-backdrop__piece) {
-    position: fixed;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-drag: none;
-    will-change: transform;
+  .landing-name {
+    margin: 0;
+    color: var(--foreground-primary);
+  }
+
+  .landing-name__line {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* S (0–599): one step more generous than headline-m; M+ unchanged */
+  .landing-name__line {
+    font-size: var(--type-headline-l-size);
+    line-height: var(--type-headline-l-line-height);
+    letter-spacing: calc(var(--type-headline-l-tracking) * 1px);
+  }
+
+  @media (min-width: 600px) {
+    .landing-name__line {
+      font-size: var(--type-headline-xl-size);
+      line-height: var(--type-headline-xl-line-height);
+      letter-spacing: calc(var(--type-headline-xl-tracking) * 1px);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .landing-name__line {
+      font-size: var(--type-display-s-size);
+      line-height: var(--type-display-s-line-height);
+      letter-spacing: calc(var(--type-display-s-tracking) * 1px);
+    }
   }
 </style>

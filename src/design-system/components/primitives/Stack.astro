@@ -1,0 +1,16 @@
+---
+interface Props {
+  gap?: string;
+  align?: 'start' | 'center' | 'end' | 'stretch';
+  justify?: 'start' | 'center' | 'end' | 'space-between';
+  class?: string;
+}
+const { gap = '8', align = 'stretch', justify = 'start', class: className = '' } = Astro.props;
+const style = `--ds-stack-gap: var(--spacing-${gap});`;
+---
+<div
+  class:list={['ds-stack', `ds-stack--align-${align}`, `ds-stack--justify-${justify}`, className]}
+  style={style}
+>
+  <slot />
+</div>

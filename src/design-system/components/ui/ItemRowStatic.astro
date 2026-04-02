@@ -1,0 +1,38 @@
+---
+import Icon from '../media/Icon.astro';
+
+interface Props {
+  variant: 'subtle' | 'outline' | 'ghost';
+  label: string;
+  description?: string;
+  detail?: string;
+  class?: string;
+}
+const { variant, label, description, detail, class: className = '' } = Astro.props;
+
+const cls = ['ds-item-row', 'ds-item-row--static', `ds-item-row--${variant}`, className];
+---
+
+<div class:list={cls}>
+  <span class="ds-item-row__inner">
+    <slot name="leading" />
+    <span class="ds-item-row__main">
+      <span class="ds-type-label-l-short" style="color: var(--foreground-primary)">{label}</span>
+      {
+        description && (
+          <span class="ds-type-body-l-short" style="color: var(--foreground-secondary)">
+            {description}
+          </span>
+        )
+      }
+    </span>
+    {
+      detail && (
+        <span class="ds-item-row__detail ds-type-body-l-short" style="color: var(--foreground-secondary)">
+          {detail}
+        </span>
+      )
+    }
+    <slot name="trailing" />
+  </span>
+</div>

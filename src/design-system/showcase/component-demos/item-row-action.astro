@@ -1,0 +1,15 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import ItemRowAction from '../../components/ui/ItemRowAction.astro';
+import ItemRowDivider from '../../components/ui/ItemRowDivider.astro';
+---
+
+<Stack gap="0">
+  <ItemRowAction variant="subtle" label="Subtle row" description="Optional description" showChevron />
+  <ItemRowDivider />
+  <ItemRowAction variant="outline" label="Outline row" detail="Detail" showChevron />
+  <ItemRowDivider />
+  <ItemRowAction variant="ghost" label="Ghost row" description="With chevron" showChevron />
+  <ItemRowDivider />
+  <ItemRowAction variant="ghost" label="Ghost selected" description="Current page" showChevron selected />
+</Stack>

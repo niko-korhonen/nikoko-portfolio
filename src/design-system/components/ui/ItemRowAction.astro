@@ -1,0 +1,92 @@
+---
+import Icon from '../media/Icon.astro';
+
+interface Props {
+  variant: 'subtle' | 'outline' | 'ghost';
+  href?: string;
+  selected?: boolean;
+  disabled?: boolean;
+  showChevron?: boolean;
+  label: string;
+  description?: string;
+  detail?: string;
+  class?: string;
+}
+const {
+  variant,
+  href,
+  selected = false,
+  disabled = false,
+  showChevron = false,
+  label,
+  description,
+  detail,
+  class: className = '',
+} = Astro.props;
+
+const cls = [
+  'ds-item-row',
+  `ds-item-row--${variant}`,
+  selected && 'ds-item-row--selected',
+  className,
+];
+const Tag = href && !disabled ? 'a' : 'button';
+---
+
+{
+  Tag === 'a' ? (
+    <a href={href} class:list={cls} aria-current={selected ? 'page' : undefined}>
+      <span class="ds-item-row__inner">
+        <slot name="leading" />
+        <span class="ds-item-row__main">
+          <span class="ds-type-label-l-short" style="color: var(--foreground-primary)">
+            {label}
+          </span>
+          {description && (
+            <span class="ds-type-body-l-short" style="color: var(--foreground-secondary)">
+              {description}
+            </span>
+          )}
+        </span>
+        {detail && (
+          <span class="ds-item-row__detail ds-type-body-l-short" style="color: var(--foreground-secondary)">
+            {detail}
+          </span>
+        )}
+        <slot name="trailing" />
+        {showChevron && (
+          <span class="ds-item-row__chevron" aria-hidden="true">
+            <Icon name="chevron-right-outlined" size="m" />
+          </span>
+        )}
+      </span>
+    </a>
+  ) : (
+    <button type="button" disabled={disabled} class:list={cls}>
+      <span class="ds-item-row__inner">
+        <slot name="leading" />
+        <span class="ds-item-row__main">
+          <span class="ds-type-label-l-short" style="color: var(--foreground-primary)">
+            {label}
+          </span>
+          {description && (
+            <span class="ds-type-body-l-short" style="color: var(--foreground-secondary)">
+              {description}
+            </span>
+          )}
+        </span>
+        {detail && (
+          <span class="ds-item-row__detail ds-type-body-l-short" style="color: var(--foreground-secondary)">
+            {detail}
+          </span>
+        )}
+        <slot name="trailing" />
+        {showChevron && (
+          <span class="ds-item-row__chevron" aria-hidden="true">
+            <Icon name="chevron-right-outlined" size="m" />
+          </span>
+        )}
+      </span>
+    </button>
+  )
+}

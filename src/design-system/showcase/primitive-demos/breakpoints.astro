@@ -1,0 +1,17 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import Inline from '../../components/primitives/Inline.astro';
+---
+
+<Stack gap="12">
+  <p class="ds-type-body-l-tall">
+    Breakpoint tokens (<code class="ds-type-code-l-tall">--bp-*</code>) define S / M / L / XL ranges. Use them in media
+    queries or layout decisions.
+  </p>
+  <Inline gap="8" wrap>
+    <span class="ds-type-label-m-short" style="padding: var(--spacing-8); background: var(--surface-3); border-radius: var(--radius-s);">S: 0–599px</span>
+    <span class="ds-type-label-m-short" style="padding: var(--spacing-8); background: var(--surface-3); border-radius: var(--radius-s);">M: 600–1023px</span>
+    <span class="ds-type-label-m-short" style="padding: var(--spacing-8); background: var(--surface-3); border-radius: var(--radius-s);">L: 1024–1439px</span>
+    <span class="ds-type-label-m-short" style="padding: var(--spacing-8); background: var(--surface-3); border-radius: var(--radius-s);">XL: 1440px+</span>
+  </Inline>
+</Stack>

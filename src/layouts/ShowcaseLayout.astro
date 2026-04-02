@@ -1,0 +1,192 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import '../design-system/styles/showcase.css';
+import Split from '../design-system/components/primitives/Split.astro';
+import Stack from '../design-system/components/primitives/Stack.astro';
+import Container from '../design-system/components/primitives/Container.astro';
+import Rail from '../design-system/components/patterns/Rail.astro';
+import NavOverlay from '../design-system/components/patterns/NavOverlay.astro';
+import MobileAppBarNav from '../design-system/components/patterns/MobileAppBarNav.astro';
+import ButtonIcon from '../design-system/components/ui/ButtonIcon.astro';
+import TocPanel from '../design-system/components/showcase/TocPanel.astro';
+import {
+  ShowcaseColorModeMenu,
+  ShowcaseSchemeMenus,
+  ShowcaseThemeMenu,
+} from '../design-system/components/showcase/ShowcaseMenus.tsx';
+import { getShowcaseTocSections } from '../design-system/lib/navigation';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const tocSections = getShowcaseTocSections();
+const currentPath = Astro.url.pathname;
+---
+
+<BaseLayout title={`${title} · Design system`}>
+  <div class="ds-showcase ds-surface-1">
+    <div class="ds-showcase__rail-wrap">
+      <Rail class="ds-rail--hide-mobile">
+        <Stack gap="8" align="center">
+          <ButtonIcon
+            variant="ghost"
+            size="m"
+            icon="sidebar-left-outlined"
+            label="Toggle table of contents"
+            dataAction="toggle-toc-desktop"
+            class="ds-show__desktop-only"
+          />
+          <div class="ds-show__desktop-only" style="display: flex; flex-direction: column; gap: var(--spacing-8); align-items: center;">
+            <ShowcaseSchemeMenus client:load />
+          </div>
+          <ButtonIcon
+            variant="ghost"
+            size="m"
+            icon="arrow-box-right-outline"
+            label="Exit to site"
+            href="/"
+            class="ds-show__desktop-only"
+          />
+        </Stack>
+      </Rail>
+    </div>
+
+    <div class="ds-showcase__body">
+      <Split collapseMobile={false} class="ds-showcase-split">
+        <aside slot="secondary" class="ds-showcase-toc ds-showcase-toc--desktop ds-surface-2">
+          <TocPanel sections={tocSections} currentPath={currentPath} />
+        </aside>
+        <div slot="primary" class="ds-surface-1" style="min-height: 0;">
+          <Container>
+            <Stack gap="16" class="ds-showcase-page" style="padding-block: var(--spacing-24);">
+              <header>
+                <h1 class="ds-type-headline-m">{title}</h1>
+                {
+                  description && (
+                    <p class="ds-type-body-xl-tall" style="color: var(--foreground-secondary); max-width: 48rem;">
+                      {description}
+                    </p>
+                  )
+                }
+              </header>
+              <section class="ds-showcase-demo-panel">
+                <slot name="demo" />
+              </section>
+              <slot />
+            </Stack>
+          </Container>
+        </div>
+      </Split>
+    </div>
+  </div>
+
+  <NavOverlay id="showcase-toc-overlay" scrim dismissible>
+    <div class="ds-showcase-toc-overlay-inner">
+      <Stack gap="16">
+        <div class="ds-showcase-toc-overlay__close-row">
+          <ButtonIcon
+            variant="ghost"
+            size="m"
+            icon="cross-large-outlined"
+            label="Close navigation"
+            dataAction="close-toc-overlay"
+          />
+        </div>
+        <TocPanel sections={tocSections} currentPath={currentPath} />
+      </Stack>
+    </div>
+  </NavOverlay>
+
+  <MobileAppBarNav aria-label="Showcase" class="ds-showcase-mobile-bar">
+    <ShowcaseColorModeMenu client:load />
+    <ShowcaseThemeMenu client:load />
+    <ButtonIcon variant="ghost" size="m" icon="arrow-box-right-outline" label="Exit demo" href="/" />
+    <ButtonIcon
+      variant="ghost"
+      size="m"
+      icon="menu-twobars-outlined"
+      label="Open navigation"
+      dataAction="open-toc-overlay"
+    />
+  </MobileAppBarNav>
+
+  <script is:inline>
+    (function () {
+      var TOC_SCROLL_KEY = 'ds-showcase-toc-scroll';
+
+      function qsa(sel) {
+        return Array.prototype.slice.call(document.querySelectorAll(sel));
+      }
+
+      function parseScrollTop() {
+        var raw = sessionStorage.getItem(TOC_SCROLL_KEY);
+        if (raw == null) return null;
+        var y = parseInt(raw, 10);
+        return isNaN(y) ? null : y;
+      }
+
+      function bindScrollPersistence(el) {
+        if (!el) return;
+        var t;
+        el.addEventListener(
+          'scroll',
+          function () {
+            clearTimeout(t);
+            t = setTimeout(function () {
+              sessionStorage.setItem(TOC_SCROLL_KEY, String(el.scrollTop));
+            }, 80);
+          },
+          { passive: true }
+        );
+      }
+
+      var splitSecondary = document.querySelector('.ds-showcase-split .ds-split__secondary');
+      var overlayPanel = document.querySelector('#showcase-toc-overlay .ds-overlay__panel');
+      var saved = parseScrollTop();
+
+      /* Apply synchronously: deferred rAF caused an extra frame at scroll 0 → visible flicker on navigation. */
+      if (saved != null) {
+        if (splitSecondary) splitSecondary.scrollTop = saved;
+        if (overlayPanel) overlayPanel.scrollTop = saved;
+      }
+      bindScrollPersistence(splitSecondary);
+      bindScrollPersistence(overlayPanel);
+
+      qsa('[data-action="toggle-toc-desktop"]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          document.documentElement.toggleAttribute('data-toc-desktop-collapsed');
+        });
+      });
+      qsa('[data-action="open-toc-overlay"]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var o = document.getElementById('showcase-toc-overlay');
+          var panel = document.querySelector('#showcase-toc-overlay .ds-overlay__panel');
+          var y = parseScrollTop();
+          if (panel && y != null) panel.scrollTop = y;
+          if (o) o.setAttribute('data-open', 'true');
+        });
+      });
+      qsa('[data-action="close-toc-overlay"]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var o = document.getElementById('showcase-toc-overlay');
+          if (o) o.setAttribute('data-open', 'false');
+        });
+      });
+      qsa('[data-overlay-scrim]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var o = btn.closest('.ds-overlay');
+          if (o && o.getAttribute('data-dismissible') !== 'false') o.setAttribute('data-open', 'false');
+        });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        qsa('.ds-overlay[data-open="true"]').forEach(function (o) {
+          if (o.getAttribute('data-dismissible') !== 'false') o.setAttribute('data-open', 'false');
+        });
+      });
+    })();
+  </script>
+</BaseLayout>

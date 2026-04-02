@@ -1,0 +1,24 @@
+---
+import Button from './component-demos/button.astro';
+import ButtonIcon from './component-demos/button-icon.astro';
+import ItemRowAction from './component-demos/item-row-action.astro';
+import ItemRowStatic from './component-demos/item-row-static.astro';
+import ItemRowDivider from './component-demos/item-row-divider.astro';
+import ItemRowHeader from './component-demos/item-row-header.astro';
+import MenuDropdown from './component-demos/menu-dropdown.astro';
+import type { ComponentSlug } from '../lib/navigation';
+
+interface Props {
+  slug: ComponentSlug;
+}
+
+const { slug } = Astro.props;
+---
+
+{slug === 'button' && <Button />}
+{slug === 'button-icon' && <ButtonIcon />}
+{slug === 'item-row-action' && <ItemRowAction />}
+{slug === 'item-row-static' && <ItemRowStatic />}
+{slug === 'item-row-divider' && <ItemRowDivider />}
+{slug === 'item-row-header' && <ItemRowHeader />}
+{slug === 'menu-dropdown' && <MenuDropdown />}

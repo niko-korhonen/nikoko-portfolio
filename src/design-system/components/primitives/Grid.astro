@@ -1,0 +1,13 @@
+---
+interface Props {
+  gap?: string;
+  columns?: string;
+  class?: string;
+}
+const { gap = '16', columns = 'repeat(auto-fill, minmax(12rem, 1fr))', class: className = '' } =
+  Astro.props;
+const style = `--ds-grid-gap: var(--spacing-${gap}); --ds-grid-cols: ${columns};`;
+---
+<div class:list={['ds-grid', className]} style={style}>
+  <slot />
+</div>

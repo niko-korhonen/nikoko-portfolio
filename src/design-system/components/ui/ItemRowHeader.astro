@@ -1,0 +1,9 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<div class:list={['ds-item-row-header', 'ds-type-body-l-short', className]}>
+  <slot />
+</div>

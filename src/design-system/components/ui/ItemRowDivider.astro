@@ -1,0 +1,7 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<div class:list={['ds-item-row-divider', className]} role="separator" aria-hidden="true" />

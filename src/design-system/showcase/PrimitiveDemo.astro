@@ -1,0 +1,38 @@
+---
+import Breakpoints from './primitive-demos/breakpoints.astro';
+import Colors from './primitive-demos/colors.astro';
+import Spacing from './primitive-demos/spacing.astro';
+import Radius from './primitive-demos/radius.astro';
+import Typography from './primitive-demos/typography.astro';
+import Icons from './primitive-demos/icons.astro';
+import Grid from './primitive-demos/grid.astro';
+import Container from './primitive-demos/container.astro';
+import Stack from './primitive-demos/stack.astro';
+import Inline from './primitive-demos/inline.astro';
+import Center from './primitive-demos/center.astro';
+import Split from './primitive-demos/split.astro';
+import OverlayPrimitiveDemo from './primitive-demos/overlay.astro';
+import NavigationModel from './primitive-demos/navigation-model.astro';
+import type { PrimitiveSlug } from '../lib/navigation';
+
+interface Props {
+  slug: PrimitiveSlug;
+}
+
+const { slug } = Astro.props;
+---
+
+{slug === 'breakpoints' && <Breakpoints />}
+{slug === 'colors' && <Colors />}
+{slug === 'spacing' && <Spacing />}
+{slug === 'radius' && <Radius />}
+{slug === 'typography' && <Typography />}
+{slug === 'icons' && <Icons />}
+{slug === 'grid' && <Grid />}
+{slug === 'container' && <Container />}
+{slug === 'stack' && <Stack />}
+{slug === 'inline' && <Inline />}
+{slug === 'center' && <Center />}
+{slug === 'split' && <Split />}
+{slug === 'overlay' && <OverlayPrimitiveDemo />}
+{slug === 'navigation-model' && <NavigationModel />}

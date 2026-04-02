@@ -1,0 +1,43 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import { typographySections } from '../../lib/showcase-demos-data';
+---
+
+<Stack gap="24">
+  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
+    CSS utility classes map to density typography tokens. Display and headline use Saans; label and body use Google Sans Flex; code uses Google Sans Code.
+  </p>
+  {
+    typographySections.map((section) => (
+      <Stack gap="12">
+        <div>
+          <p class="ds-type-label-l-short" style="color: var(--foreground-primary);">
+            {section.title}
+          </p>
+          {section.subtitle && (
+            <p class="ds-type-body-m-tall" style="color: var(--foreground-secondary); margin-top: var(--spacing-4);">
+              {section.subtitle}
+            </p>
+          )}
+        </div>
+        <div class="ds-showcase-typography-table" role="list">
+          {section.items.map((item) => (
+            <div class="ds-showcase-typography-row" role="listitem">
+              <p class={item.className} style="color: var(--foreground-primary); margin: 0;">
+                {item.sample}
+              </p>
+              <div class="ds-showcase-typography-meta">
+                <code class="ds-type-code-xs-short" style="color: var(--foreground-secondary);">
+                  .{item.className}
+                </code>
+                <span class="ds-type-label-xs-short" style="color: var(--foreground-secondary);">
+                  {item.tokenHint}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Stack>
+    ))
+  }
+</Stack>

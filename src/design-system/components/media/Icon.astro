@@ -1,0 +1,14 @@
+---
+interface Props {
+  name: string;
+  size?: 'xxl' | 'xl' | 'l' | 'm' | 's';
+  class?: string;
+}
+const { name, size = 'm', class: className = '' } = Astro.props;
+const src = `/icons/${name}.svg`;
+---
+<span
+  class:list={['ds-icon', `ds-icon--${size}`, className]}
+  style={`--icon-src: url('${src}')`}
+  aria-hidden="true"
+/>

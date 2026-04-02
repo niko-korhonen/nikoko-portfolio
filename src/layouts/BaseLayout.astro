@@ -1,62 +1,42 @@
 ---
 import '../styles/global.css';
+import '../design-system/styles/fonts.css';
+import '../design-system/styles/ds-base.css';
+import '../design-system/styles/typography.css';
+import '../design-system/styles/primitives.css';
+import '../design-system/styles/components.css';
+import '../design-system/styles/menu.css';
 
 interface Props {
   title?: string;
 }
 
-const { title = 'Niko UI' } = Astro.props;
+const { title = 'Site' } = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="core" data-color-scheme="light">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!--
-      Apply saved theme before stylesheets paint. Without this, :root:not([data-theme]) + prefers-color-scheme: dark
-      wins on first paint when the user chose "light", causing a black flash until deferred JS sets data-theme="light".
-    -->
-    <script is:inline>
-      (function () {
-        try {
-          var k = 'niko-ui-theme';
-          var v = localStorage.getItem(k);
-          var d = document.documentElement;
-          if (v === 'light') {
-            d.setAttribute('data-theme', 'light');
-            d.style.colorScheme = 'light';
-          } else if (v === 'dark') {
-            d.setAttribute('data-theme', 'dark');
-            d.style.colorScheme = 'dark';
-          } else {
-            d.removeAttribute('data-theme');
-            d.style.colorScheme = '';
-          }
-        } catch (e) {
-          /* ignore */
-        }
-      })();
-    </script>
-    <script is:inline>
-      (function () {
-        try {
-          var mq = window.matchMedia('(min-width: 48rem)');
-          document.documentElement.setAttribute('data-nav-drawer-open', mq.matches ? 'true' : 'false');
-        } catch (e) {
-          document.documentElement.setAttribute('data-nav-drawer-open', 'true');
-        }
-      })();
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:image" content="/og.png" />
     <title>{title}</title>
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t) document.documentElement.setAttribute('data-theme', t);
+          var cs = localStorage.getItem('color-scheme');
+          if (cs === 'light' || cs === 'dark') {
+            document.documentElement.setAttribute('data-color-scheme', cs);
+          } else if (!cs || cs === 'system') {
+            var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-color-scheme', d ? 'dark' : 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <slot />

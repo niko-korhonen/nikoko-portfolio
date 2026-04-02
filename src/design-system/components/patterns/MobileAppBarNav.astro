@@ -1,0 +1,13 @@
+---
+/**
+ * Bottom fixed bar for primary destinations on small viewports.
+ */
+interface Props {
+  class?: string;
+  'aria-label'?: string;
+}
+const { class: className = '', 'aria-label': ariaLabel = 'Primary navigation' } = Astro.props;
+---
+<nav class:list={['ds-mobile-app-bar', className]} aria-label={ariaLabel}>
+  <slot />
+</nav>

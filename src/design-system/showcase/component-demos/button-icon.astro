@@ -1,0 +1,16 @@
+---
+import Inline from '../../components/primitives/Inline.astro';
+import ButtonIcon from '../../components/ui/ButtonIcon.astro';
+---
+
+<Inline gap="8" wrap align="center">
+  <ButtonIcon variant="fill" size="m" icon="search-outlined" label="Search" />
+  <ButtonIcon variant="outline" size="m" icon="settings-gear-outlined" label="Settings" />
+  <ButtonIcon variant="subtle" size="m" icon="heart-outlined" label="Like" />
+  <ButtonIcon variant="ghost" size="m" icon="share-outlined" label="Share" />
+  <span style="display: inline-flex; padding: var(--spacing-8); background: var(--surface-inverse); border-radius: var(--radius-m);">
+    <ButtonIcon variant="ghost-inverse" size="m" icon="sun-outlined" label="Sun" />
+  </span>
+  <ButtonIcon variant="subtle" size="m" icon="star-filled" label="Selected" selected />
+  <ButtonIcon variant="subtle" size="m" icon="cursor-outlined" label="Disabled" disabled />
+</Inline>

@@ -1,0 +1,37 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Icon from '../../components/media/Icon.astro';
+import DsGrid from '../../components/primitives/Grid.astro';
+import Stack from '../../components/primitives/Stack.astro';
+
+const iconsDir = path.join(process.cwd(), 'public/icons');
+const iconNames = fs
+  .readdirSync(iconsDir)
+  .filter((f) => f.endsWith('.svg'))
+  .map((f) => f.replace(/\.svg$/, ''))
+  .sort((a, b) => a.localeCompare(b));
+---
+
+<Stack gap="16">
+  <p class="ds-type-body-l-tall" style="color: var(--foreground-secondary);">
+    SVG assets in <code class="ds-type-code-l-tall">/public/icons</code>, referenced via the Icon component or
+    <code class="ds-type-code-l-tall">--icon-src</code> mask. Sizes: <code class="ds-type-code-l-tall">xxl</code> through
+    <code class="ds-type-code-l-tall">s</code> (see <code class="ds-type-code-l-tall">--icon-*</code> tokens).
+  </p>
+  <p class="ds-type-label-m-short" style="color: var(--foreground-secondary);">
+    {iconNames.length} icons
+  </p>
+  <DsGrid columns="repeat(auto-fill, minmax(7.5rem, 1fr))" gap="12">
+    {
+      iconNames.map((name) => (
+        <div class="ds-showcase-icon-cell">
+          <Icon name={name} size="l" />
+          <span class="ds-type-label-xs-short" style="color: var(--foreground-secondary);">
+            {name}
+          </span>
+        </div>
+      ))
+    }
+  </DsGrid>
+</Stack>

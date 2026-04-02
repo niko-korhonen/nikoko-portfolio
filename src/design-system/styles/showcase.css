@@ -1,0 +1,251 @@
+/* Inline <code> in showcase copy: pair with same tier as surrounding body (code-s was visually smaller). */
+.ds-showcase-page .ds-type-body-l-tall code,
+.ds-showcase-demo-panel .ds-type-body-l-tall code {
+  font-family: var(--font-code);
+  font-size: var(--type-code-l-size);
+  font-weight: var(--type-code-l-weight);
+  line-height: var(--type-code-l-line-height-tall);
+}
+
+.ds-showcase-page .ds-type-body-xl-tall code,
+.ds-showcase-demo-panel .ds-type-body-xl-tall code {
+  font-family: var(--font-code);
+  font-size: var(--type-code-xl-size);
+  font-weight: var(--type-code-xl-weight);
+  line-height: var(--type-code-xl-line-height-tall);
+}
+
+.ds-showcase-page .ds-type-body-m-tall code,
+.ds-showcase-demo-panel .ds-type-body-m-tall code {
+  font-family: var(--font-code);
+  font-size: var(--type-code-m-size);
+  font-weight: var(--type-code-m-weight);
+  line-height: var(--type-code-m-line-height-tall);
+}
+
+/* Showcase shell (/s/) layout — full viewport height; TOC + main scroll independently */
+.ds-showcase {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.ds-showcase__rail-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 0;
+  width: fit-content;
+}
+
+/* Narrow rail: hug icons with 8px inline padding; separator sits on the rail (not the menu). */
+.ds-showcase__rail-wrap .ds-rail {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: auto;
+  min-width: 0;
+  padding-inline: var(--spacing-8);
+  padding-block: var(--spacing-8);
+  border-right: 1px solid var(--border-muted);
+}
+
+@media (max-width: 599px) {
+  .ds-showcase__rail-wrap {
+    display: none;
+  }
+
+  .ds-showcase {
+    height: auto;
+    max-height: none;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+}
+
+.ds-showcase__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-showcase-split {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ds-showcase-split .ds-split__secondary {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  align-self: stretch;
+  min-height: 0;
+}
+
+.ds-showcase-split .ds-split__primary {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.ds-showcase-toc {
+  width: var(--layout-sidebar-width);
+  flex-shrink: 0;
+  border-right: none;
+}
+
+/* Menu stack: 8px vertical, 32px horizontal (matches Figma rail → label gap). */
+.ds-showcase-toc-inner {
+  padding: var(--spacing-8) var(--spacing-32);
+  box-sizing: border-box;
+}
+
+@media (max-width: 599px) {
+  .ds-showcase-toc--desktop {
+    display: none;
+  }
+}
+
+/* Collapse the Split secondary column, not only the aside — flex basis was still reserving sidebar width. */
+html[data-toc-desktop-collapsed] .ds-showcase-split .ds-split__secondary {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+html[data-toc-desktop-collapsed] .ds-showcase-toc--desktop {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+  border: none;
+}
+
+.ds-show__desktop-only {
+  display: flex;
+}
+
+.ds-show__mobile-only {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .ds-show__desktop-only {
+    display: none !important;
+  }
+
+  .ds-show__mobile-only {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .ds-showcase__body {
+    padding-bottom: calc(var(--spacing-64) + env(safe-area-inset-bottom, 0));
+  }
+
+  /* Four equal columns: mode, theme, exit, menu — icons centered; edges match column gutters. */
+  .ds-mobile-app-bar.ds-showcase-mobile-bar {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 0;
+    padding-inline: var(--spacing-8);
+    padding-top: var(--spacing-8);
+    padding-bottom: calc(var(--spacing-8) + env(safe-area-inset-bottom, 0));
+  }
+}
+
+.ds-showcase-demo-panel {
+  padding: var(--spacing-24);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+}
+
+@media (max-width: 599px) {
+  .ds-showcase .ds-split__secondary {
+    display: none;
+  }
+
+  .ds-showcase .ds-split__primary {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+.ds-demo-swatch {
+  min-height: var(--spacing-48);
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-muted);
+}
+
+.ds-showcase-color-swatch {
+  min-height: var(--spacing-48);
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-muted);
+  box-sizing: border-box;
+}
+
+.ds-showcase-typography-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding-block: var(--spacing-12);
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.ds-showcase-typography-row:last-child {
+  border-bottom: none;
+}
+
+.ds-showcase-typography-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.ds-showcase-icon-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-8);
+  padding: var(--spacing-12);
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  border: 1px solid var(--border-muted);
+  text-align: center;
+  word-break: break-word;
+  color: var(--foreground-primary);
+}
+
+/* Mobile TOC overlay: close control stays icon-sized and aligns end (Stack default stretch was widening the button). */
+.ds-showcase-toc-overlay-inner {
+  padding: var(--spacing-16);
+  max-width: 32rem;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.ds-showcase-toc-overlay__close-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-showcase-toc-overlay__close-row .ds-btn-icon {
+  flex: 0 0 auto;
+}

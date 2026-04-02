@@ -1,0 +1,13 @@
+---
+import Stack from '../../components/primitives/Stack.astro';
+import ItemRowStatic from '../../components/ui/ItemRowStatic.astro';
+import ItemRowDivider from '../../components/ui/ItemRowDivider.astro';
+---
+
+<Stack gap="0">
+  <ItemRowStatic variant="subtle" label="Read-only subtle" description="No interaction" detail="42" />
+  <ItemRowDivider />
+  <ItemRowStatic variant="outline" label="Read-only outline" />
+  <ItemRowDivider />
+  <ItemRowStatic variant="ghost" label="Read-only ghost" description="Paired with actions in stacks" />
+</Stack>

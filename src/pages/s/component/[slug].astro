@@ -1,0 +1,18 @@
+---
+import ShowcaseLayout from '../../../layouts/ShowcaseLayout.astro';
+import ComponentDemo from '../../../design-system/showcase/ComponentDemo.astro';
+import { componentSlugs } from '../../../design-system/lib/navigation';
+import { componentMeta } from '../../../design-system/lib/component-meta';
+import type { ComponentSlug } from '../../../design-system/lib/navigation';
+
+export function getStaticPaths() {
+  return componentSlugs.map((slug) => ({ params: { slug } }));
+}
+
+const slug = Astro.params.slug as ComponentSlug;
+const meta = componentMeta[slug];
+---
+
+<ShowcaseLayout title={meta.title} description={meta.description}>
+  <ComponentDemo slot="demo" slug={slug} />
+</ShowcaseLayout>
