@@ -1,21 +1,21 @@
 import { useEffect, useRef } from 'preact/hooks';
 import Matter from 'matter-js';
 
-/** Intrinsic SVG dimensions from each asset (for sprite + collider fit). */
+/** Intrinsic SVG dimensions from each asset (must match root svg width/height & viewBox). */
 const BADGES = [
   { src: '/badge-graphics/rain-1.svg', w: 116, h: 120 },
-  { src: '/badge-graphics/rain-2.svg', w: 146, h: 90 },
-  { src: '/badge-graphics/rain-3.svg', w: 110, h: 110 },
-  { src: '/badge-graphics/rain-4.svg', w: 150, h: 75 },
+  { src: '/badge-graphics/rain-2.svg', w: 110, h: 110 },
+  { src: '/badge-graphics/rain-3.svg', w: 120, h: 120 },
+  { src: '/badge-graphics/rain-4.svg', w: 120, h: 120 },
   { src: '/badge-graphics/rain-5.svg', w: 120, h: 120 },
-  { src: '/badge-graphics/rain-6.svg', w: 150, h: 100 },
+  { src: '/badge-graphics/rain-6.svg', w: 120, h: 120 },
   { src: '/badge-graphics/rain-7.svg', w: 130, h: 130 },
-  { src: '/badge-graphics/rain-8.svg', w: 150, h: 110 },
+  { src: '/badge-graphics/rain-8.svg', w: 120, h: 120 },
   { src: '/badge-graphics/rain-9.svg', w: 120, h: 110 },
-  { src: '/badge-graphics/rain-10.svg', w: 172, h: 110 },
+  { src: '/badge-graphics/rain-10.svg', w: 120, h: 120 },
   { src: '/badge-graphics/rain-11.svg', w: 120, h: 120 },
   { src: '/badge-graphics/rain-12.svg', w: 120, h: 120 },
-  { src: '/badge-graphics/rain-13.svg', w: 111, h: 120 },
+  { src: '/badge-graphics/rain-13.svg', w: 107, h: 118 },
 ] as const;
 
 /** Larger badges on S/M viewports; L+ approaches a modest cap. */

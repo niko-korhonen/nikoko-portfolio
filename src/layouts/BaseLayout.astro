@@ -9,13 +9,15 @@ import '../design-system/styles/menu.css';
 
 interface Props {
   title?: string;
+  /** When set, scopes shell background tokens (e.g. showcase uses surface-2 behind safe areas). */
+  shell?: 'default' | 'showcase';
 }
 
-const { title = 'Site' } = Astro.props;
+const { title = 'Site', shell = 'default' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="core" data-color-scheme="light">
+<html lang="en" data-theme="core" data-color-scheme="light" data-shell={shell}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

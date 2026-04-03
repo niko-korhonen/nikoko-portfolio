@@ -28,6 +28,12 @@ body {
   color: var(--foreground-primary);
 }
 
+/* Design system showcase (/s/): page chrome matches ds-surface-2 (status bar, overscroll). */
+html[data-shell='showcase'],
+html[data-shell='showcase'] body {
+  background: var(--surface-2);
+}
+
 :focus {
   outline: none;
 }

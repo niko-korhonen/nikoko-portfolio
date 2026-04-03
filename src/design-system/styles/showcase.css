@@ -31,6 +31,11 @@
   line-height: var(--type-code-m-line-height-tall);
 }
 
+/* Mobile TOC overlay uses overlay panel defaults (surface-1); align with desktop TOC + page. */
+#showcase-toc-overlay .ds-overlay__panel {
+  background: var(--surface-2);
+}
+
 /* Showcase shell (/s/) layout — full viewport height; TOC + main scroll independently */
 .ds-showcase {
   display: flex;
