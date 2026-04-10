@@ -17,6 +17,11 @@ export const componentMeta: Record<
     title: 'Button icon',
     description: 'Icon-only button with the same variants plus a selected state.',
   },
+  tooltip: {
+    title: 'Tooltip',
+    description:
+      'Compact helper label on inverse surface with controllable placement (top/right/bottom/left) and alignment (start/center/end).',
+  },
   toggle: {
     title: 'Toggle',
     description:

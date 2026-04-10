@@ -2,6 +2,7 @@
 import { ButtonPlayground } from './playgrounds/ButtonPlayground';
 import { ButtonDropdownPlayground } from './playgrounds/ButtonDropdownPlayground';
 import { ButtonIconPlayground } from './playgrounds/ButtonIconPlayground';
+import { TooltipPlayground } from './playgrounds/TooltipPlayground';
 import { TogglePlayground } from './playgrounds/TogglePlayground';
 import { RadioPlayground } from './playgrounds/RadioPlayground';
 import { ItemRowActionPlayground } from './playgrounds/ItemRowActionPlayground';
@@ -21,6 +22,7 @@ const { slug } = Astro.props;
 {slug === 'button' && <ButtonPlayground client:load />}
 {slug === 'button-dropdown' && <ButtonDropdownPlayground client:load />}
 {slug === 'button-icon' && <ButtonIconPlayground client:load />}
+{slug === 'tooltip' && <TooltipPlayground client:load />}
 {slug === 'toggle' && <TogglePlayground client:load />}
 {slug === 'radio' && <RadioPlayground client:load />}
 {slug === 'item-row-action' && <ItemRowActionPlayground client:load />}

@@ -1,5 +1,6 @@
 ---
 import Icon from '../media/Icon.astro';
+import Tooltip from './Tooltip.astro';
 
 interface Props {
   variant?: 'fill' | 'outline' | 'subtle' | 'ghost' | 'ghost-inverse';
@@ -14,6 +15,10 @@ interface Props {
   class?: string;
   id?: string;
   dataAction?: string;
+  tooltipLabel?: string;
+  tooltipPlacement?: 'top' | 'bottom' | 'left' | 'right';
+  tooltipAlign?: 'start' | 'center' | 'end';
+  tooltipOpen?: boolean;
 }
 const {
   variant = 'subtle',
@@ -28,6 +33,10 @@ const {
   class: className = '',
   id,
   dataAction,
+  tooltipLabel,
+  tooltipPlacement = 'top',
+  tooltipAlign = 'center',
+  tooltipOpen = false,
 } = Astro.props;
 
 const v =
@@ -50,21 +59,45 @@ const cls = [
 ---
 
 {
-  href && !disabled ? (
-    <a href={href} class:list={cls} aria-label={label} id={id} data-action={dataAction}>
-      <Icon name={icon} size={iconSize} />
-    </a>
+  tooltipLabel ? (
+    <Tooltip label={tooltipLabel} placement={tooltipPlacement} align={tooltipAlign} open={tooltipOpen}>
+      {
+        href && !disabled ? (
+          <a href={href} class:list={cls} aria-label={label} id={id} data-action={dataAction}>
+            <Icon name={icon} size={iconSize} />
+          </a>
+        ) : (
+          <button
+            type={type}
+            disabled={disabled}
+            class:list={cls}
+            aria-label={label}
+            aria-pressed={selected ? 'true' : undefined}
+            id={id}
+            data-action={dataAction}
+          >
+            <Icon name={icon} size={iconSize} />
+          </button>
+        )
+      }
+    </Tooltip>
   ) : (
-    <button
-      type={type}
-      disabled={disabled}
-      class:list={cls}
-      aria-label={label}
-      aria-pressed={selected ? 'true' : undefined}
-      id={id}
-      data-action={dataAction}
-    >
-      <Icon name={icon} size={iconSize} />
-    </button>
+    href && !disabled ? (
+      <a href={href} class:list={cls} aria-label={label} id={id} data-action={dataAction}>
+        <Icon name={icon} size={iconSize} />
+      </a>
+    ) : (
+      <button
+        type={type}
+        disabled={disabled}
+        class:list={cls}
+        aria-label={label}
+        aria-pressed={selected ? 'true' : undefined}
+        id={id}
+        data-action={dataAction}
+      >
+        <Icon name={icon} size={iconSize} />
+      </button>
+    )
   )
 }

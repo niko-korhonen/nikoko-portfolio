@@ -1,0 +1,26 @@
+---
+interface Props {
+  label: string;
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+  open?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  label,
+  placement = 'top',
+  align = 'center',
+  open = false,
+  id,
+  class: className = '',
+} = Astro.props;
+---
+
+<span class:list={['ds-tooltip', `ds-tooltip--${placement}`, `ds-tooltip--align-${align}`, className]} data-open={open ? 'true' : undefined}>
+  <span class="ds-tooltip__trigger" aria-describedby={id}>
+    <slot />
+  </span>
+  <span id={id} class="ds-tooltip__content ds-type-label-m-short" role="tooltip">{label}</span>
+</span>

@@ -318,6 +318,94 @@
   width: 100%;
 }
 
+/* ---------- Tooltip ---------- */
+.ds-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.ds-tooltip__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-tooltip__content {
+  position: absolute;
+  z-index: 20;
+  max-width: 16rem;
+  box-sizing: border-box;
+  padding: var(--spacing-6) var(--spacing-8);
+  border-radius: var(--radius-xxs);
+  background: var(--surface-inverse);
+  color: var(--foreground-inverse);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.12s ease,
+    visibility 0.12s ease;
+}
+
+.ds-tooltip:hover .ds-tooltip__content,
+.ds-tooltip:focus-within .ds-tooltip__content,
+.ds-tooltip[data-open='true'] .ds-tooltip__content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ds-tooltip--top .ds-tooltip__content {
+  bottom: calc(100% + var(--spacing-8));
+}
+
+.ds-tooltip--bottom .ds-tooltip__content {
+  top: calc(100% + var(--spacing-8));
+}
+
+.ds-tooltip--left .ds-tooltip__content {
+  right: calc(100% + var(--spacing-8));
+}
+
+.ds-tooltip--right .ds-tooltip__content {
+  left: calc(100% + var(--spacing-8));
+}
+
+.ds-tooltip--top.ds-tooltip--align-start .ds-tooltip__content,
+.ds-tooltip--bottom.ds-tooltip--align-start .ds-tooltip__content {
+  left: 0;
+}
+
+.ds-tooltip--top.ds-tooltip--align-center .ds-tooltip__content,
+.ds-tooltip--bottom.ds-tooltip--align-center .ds-tooltip__content {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ds-tooltip--top.ds-tooltip--align-end .ds-tooltip__content,
+.ds-tooltip--bottom.ds-tooltip--align-end .ds-tooltip__content {
+  right: 0;
+}
+
+.ds-tooltip--left.ds-tooltip--align-start .ds-tooltip__content,
+.ds-tooltip--right.ds-tooltip--align-start .ds-tooltip__content {
+  top: 0;
+}
+
+.ds-tooltip--left.ds-tooltip--align-center .ds-tooltip__content,
+.ds-tooltip--right.ds-tooltip--align-center .ds-tooltip__content {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ds-tooltip--left.ds-tooltip--align-end .ds-tooltip__content,
+.ds-tooltip--right.ds-tooltip--align-end .ds-tooltip__content {
+  bottom: 0;
+}
+
 /* ---------- Item rows ---------- */
 .ds-item-row {
   position: relative;
