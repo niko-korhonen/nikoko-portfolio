@@ -59,6 +59,7 @@ export const componentSlugs = [
   'item-row-divider',
   'item-row-header',
   'menu-dropdown',
+  'dialog',
 ] as const;
 
 export type ComponentSlug = (typeof componentSlugs)[number];

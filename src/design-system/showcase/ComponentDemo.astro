@@ -10,6 +10,7 @@ import { ItemRowStaticPlayground } from './playgrounds/ItemRowStaticPlayground';
 import { ItemRowDividerPlayground } from './playgrounds/ItemRowDividerPlayground';
 import { ItemRowHeaderPlayground } from './playgrounds/ItemRowHeaderPlayground';
 import { MenuDropdownPlayground } from './playgrounds/MenuDropdownPlayground';
+import { DialogPlayground } from './playgrounds/DialogPlayground';
 import type { ComponentSlug } from '../lib/navigation';
 
 interface Props {
@@ -30,3 +31,4 @@ const { slug } = Astro.props;
 {slug === 'item-row-divider' && <ItemRowDividerPlayground client:load />}
 {slug === 'item-row-header' && <ItemRowHeaderPlayground client:load />}
 {slug === 'menu-dropdown' && <MenuDropdownPlayground client:load />}
+{slug === 'dialog' && <DialogPlayground client:load />}

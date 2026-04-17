@@ -82,7 +82,6 @@ export function ButtonIconPlayground() {
   const withTooltip = showTooltip ? (
     <span
       class={`ds-tooltip ds-tooltip--${tooltipPlacement} ds-tooltip--align-${tooltipAlign}`}
-      data-open="true"
     >
       <span class="ds-tooltip__trigger">{inner}</span>
       <span class="ds-tooltip__content ds-type-label-m-short" role="tooltip">

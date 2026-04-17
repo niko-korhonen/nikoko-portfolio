@@ -52,4 +52,9 @@ export const componentMeta: Record<
     title: 'Menu dropdown',
     description: 'Anchored menu with viewport clamping, scroll, and surface-5 elevation.',
   },
+  dialog: {
+    title: 'Dialog',
+    description:
+      'Structural modal surface with backdrop, centered panel, top bar (back / close), scrollable content, and footer regions; focus trap, escape, and backdrop dismiss.',
+  },
 };

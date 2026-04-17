@@ -950,3 +950,118 @@ a.ds-item-row {
 .ds-radio--static-selected-disabled .ds-radio__icon {
   color: var(--foreground-inverse);
 }
+
+/* ---------- Dialog ---------- */
+/* Structural modal surface: backdrop + centered panel with topbar / content / footer regions. */
+.ds-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-24);
+  box-sizing: border-box;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.ds-dialog[data-open='true'] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.ds-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: var(--surface-backdrop);
+}
+
+.ds-dialog__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--ds-dialog-max-width, 32rem);
+  max-height: calc(100dvh - var(--spacing-48));
+  background: var(--surface-1);
+  border-radius: var(--radius-l);
+  box-shadow:
+    calc(var(--surface-shadow-5-x) * 1px) calc(var(--surface-shadow-5-y) * 1px)
+      calc(var(--surface-shadow-5-blur) * 1px) calc(var(--surface-shadow-5-spread) * 1px)
+      var(--surface-shadow-5-color);
+  overflow: hidden;
+  outline: none;
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.18s ease;
+}
+
+.ds-dialog[data-open='true'] .ds-dialog__panel {
+  transform: translateY(0) scale(1);
+}
+
+.ds-dialog__panel:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.ds-dialog__topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  min-height: var(--spacing-48);
+}
+
+.ds-dialog__topbar-leading,
+.ds-dialog__topbar-trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.ds-dialog__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--ds-dialog-padding, var(--spacing-24));
+}
+
+/* Topbar already provides 8px breathing room; collapse content top padding when present. */
+.ds-dialog__topbar + .ds-dialog__content {
+  padding-top: var(--spacing-8);
+}
+
+.ds-dialog__footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  gap: var(--spacing-8);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--ds-dialog-padding, var(--spacing-24));
+  padding-top: 0;
+}
+
+@media (max-width: 599px) {
+  .ds-dialog {
+    padding: var(--spacing-12);
+  }
+}

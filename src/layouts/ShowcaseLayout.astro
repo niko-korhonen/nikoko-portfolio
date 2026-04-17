@@ -38,6 +38,9 @@ const currentPath = Astro.url.pathname;
             label="Toggle table of contents"
             dataAction="toggle-toc-desktop"
             class="ds-show__desktop-only"
+            tooltipLabel="Collapse"
+            tooltipPlacement="right"
+            tooltipAlign="center"
           />
           <div class="ds-show__desktop-only" style="display: flex; flex-direction: column; gap: var(--spacing-8); align-items: center;">
             <ShowcaseSchemeMenus client:load />
@@ -49,6 +52,9 @@ const currentPath = Astro.url.pathname;
             label="Exit to site"
             href="/"
             class="ds-show__desktop-only"
+            tooltipLabel="Exit demo"
+            tooltipPlacement="right"
+            tooltipAlign="center"
           />
         </Stack>
       </Rail>

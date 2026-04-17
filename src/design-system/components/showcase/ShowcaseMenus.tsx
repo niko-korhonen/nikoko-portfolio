@@ -61,12 +61,21 @@ const themeItems = THEMES.map((t) => ({
   label: t.charAt(0).toUpperCase() + t.slice(1),
 }));
 
-function ColorModeMenu() {
+interface MenuTooltipProps {
+  tooltipLabel?: string;
+  tooltipPlacement?: 'top' | 'bottom' | 'left' | 'right';
+  tooltipAlign?: 'start' | 'center' | 'end';
+}
+
+function ColorModeMenu(tooltip: MenuTooltipProps = {}) {
   return (
     <MenuDropdown
       aria-label="Color mode"
       trigger={<DsIcon name="sun-outlined" size="l" />}
       items={schemeItems}
+      tooltipLabel={tooltip.tooltipLabel}
+      tooltipPlacement={tooltip.tooltipPlacement}
+      tooltipAlign={tooltip.tooltipAlign}
       onSelect={(id) => {
         if (id === 'system') {
           localStorage.setItem('color-scheme', 'system');
@@ -80,12 +89,15 @@ function ColorModeMenu() {
   );
 }
 
-function ThemeMenu() {
+function ThemeMenu(tooltip: MenuTooltipProps = {}) {
   return (
     <MenuDropdown
       aria-label="Theme"
       trigger={<DsIcon name="color-palette-outlined" size="l" />}
       items={themeItems}
+      tooltipLabel={tooltip.tooltipLabel}
+      tooltipPlacement={tooltip.tooltipPlacement}
+      tooltipAlign={tooltip.tooltipAlign}
       onSelect={(id) => {
         localStorage.setItem('theme', id);
         document.documentElement.setAttribute('data-theme', id);
@@ -102,8 +114,8 @@ export function ShowcaseSchemeMenus() {
 
   return (
     <>
-      <ColorModeMenu />
-      <ThemeMenu />
+      {ColorModeMenu({ tooltipLabel: 'Mode', tooltipPlacement: 'right', tooltipAlign: 'center' })}
+      {ThemeMenu({ tooltipLabel: 'Theme', tooltipPlacement: 'right', tooltipAlign: 'center' })}
     </>
   );
 }
@@ -114,7 +126,7 @@ export function ShowcaseColorModeMenu() {
     ensureShowcaseSchemeInit();
   }, []);
 
-  return <ColorModeMenu />;
+  return ColorModeMenu();
 }
 
 /** Mobile bar 2/4: theme palette. */
@@ -123,5 +135,5 @@ export function ShowcaseThemeMenu() {
     ensureShowcaseSchemeInit();
   }, []);
 
-  return <ThemeMenu />;
+  return ThemeMenu();
 }

@@ -30,6 +30,10 @@ export interface MenuDropdownProps {
   align?: MenuAlign;
   onSelect?: (id: string) => void;
   'aria-label': string;
+  /** When set, the trigger is wrapped in a tooltip revealed on hover/focus. */
+  tooltipLabel?: string;
+  tooltipPlacement?: MenuPlacement;
+  tooltipAlign?: MenuAlign;
 }
 
 export function MenuDropdown(props: MenuDropdownProps) {
@@ -42,6 +46,9 @@ export function MenuDropdown(props: MenuDropdownProps) {
     align = 'start',
     onSelect,
     'aria-label': ariaLabel,
+    tooltipLabel,
+    tooltipPlacement = 'top',
+    tooltipAlign = 'center',
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -143,6 +150,34 @@ export function MenuDropdown(props: MenuDropdownProps) {
     });
   }
 
+  const triggerEl = (
+    <div
+      ref={triggerRef}
+      onClick={() => toggle()}
+      onKeyDown={(e) => {
+        if (disabled) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-haspopup="menu"
+      aria-expanded={disabled ? false : open}
+      aria-disabled={disabled ? true : undefined}
+      aria-label={ariaLabel}
+      class={[
+        triggerClass,
+        disabled ? 'ds-menu-dropdown-trigger--disabled' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      {trigger}
+    </div>
+  );
+
   return (
     <div
       ref={wrapRef}
@@ -150,31 +185,18 @@ export function MenuDropdown(props: MenuDropdownProps) {
       data-open={open ? 'true' : 'false'}
       style={{ position: 'relative', display: 'inline-flex' }}
     >
-      <div
-        ref={triggerRef}
-        onClick={() => toggle()}
-        onKeyDown={(e) => {
-          if (disabled) return;
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-          }
-        }}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-haspopup="menu"
-        aria-expanded={disabled ? false : open}
-        aria-disabled={disabled ? true : undefined}
-        aria-label={ariaLabel}
-        class={[
-          triggerClass,
-          disabled ? 'ds-menu-dropdown-trigger--disabled' : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        {trigger}
-      </div>
+      {tooltipLabel ? (
+        <span
+          class={`ds-tooltip ds-tooltip--${tooltipPlacement} ds-tooltip--align-${tooltipAlign}`}
+        >
+          <span class="ds-tooltip__trigger">{triggerEl}</span>
+          <span class="ds-tooltip__content ds-type-label-m-short" role="tooltip">
+            {tooltipLabel}
+          </span>
+        </span>
+      ) : (
+        triggerEl
+      )}
       <ul
         ref={menuRef}
         class="ds-menu-dropdown"
